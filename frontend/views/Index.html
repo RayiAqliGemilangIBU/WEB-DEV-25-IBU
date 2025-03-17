@@ -5,31 +5,41 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SPA Project</title>
     <link rel="stylesheet" href="../css/style.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
+<body class="bg-gray-100">
     <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg bg-primary text-white px-3">
-        <a class="navbar-brand text-white" href="#">MySPA</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ms-auto" id="nav-links">
-                <li class="nav-item"><a class="nav-link text-white" href="#" onclick="navigate('Login')">Login</a></li>
-            </ul>
-        </div>
-    </nav>
+    <header class="bg-white shadow-md p-4">
+        <div>
+            <!-- Dropdown untuk mobile -->
+            <div class="sm:hidden">
+                <label for="Tab" class="sr-only">Tab</label>
+                <select id="Tab" class="w-full rounded-md border-gray-200" onchange="handleNavChange(this)">
+                    <option value="Login">Login</option>
+                    <option value="Home">Home</option>
+                    <option value="Profile">Profile</option>
+                    <option value="Study">Study</option>
+                    <option value="logout">Log out</option>
+                </select>
+            </div>
 
-    <!-- Konten Utama -->
-    <div id="app" class="container mt-4">
-        <!-- KKonenten disini Bosssssssssssssssssssss-->
-    </div>
+            <!-- Navbar untuk layar besar -->
+            <div class="hidden sm:block">
+                <nav id="nav-links" class="flex gap-6" aria-label="Tabs">
+                    <!-- Akan diperbarui oleh JavaScript -->
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Content SPA -->
+    <main id="app" class="p-6">
+        <!-- Konten akan di-load di sini -->
+    </main>
 
     <!-- Footer -->
-    <footer class="bg-dark text-white text-center py-3 mt-4">
-        <p>&copy; 2025 SPA Project</p>
+    <footer class="bg-gray-800 text-white text-center p-4 mt-10">
+        <p>&copy; 2025 SPA Project. All Rights Reserved.</p>
     </footer>
 
     <script src="../js/router.js"></script>
