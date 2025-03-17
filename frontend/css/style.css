@@ -1,0 +1,7 @@
+body {
+    font-family: Arial, sans-serif;
+}
+
+.navbar {
+    transition: all 0.3s ease;
+}
