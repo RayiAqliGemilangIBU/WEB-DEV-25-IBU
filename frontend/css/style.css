@@ -23,4 +23,6 @@ footer {
     /* Optional: Add padding and background color */
     padding: 1rem; 
     background-color: white; 
+    position: relative; 
+    z-index: 1; /* Lebih rendah dari modal */
 }
