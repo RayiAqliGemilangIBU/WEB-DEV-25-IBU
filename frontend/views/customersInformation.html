@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Information</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Toastr CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet">
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">
+    <!-- DataTables JS -->
+    <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1 style="text-align: center;">Customers Information</h1>
+        <!--Table-->
+        <table id="students" class="display"></table>
+        <!-- Edit Modal -->
+        <div class="modal" id="editModal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Edit Customers</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="editForm">
+                            <div class="form-group">
+                                <label for="name">Name:</label>
+                                <input type="text" class="form-control" id="name" name="name">
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Email:</label>
+                                <input type="email" class="form-control" id="email" name="email">
+                            </div>
+                            <div class="form-group">
+                                <label for="password">Password:</label>
+                                <input type="password" class="form-control" id="password" name="password">
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" onclick="closeModal()">Close</button>
+                        <button type="button" class="btn btn-primary" onclick="saveChanges()">Save changes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Delete Modal -->
+        <div class="modal" id="deleteModal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Delete Customer</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="deleteForm">
+                            <div class="form-group">
+                                <label for="deleteConfirm">Are you sure to delete this data? If yes, please rewrite "delete":</label>
+                                <input type="text" class="form-control" id="deleteConfirm" name="deleteConfirm">
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" onclick="closeDeleteModal()">Close</button>
+                        <button type="button" class="btn btn-danger" onclick="confirmDelete()">Confirm Delete</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toastr JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <!-- Bootstrap Bundle with Popper -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom Script -->
+    <script>
+        function fetchStudentsFromFile() {
+            $.ajax({
+                url: '/data/students.json', // Replace 'data.json' with the path to your JSON file
+                type: 'GET',
+                dataType: 'json',
+                success: function (data) {
+                    console.log(data);
+                    let html = "";
+                    $("table#students").html(html);
+                    $("table#students").DataTable({
+                        data: data,
+                        columns: [
+                            { data: 'name', title: 'Name' },
+                            { data: 'email', title: 'Email' },
+                            { data: 'password', title: 'Password' },
+                            {
+                                title: 'Action',
+                                render: function (data, type, row, meta) {
+                                    return `
+                                        <button class="btn btn-primary" onclick="openEditModal('${row.id}')">Edit Student</button>
+                                        <button class="btn btn-danger" style="color: black;" onclick="openDeleteModal('${row.id}')">Delete Customer</button>
+                                    `;
+                                }
+                            }
+                        ]
+                    });
+                    console.log('Data from file:', data);
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error fetching data from file:', error);
+                }
+            });
+        }
+
+        function getStudentById(id) {
+            $.ajax({
+                url: '/data/student_' + id + '.json',
+                type: 'GET',
+                dataType: 'json',
+                success: function (data) {
+                    console.log('Data for student ' + id);
+                    console.log(data);
+                    $('input[name="name"]').val(data.name);
+                    $('input[name="email"]').val(data.email);
+                    $('input[name="password"]').val(data.password);
+                    
+                    // Tampilkan modal setelah data berhasil dimuat
+                    var modal = new bootstrap.Modal(document.getElementById('editModal'), {
+                        backdrop: 'static',
+                        keyboard: false
+                    });
+                    modal.show();
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error fetching data from file:', error);
+                }
+            });
+        }
+
+        function openEditModal(id) {
+            console.log(id);
+            getStudentById(id); // Memanggil data siswa sebelum menampilkan modal
+        }
+
+        function closeModal(){
+            // Menutup modal menggunakan Bootstrap 5
+            var modal = bootstrap.Modal.getInstance(document.getElementById('editModal'));
+            modal.hide();
+        }
+
+        function saveChanges() {
+            toastr.success('The changes you made were successfully sent to the backend team. If for 24 hours there is no change, then fire the backend employee and look for new employees!!!'); // Menggunakan toastr untuk notifikasi
+            closeModal(); // Menutup modal setelah perubahan disimpan
+        }
+
+        function openDeleteModal(id) {
+            console.log(id);
+            // Tampilkan modal delete
+            var modal = new bootstrap.Modal(document.getElementById('deleteModal'), {
+                backdrop: 'static',
+                keyboard: false
+            });
+            modal.show();
+        }
+
+        function closeDeleteModal(){
+            // Menutup modal menggunakan Bootstrap 5
+            var modal = bootstrap.Modal.getInstance(document.getElementById('deleteModal'));
+            modal.hide();
+        }
+
+        function confirmDelete() {
+            const userInput = $('input[name="deleteConfirm"]').val().trim().toLowerCase();
+            if (userInput === "delete") {
+                toastr.success('The changes you made were successfully sent to the backend team. If for 24 hours there is no change, then fire the backend employee and look for new employees!!!');
+                closeDeleteModal(); // Menutup modal setelah penghapusan
+            } else {
+                toastr.error('An typo error occurred while typing "delete"');
+            }
+        }
+
+        $(document).ready(function() {
+            fetchStudentsFromFile();
+        });
+    </script>
+</body>
+</html>

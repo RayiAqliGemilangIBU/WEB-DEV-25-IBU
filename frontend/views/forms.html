@@ -1,0 +1,74 @@
+<div class="container">
+    <h1>Form Validation</h1>
+    <form id="myForm">
+        <div class="form-group">
+            <label for="name">Name:</label>
+            <input type="text" class="form-control" id="name" name="name" placeholder="Student" value="Student">
+        </div>
+        <div class="form-group">
+            <label for="email">Email:</label>
+            <input type="email" class="form-control" id="email" name="email" required>
+        </div>
+        <div class="form-group">
+            <label for="password">Password:</label>
+            <input type="password" class="form-control" id="password" name="password" minlength="8" required>
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+    </form>
+</div>
+<script>
+    $(document).ready(function () {
+        $('#myForm').validate({
+            rules: {
+                name: 'required',
+                email: {
+                    required: true,
+                    email: true
+                },
+                password: {
+                    required: true,
+                    minlength: 8,
+                    maxlength: 20
+                }
+            },
+            messages: {
+                name: 'Please enter your name',
+                email: {
+                    required: 'Please enter your email',
+                    email: 'Please enter a valid email address'
+                },
+                password: {
+                    required: 'Please enter a password',
+                    minlength: 'Password must be at least 8 characters long',
+                    maxlength: 'Password cannot be longer than 20 characters'
+                }
+            },
+            submitHandler: function (form) {
+                try {
+                    // Block UI on form submission
+                    $.blockUI({ message: '<div class="spinner-border" role="status"><span class="visually-hidden">Loading...</span></div>' });
+                    // Simulate form submission
+                    setTimeout(function () {
+                        console.log('Form submitted');
+                        toastr.success('Account that you made were successfully sent to the backend team. If for 24 hours there is no change in customer infomation section, then fire the backend employee and look for new employees!!!');
+                        // Reset the form
+                        $(form)[0].reset();
+                        // Unblock UI after request is complete
+                        $.unblockUI();
+                    }, 3000); // Simulate a 3-second submission time
+                } catch (error) {
+                    console.error('Error in submitHandler:', error);
+                    toastr.error('An error occurred. Please try again later.');
+                    // Unblock UI after request is complete
+                    $.unblockUI();
+                }
+            }
+        });
+    });
+</script>
+<!-- Referensi jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- Referensi jQuery Validate -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script>
