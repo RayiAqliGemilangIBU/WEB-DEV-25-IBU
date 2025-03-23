@@ -3,13 +3,17 @@
         "id": 1, 
         "name": "Rafal",
         "email": "rafal@alchem.com",
-        "password": "1234567890"
+        "address": "456 Another Rd, Townsville",
+        "phone_number": "+0987654321",
+        "date_of_birth": "1999-05-15"
     },
     {   
         "id": 2,
-        "name": "STD2",
-        "email": "std2@stu.ibu.edu.ba",
-        "password": "1234567890"
-    }    
+        "name": "ucok",
+        "email": "ucok@alchem.com",
+        "address": "456 Another Rd, Townsville",
+        "phone_number": "+0987654321",
+        "date_of_birth": "1999-05-15"
+    }   
 ]
 
