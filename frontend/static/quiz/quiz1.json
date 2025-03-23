@@ -1,0 +1,28 @@
+{
+    "id": 1,
+    "title": "Oxidation Reactions",
+    "description": "This quiz tests your knowledge on oxidation reactions in organic chemistry.",
+    "questions": [
+      {
+        "questionText": "What is the product of the oxidation of a primary alcohol?",
+        "options": [
+          { "id": "a", "text": "Aldehyde" },
+          { "id": "b", "text": "Ketone" },
+          { "id": "c", "text": "Carboxylic acid" },
+          { "id": "d", "text": "Alcohol" }
+        ],
+        "correctAnswer": "c"
+      },
+      {
+        "questionText": "Which of the following is a common oxidizing agent for alcohols?",
+        "options": [
+          { "id": "a", "text": "H2SO4" },
+          { "id": "b", "text": "KMnO4" },
+          { "id": "c", "text": "NaCl" },
+          { "id": "d", "text": "NaOH" }
+        ],
+        "correctAnswer": "b"
+      }
+    ]
+  }
+  

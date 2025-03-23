@@ -31,8 +31,8 @@
 <script src="../js/util/textMaterialServices.js"></script>
 <script>
   $(document).ready(function() {
-      // Load the material and quiz list when the page is ready
-      textMaterialServices.getMaterialAndQuizList();
+      // Load the material list when the page is ready
+      textMaterialServices.getMaterialList();  // Menggunakan getMaterialList yang sudah diubah
 
       // Load content based on material selection
       $(document).on('click', '.materialItem', function(event) {
@@ -40,11 +40,21 @@
           var materialId = $(this).data('id');
           textMaterialServices.loadMaterialContent(materialId);
       });
+  });
+</script>
 
+<!-- Include the quizServices.js -->
+<script src="../js/util/quizServices.js"></script>
+<script>
+  $(document).ready(function() {
+      // Load the quiz list when the page is ready
+      quizServices.getQuizList();
+
+      // Load content based on quiz selection
       $(document).on('click', '.quizItem', function(event) {
           event.preventDefault();
           var quizId = $(this).data('id');
-          textMaterialServices.loadQuizContent(quizId);
+          quizServices.loadQuizContent(quizId);
       });
   });
 </script>
