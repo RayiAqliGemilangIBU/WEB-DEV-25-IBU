@@ -13,8 +13,8 @@ $(document).ready(function () {
     });
   
     app.route({
-      view: "forms",
-      load: "forms.html",
+      view: "profile",
+      load: "profile.html",
     });
   
     app.route({
