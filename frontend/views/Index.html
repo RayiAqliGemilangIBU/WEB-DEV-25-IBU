@@ -79,7 +79,7 @@
             <label for="Tab" class="sr-only">Tab</label>
             <select id="Tab" class="w-full rounded-md border-gray-200" onchange="location = this.value;">
                 <option value="#customersInformation">Customers Information</option>
-                <option value="#highcharts">Highcharts</option>
+                <option value="#study">study</option>
                 <option value="#profile">profile</option>
                 <option value="#product">Product</option>
                 <option value="#faq">FAQs</option>
@@ -118,20 +118,18 @@
                     <a href="javascript:void(0);" class="shrink-0 rounded-lg p-2 text-sm font-medium text-gray-500 hover:bg-gray-50 hover:text-gray-700" onclick="UserService.logout()">Logout</a>
                 `;
                 mainContent = `
-                    <section id="product"></section>
-                    <section id="faq" data-load="tpl/faq.html"></section>
+                    <section id="study"></section>
                     <section id="profile"></section>
                 `;
                 window.location.hash = "#profile"; // Direct to the product page
             } else {
                 navContent = `
-                    <a href="#customersInformation" class="shrink-0 rounded-lg p-2 text-sm font-medium text-gray-500 hover:bg-gray-50 hover:text-gray-700">Customers Information</a>
+                    <a href="#customersInformation" class="shrink-0 rounded-lg p-2 text-sm font-medium text-gray-500 hover:bg-gray-50 hover:text-gray-700">students Information</a>
                     <a href="#profile" class="shrink-0 rounded-lg p-2 text-sm font-medium text-gray-500 hover:bg-gray-50 hover:text-gray-700">profile</a>
                     <a href="javascript:void(0);" class="shrink-0 rounded-lg p-2 text-sm font-medium text-gray-500 hover:bg-gray-50 hover:text-gray-700" onclick="UserService.logout()">Logout</a>
                 `;
                 mainContent = `
                     <section id="customersInformation" data-load="customersInformation.html"></section>
-                    <section id="study"></section>
                     <section id="profile"></section>
                 `;
                 window.location.hash = "#profile"; // Direct to the customers information page

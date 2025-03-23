@@ -48,7 +48,7 @@ var quizServices = {
             });
 
             quizHTML += '</ul>';
-            quizHTML += '<button id="next-question" style="display: none;">Next</button>';  // Initially hidden
+            quizHTML += '<button id="next-question" style="display: none; background-color: black; color: white; border: none; padding: 5px 15px; border-radius: 5px; cursor: pointer; margin: 2px 0;">Next</button>';  // Initially hidden
             $('#dynamicContent').html(quizHTML);
 
             // Set timer if it's the first question
