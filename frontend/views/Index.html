@@ -98,7 +98,7 @@
     
     <main id="spapp" role="main" class="mt-32">
         <section id="customersInformation" class="p-8"></section>
-        <section id="highcharts" class="p-8"></section>
+        <section id="study" class="p-8"></section>
         <section id="forms" class="p-8"></section>
         <section id="product" class="p-8"></section>
         <section id="faq" class="p-8" data-load="tpl/faq.html"></section>
@@ -125,13 +125,13 @@
             } else {
                 navContent = `
                     <a href="#customersInformation" class="shrink-0 rounded-lg p-2 text-sm font-medium text-gray-500 hover:bg-gray-50 hover:text-gray-700">Customers Information</a>
-                    <a href="#highcharts" class="shrink-0 rounded-lg p-2 text-sm font-medium text-gray-500 hover:bg-gray-50 hover:text-gray-700">Sale report</a>
+                    <a href="#study" class="shrink-0 rounded-lg p-2 text-sm font-medium text-gray-500 hover:bg-gray-50 hover:text-gray-700">study</a>
                     <a href="#forms" class="shrink-0 rounded-lg p-2 text-sm font-medium text-gray-500 hover:bg-gray-50 hover:text-gray-700">Add New Customer</a>
                     <a href="javascript:void(0);" class="shrink-0 rounded-lg p-2 text-sm font-medium text-gray-500 hover:bg-gray-50 hover:text-gray-700" onclick="UserService.logout()">Logout</a>
                 `;
                 mainContent = `
                     <section id="customersInformation" data-load="customersInformation.html"></section>
-                    <section id="highcharts"></section>
+                    <section id="study"></section>
                     <section id="forms"></section>
                 `;
                 window.location.hash = "#customersInformation"; // Direct to the customers information page

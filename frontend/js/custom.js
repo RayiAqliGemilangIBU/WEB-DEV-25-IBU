@@ -8,8 +8,8 @@ $(document).ready(function () {
     });
     
     app.route({
-      view: "highcharts",
-      load: "highcharts.html",
+      view: "study",
+      load: "study.html",
     });
   
     app.route({
