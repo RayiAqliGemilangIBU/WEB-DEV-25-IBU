@@ -1,0 +1,22 @@
+[
+    {   
+        "id": 1, 
+        "name": "Edward Elric",
+        "email": "admin@alchem.com",
+        "password": "12", 
+        "admin": true,
+        "address": "123 Main St, Cityville",
+        "phone_number": "+1234567890",
+        "date_of_birth": "2000-01-01"
+    },
+    {   
+        "id": 2,
+        "name": "Rafal",
+        "email": "rafal@alchem.com",
+        "password": "123",
+        "admin": false,
+        "address": "456 Another Rd, Townsville",
+        "phone_number": "+0987654321",
+        "date_of_birth": "1999-05-15"
+    }
+]

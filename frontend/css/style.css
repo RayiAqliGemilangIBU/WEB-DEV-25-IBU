@@ -1,0 +1,28 @@
+/* body {
+    font-family: Arial, sans-serif;
+} */
+
+.navbar {
+    transition: all 0.3s ease;
+}
+html, body {
+    height: 100%; /* Full height for html and body */
+    margin: 0; /* Remove default margin */
+}
+
+body {
+    display: flex; /* Enable flex layout */
+    flex-direction: column; /* Stack children vertically */
+}
+
+main {
+    flex: 1; /* Allow main to take remaining space */
+}
+
+footer {
+    /* Optional: Add padding and background color */
+    padding: 1rem; 
+    background-color: white; 
+    position: relative; 
+    z-index: 1; /* Lebih rendah dari modal */
+}
