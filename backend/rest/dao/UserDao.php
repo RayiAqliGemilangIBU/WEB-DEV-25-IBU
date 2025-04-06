@@ -25,5 +25,15 @@ class UserDao extends BaseDao {
             return false; // Jika gagal
         }
     }
+
+        // Fungsi untuk update data user
+    public function updateUser($data, $id) {
+        // Menentukan nama tabel dan kolom ID
+        $table = 'user'; // Nama tabel
+        $idField = 'user_id'; // Kolom ID
+            
+        // Memanggil fungsi update dari BaseDao
+        return $this->update($table, $data, $idField, $id);
+    }
 }
 
