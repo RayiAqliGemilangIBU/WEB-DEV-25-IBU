@@ -1,0 +1,48 @@
+{
+    "id": 1,
+    "title": "Oxidation Reactions",
+    "description": "This quiz tests your knowledge on oxidation reactions in organic chemistry.",
+    "questions": [
+      {
+        "questionText": "What is the final oxidation product of a primary alcohol?",
+        "options": [
+          { "id": "a", "text": "Ketone", "correct": false },
+          { "id": "b", "text": "Carboxylic acid", "correct": true },
+          { "id": "c", "text": "Aldehyde", "correct": false },
+          { "id": "d", "text": "Alkene", "correct": false }
+        ],
+        "explanation": "Primary alcohols first oxidize to aldehydes and then further oxidize to carboxylic acids if the oxidation continues."
+      },
+      {
+        "questionText": "Why don’t tertiary alcohols undergo oxidation?",
+        "options": [
+          { "id": "a", "text": "They lack a hydrogen atom on the carbon bearing the hydroxyl group", "correct": true },
+          { "id": "b", "text": "They form unstable products", "correct": false },
+          { "id": "c", "text": "They react too fast", "correct": false },
+          { "id": "d", "text": "They turn into water", "correct": false }
+        ],
+        "explanation": "Tertiary alcohols do not have a hydrogen atom attached to the carbon with the hydroxyl group, which is necessary for oxidation to occur."
+      },
+      {
+        "questionText": "Which reagent is used to stop the oxidation of a primary alcohol at the aldehyde stage?",
+        "options": [
+          { "id": "a", "text": "Sulfuric acid (H₂SO₄)", "correct": false },
+          { "id": "b", "text": "Potassium permanganate (KMnO₄)", "correct": false },
+          { "id": "c", "text": "Pyridinium chlorochromate (PCC)", "correct": true },
+          { "id": "d", "text": "Sodium hydroxide (NaOH)", "correct": false }
+        ],
+        "explanation": "PCC (pyridinium chlorochromate) is a mild oxidizing agent that can oxidize primary alcohols to aldehydes without further oxidation to carboxylic acids."
+      },
+      {
+        "questionText": "What is the oxidation product of a secondary alcohol?",
+        "options": [
+          { "id": "a", "text": "Carboxylic acid", "correct": false },
+          { "id": "b", "text": "Aldehyde", "correct": false },
+          { "id": "c", "text": "Ketone", "correct": true },
+          { "id": "d", "text": "Alkane", "correct": false }
+        ],
+        "explanation": "Secondary alcohols oxidize to ketones because they lack the second hydrogen needed for further oxidation into carboxylic acids."
+      }
+    ]
+  }
+  

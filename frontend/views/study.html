@@ -1,0 +1,60 @@
+<div id="container" style="display: flex; height: 100vh;">
+  <!-- Left Column -->
+  <div id="leftColumn" style="width: 33%; padding: 10px; border-right: 2px solid #ddd; box-sizing: border-box; display: flex; flex-direction: column;">
+      <!-- Box for Material List -->
+      <div id="materialBox" style="flex: 1; overflow-y: auto; margin-bottom: 10px;">
+          <h3><strong>Materials</strong></h3>
+          <ul id="materialList">
+              <!-- Dynamic Material List will be inserted here -->
+          </ul>
+      </div>
+      <hr class="solid">
+      <!-- Box for Quiz List -->
+      <div id="quizBox" style="flex: 1; overflow-y: auto;">
+          <h3><strong>Quizzes</strong></h3>
+          <ul id="quizList">
+              <!-- Dynamic Quiz List will be inserted here -->
+          </ul>
+      </div>
+  </div>
+
+  <!-- Right Column -->
+  <div id="rightColumn" style="width: 66%; padding: 10px; overflow-y: auto; box-sizing: border-box;">
+      <div id="dynamicContent" style="margin-top: 20px;">
+          <p><strong>Choose Material to study</strong></p>
+          <p>Please select a material from the left to see the content here.</p>
+      </div>
+  </div>
+</div>
+
+<!-- Include the textMaterialServices.js -->
+<script src="../js/util/textMaterialServices.js"></script>
+<script>
+  $(document).ready(function() {
+      // Load the material list when the page is ready
+      textMaterialServices.getMaterialList();  // Menggunakan getMaterialList yang sudah diubah
+
+      // Load content based on material selection
+      $(document).on('click', '.materialItem', function(event) {
+          event.preventDefault();
+          var materialId = $(this).data('id');
+          textMaterialServices.loadMaterialContent(materialId);
+      });
+  });
+</script>
+
+<!-- Include the quizServices.js -->
+<script src="../js/util/quizServices.js"></script>
+<script>
+  $(document).ready(function() {
+      // Load the quiz list when the page is ready
+      quizServices.getQuizList();
+
+      // Load content based on quiz selection
+      $(document).on('click', '.quizItem', function(event) {
+          event.preventDefault();
+          var quizId = $(this).data('id');
+          quizServices.loadQuizContent(quizId);
+      });
+  });
+</script>

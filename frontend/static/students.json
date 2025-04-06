@@ -1,0 +1,19 @@
+[
+    {   
+        "id": 1, 
+        "name": "Rafal",
+        "email": "rafal@alchem.com",
+        "address": "456 Another Rd, Townsville",
+        "phone_number": "+0987654321",
+        "date_of_birth": "1999-05-15"
+    },
+    {   
+        "id": 2,
+        "name": "ucok",
+        "email": "ucok@alchem.com",
+        "address": "456 Another Rd, Townsville",
+        "phone_number": "+0987654321",
+        "date_of_birth": "1999-05-15"
+    }   
+]
+
