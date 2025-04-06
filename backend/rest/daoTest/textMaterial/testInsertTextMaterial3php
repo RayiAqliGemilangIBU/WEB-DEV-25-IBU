@@ -1,0 +1,13 @@
+<?php
+require_once __DIR__ . '/../../dao/TextMaterialDao.php';
+
+$dao = new TextMaterialDao();
+$newTextMaterial = [
+
+    'title' => 'Pendahuluan Kimia 3',
+    'content' => 'Ini adalah konten pengantar kimia... 3',
+    'image_path' => 'images3/kimia1.jpg'
+];
+
+$id = $dao->insertTextMaterial($newTextMaterial);
+echo "Inserted TextMaterial with ID: $id\n";
