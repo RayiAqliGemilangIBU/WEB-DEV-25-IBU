@@ -3,7 +3,7 @@ require_once __DIR__ . '/../../dao/MaterialDao.php';
 
 $materialDao = new MaterialDao();
 
-$id = 1; // ID materi yang ingin diubah
+$id = 5; // ID materi yang ingin diubah
 $data = [
     'title' => 'Materi Kimia Dasar', //Materi Kimia Revisi
     'description' => 'Pengenalan tentang atom dan molekuu' //Materi telah diperbarui
