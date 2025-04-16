@@ -2,7 +2,7 @@
 class Database {
     private static $host = 'localhost';
     private static $port = '3306'; // default port MySQL di XAMPP
-    private static $db = 'chemlp'; // Pastikan kamu sudah buat database ini
+    private static $db = 'ChemLP1.2'; // Pastikan kamu sudah buat database ini
     private static $user = 'root'; // default user XAMPP
     private static $pass = ''; // default password XAMPP biasanya kosong
     private static $charset = 'utf8mb4';
