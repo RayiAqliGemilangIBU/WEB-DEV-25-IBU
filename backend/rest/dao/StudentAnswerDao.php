@@ -6,7 +6,7 @@ class StudentAnswerDao extends BaseDao {
     protected $table = 'student_answer';
     protected $idField = 'answer_id';
 
-    public function getStudentAnswerById($id) {
+    public function getAnswerById($id) {
         return $this->findById($this->table, $this->idField, $id);
     }
 
@@ -14,27 +14,49 @@ class StudentAnswerDao extends BaseDao {
         return $this->findAll($this->table);
     }
 
-    public function insertStudentAnswer($data) {
+    public function insertAnswer($data) {
+        echo "Inserting answer with data: ";
+        print_r($data);
         return $this->insert($this->table, $data);
     }
+    
 
-    public function updateStudentAnswer($data, $id) {
+    public function updateAnswer($data, $id) {
         return $this->update($this->table, $data, $this->idField, $id);
     }
 
-    public function deleteStudentAnswer($id) {
+    public function deleteAnswer($id) {
         return $this->delete($this->table, $this->idField, $id);
     }
 
-    // Tambahan: ambil jawaban berdasarkan user
-    public function getAnswersByUser($user_id) {
+    public function getAnswersByStudentId($user_id) {
         $stmt = $this->conn->prepare("SELECT * FROM $this->table WHERE user_id = ?");
         $stmt->execute([$user_id]);
         return $stmt->fetchAll();
     }
 
-    // Tambahan: ambil jawaban + opsi + soal untuk analisis
+    // Menambahkan metode berikut
+    public function getAnswerByStudentAndQuestion($user_id, $question_id) {
+        echo "Checking if student has answered the question...\n";
+        echo "User ID: $user_id, Question ID: $question_id\n";
+        $stmt = $this->conn->prepare("SELECT * FROM student_answer WHERE user_id = ? AND question_id = ?");
+        $stmt->execute([$user_id, $question_id]);
+        return $stmt->fetch();
+    }
+
     public function getDetailedAnswersByUser($user_id) {
+        // Debugging: tampilkan query dan nilai parameter untuk memastikan semuanya benar
+        // echo "Executing query: SELECT sa.*, q.header, oi.option_text, oi.is_correct
+        // FROM student_answer sa
+        // JOIN question q ON sa.question_id = q.question_id
+        // LEFT JOIN optionitem oi ON sa.selected_option_id = oi.option_id
+        // WHERE sa.user_id = " . $user_id . "\n";
+    
+        // // Debugging nilai user_id
+        // echo "user_id: ";
+        // var_dump($user_id);
+    
+        // Eksekusi query
         $stmt = $this->conn->prepare("
             SELECT sa.*, q.header, oi.option_text, oi.is_correct
             FROM student_answer sa
@@ -46,31 +68,22 @@ class StudentAnswerDao extends BaseDao {
         return $stmt->fetchAll();
     }
 
-    // Fungsi untuk menghitung persentase jawaban benar peserta
     public function calculateCorrectAnswerPercentage($user_id) {
-        // Ambil semua jawaban yang diberikan oleh user
-        $answers = $this->getDetailedAnswersByUser($user_id);
-        
-        // Inisialisasi variabel untuk menghitung jawaban benar dan total jawaban
-        $correctAnswers = 0;
-        $totalAnswers = count($answers);
+        $answers = $this->getDetailedAnswersByStudent($user_id);
+        $correct = 0;
+        $total = count($answers);
 
-        // Loop melalui jawaban dan hitung yang benar
-        foreach ($answers as $answer) {
-            if ($answer['is_correct'] == 1) { // Asumsikan is_correct = 1 berarti benar
-                $correctAnswers++;
-            }
+        foreach ($answers as $a) {
+            if ($a['is_correct'] == 1) $correct++;
         }
 
-        // Jika total jawaban adalah 0, kembalikan persentase 0
-        if ($totalAnswers == 0) {
-            return 0;
-        }
-
-        // Hitung persentase jawaban benar
-        $percentage = ($correctAnswers / $totalAnswers) * 100;
-        return $percentage;
+        return $total > 0 ? ($correct / $total) * 100 : 0;
     }
 
-    
+    public function getAnswersByOptionId($option_id) {
+        $stmt = $this->conn->prepare("SELECT * FROM student_answer WHERE selected_option_id = ?");
+        $stmt->execute([$option_id]);
+        return $stmt->fetchAll();
+    }
+
 }
