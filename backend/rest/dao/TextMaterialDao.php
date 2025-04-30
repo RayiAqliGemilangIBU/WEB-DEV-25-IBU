@@ -25,4 +25,10 @@ class TextMaterialDao extends BaseDao {
     public function deleteTextMaterial($id) {
         return $this->delete("textmaterial", "text_id", $id);
     }
+
+    public function getTextMaterialByMaterialId($materialId) {
+        $stmt = $this->conn->prepare("SELECT * FROM textmaterial WHERE material_id = ?");
+        $stmt->execute([$materialId]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
 }
