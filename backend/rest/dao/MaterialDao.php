@@ -33,5 +33,11 @@ class MaterialDao extends BaseDao {
     public function deleteMaterial($id) {
         return $this->delete($this->table, 'material_id', $id);
     }
+
+    public function getMaterialByTitle($title) {
+        $stmt = $this->conn->prepare("SELECT * FROM $this->table WHERE title = ?");
+        $stmt->execute([$title]);
+        return $stmt->fetch();
+    }
 }
 ?>
