@@ -28,4 +28,28 @@ class QuestionDao extends BaseDao {
     public function deleteQuestion($id) {
         return $this->delete('question', 'question_id', $id);
     }
+
+    // Method untuk cek duplikasi pertanyaan berdasarkan header dan quiz_id
+    public function getQuestionByHeaderAndQuizId($header, $quizId) {
+        $sql = "SELECT * FROM question WHERE header = :header AND quiz_id = :quizId";
+        $stmt = $this->conn->prepare($sql);
+        // Menggunakan bindValue() atau bindParam() untuk PDO
+        $stmt->bindValue(':header', $header, PDO::PARAM_STR); 
+        $stmt->bindValue(':quizId', $quizId, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+    // Method untuk menghitung jumlah pertanyaan berdasarkan quiz_id
+    public function getCountByQuizId($quizId) {
+        $sql = "SELECT COUNT(*) AS count FROM question WHERE quiz_id = :quizId";
+        $stmt = $this->conn->prepare($sql);
+        // Menggunakan bindValue() atau bindParam() untuk PDO
+        $stmt->bindValue(':quizId', $quizId, PDO::PARAM_INT); 
+        $stmt->execute();
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $result['count'];
+    }
+
+
 }
