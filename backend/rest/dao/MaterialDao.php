@@ -25,7 +25,7 @@ class MaterialDao extends BaseDao {
     }
 
     // UPDATE
-    public function updateMaterial($data, $id) {
+    public function updateMaterial($id, $data) {
         return $this->update($this->table, $data, 'material_id', $id);
     }
 

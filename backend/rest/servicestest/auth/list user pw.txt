@@ -1,3 +1,17 @@
 
 // $response = $authService->registerUser("ucok@test.com", "ucok", "New User", "Student");
 // $response = $authService->registerUser("newuser@domain.com", "newpassword", "New User", "Student");
+
+$response = $authService->registerUser("budi@test.com", "budi", "budi", "Admin"); //registerUser($email, $password, $name, $role) 
+
+
+JWT token student 
+Login successful!
+JWT: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOjksImVtYWlsIjoidWNva0B0ZXN0LmNvbSIsInJvbGUiOiJTdHVkZW50IiwiaWF0IjoxNzQ2MTA0MzMwLCJleHAiOjIwNjE0NjQzMzB9.0HHosY1xm7m_7PuY-6zixryTQw8UO0YLfrL3QSBe2PQ
+
+
+JWT TOKEN Admin
+
+Login successful!
+JWT: Budi
+eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOjEwLCJlbWFpbCI6ImJ1ZGlAdGVzdC5jb20iLCJyb2xlIjoiQWRtaW4iLCJpYXQiOjE3NDYxMDU2NTgsImV4cCI6MjA2MTQ2NTY1OH0.uf__o-23m6avQ9gvNl2BQwYjcOsl7qyFpipTGoPj120
