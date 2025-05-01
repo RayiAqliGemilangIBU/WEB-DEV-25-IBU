@@ -1,0 +1,3 @@
+
+// $response = $authService->registerUser("ucok@test.com", "ucok", "New User", "Student");
+// $response = $authService->registerUser("newuser@domain.com", "newpassword", "New User", "Student");
