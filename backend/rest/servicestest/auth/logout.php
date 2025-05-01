@@ -4,7 +4,9 @@ require_once __DIR__ . '/../../services/AuthService.php';
 $authService = new AuthService();
 
 // Simulasi token yang sebelumnya didapat saat login
-$token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOjgsImVtYWlsIjoibmV3dXNlckBkb21haW4uY29tIiwicm9sZSI6IlN0dWRlbnQiLCJpYXQiOjE3NDYxMDIyODMsImV4cCI6MTc0NjEwNTg4M30.nPu716YWMZnelpa13Jdi7_UxJrFXuIJuBokwKrXvcD8'; // Bisa diambil dari hasil login sebelumnya
+$token = '
+eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOjksImVtYWlsIjoidWNva0B0ZXN0LmNvbSIsInJvbGUiOiJTdHVkZW50IiwiaWF0IjoxNzQ2MTA0MzMwLCJleHAiOjIwNjE0NjQzMzB9.0HHosY1xm7m_7PuY-6zixryTQw8UO0YLfrL3QSBe2PQ
+'; // Bisa diambil dari hasil login sebelumnya
 
 // Logout user (misalnya invalidasi token, hapus sesi, dll)
 $response = $authService->logoutUser($token);
