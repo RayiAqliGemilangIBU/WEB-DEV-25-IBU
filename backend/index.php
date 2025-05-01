@@ -1,31 +1,40 @@
 <?php
-// Dummy data pengguna
-$users = [
-    ['id' => 1, 'name' => 'User Satu', 'email' => 'user1@example.com'],
-    ['id' => 2, 'name' => 'User Dua', 'email' => 'user2@example.com'],
-    ['id' => 3, 'name' => 'User Tiga', 'email' => 'user3@example.com']
-];
-?>
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Daftar Pengguna</title>
-</head>
-<body>
-    <h2>Daftar Pengguna</h2>
-    <table border="1">
-        <tr>
-            <th>ID</th>
-            <th>Nama</th>
-            <th>Email</th>
-        </tr>
-        <?php foreach ($users as $user): ?>
-        <tr>
-            <td><?php echo $user['id']; ?></td>
-            <td><?php echo htmlspecialchars($user['name']); ?></td>
-            <td><?php echo htmlspecialchars($user['email']); ?></td>
-        </tr>
-        <?php endforeach; ?>
-    </table>
-</body>
-</html>
+require_once __DIR__ . '/flight/Flight.php';
+require_once __DIR__ . '/service/MaterialService.php';
+
+// Inisialisasi service
+$materialService = new MaterialService();
+
+// Routing
+Flight::route('GET /materials', function() use ($materialService) {
+    $materials = $materialService->getAllMaterials();
+    Flight::json($materials);
+});
+
+Flight::route('GET /materials/@id', function($id) use ($materialService) {
+    $material = $materialService->getMaterialById($id);
+    if ($material) {
+        Flight::json($material);
+    } else {
+        Flight::halt(404, 'Material not found');
+    }
+});
+
+Flight::route('POST /materials', function() use ($materialService) {
+    $data = Flight::request()->data->getData();
+    $created = $materialService->createMaterial($data);
+    Flight::json($created);
+});
+
+Flight::route('PUT /materials/@id', function($id) use ($materialService) {
+    $data = Flight::request()->data->getData();
+    $updated = $materialService->updateMaterial($id, $data);
+    Flight::json($updated);
+});
+
+Flight::route('DELETE /materials/@id', function($id) use ($materialService) {
+    $deleted = $materialService->deleteMaterial($id);
+    Flight::json(["deleted" => $deleted]);
+});
+
+Flight::start();
