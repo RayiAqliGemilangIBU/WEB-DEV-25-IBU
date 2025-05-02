@@ -25,15 +25,14 @@ Flight::route('GET /materials/@id', function($id) use ($materialService) {
 Flight::route('POST /materials', function() use ($materialService) {
     $data = Flight::request()->data->getData();
     try {
-        // Validasi data (contoh)
         if (empty($data['title']) || empty($data['description'])) {
             Flight::halt(400, 'Title and Description are required');
         }
 
-        $created = $materialService->createMaterial($data['title'], $data['description']);
-        Flight::json(["success" => true, "message" => "Material created", "data" => $created], 201); // 201 Created
+        $created = $materialService->createMaterial($data);
+        Flight::json(["success" => true, "message" => "Material created", "data" => $created], 201);
     } catch (Exception $e) {
-        Flight::json(["success" => false, "message" => $e->getMessage()], 400); // 400 Bad Request
+        Flight::json(["success" => false, "message" => $e->getMessage()], 400);
     }
 });
 
@@ -64,6 +63,19 @@ Flight::route('DELETE /materials/@id', function($id) use ($materialService) {
         Flight::json(["success" => true, "message" => "Material deleted"]);
     } else {
         Flight::halt(404, 'Material not found');
+    }
+});
+
+
+// ---------------------------------------------------- TEXT MATERIAL--------------------------------------------------------------------------
+
+Flight::route('POST /textmaterials', function() use ($textMaterialService) {
+    $data = Flight::request()->data->getData();
+    try {
+        $createdId = $textMaterialService->createTextMaterial($data);
+        Flight::json(["success" => true, "message" => "TextMaterial created", "id" => $createdId], 201);
+    } catch (Exception $e) {
+        Flight::json(["success" => false, "message" => $e->getMessage()], 400);
     }
 });
 
