@@ -9,31 +9,19 @@ class QuestionService {
         $this->questionDao = new QuestionDao();
     }
 
-    // Validasi dan penambahan pertanyaan
-    public function createQuestion($question) {
-        // Validasi data
-        if (empty($question['header']) || empty($question['explanation'])) {
-            throw new Exception("Header and explanation cannot be empty.");
+    public function createQuiz($data) {
+        // Validasi data input
+        if (empty($data['title']) || empty($data['material_id'])) {
+            throw new Exception("Data tidak valid, title dan material_id diperlukan.");
         }
 
-        if (strlen($question['header']) < 10) {
-            throw new Exception("Header must be at least 10 characters long.");
+        // Memasukkan quiz baru ke dalam database
+        $quizId = $this->quizDao->insertQuiz($data); // Memanggil metode insertQuiz di QuizDao
+        if ($quizId) {
+            return ['last_insert_id' => $quizId];
+        } else {
+            throw new Exception("Quiz creation failed.");
         }
-
-        // Cek duplikasi pertanyaan dalam satu kuis
-        $existingQuestion = $this->questionDao->getQuestionByHeaderAndQuizId($question['header'], $question['quiz_id']);
-        if ($existingQuestion) {
-            throw new Exception("Duplicate question found in the quiz.");
-        }
-
-        // Validasi jumlah pertanyaan per kuis
-        $questionCount = $this->questionDao->getCountByQuizId($question['quiz_id']);
-        if ($questionCount >= 10) {
-            throw new Exception("You can only have a maximum of 10 questions per quiz.");
-        }
-
-        // Insert pertanyaan baru
-        return $this->questionDao->insertQuestion($question);
     }
 
     // Update pertanyaan

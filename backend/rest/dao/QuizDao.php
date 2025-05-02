@@ -4,9 +4,9 @@ require_once 'BaseDao.php';
 class QuizDao extends BaseDao {
 
     public function insertQuiz($data) {
-        return $this->insert('quiz', $data);
+        // Menyusun data untuk tabel quizzes
+        return $this->insert('quiz', $data); // Memanggil metode insert di BaseDao
     }
-
     public function updateQuiz($data, $id) {
         return $this->update('quiz', $data, 'quiz_id', $id);
     }

@@ -1,43 +1,51 @@
 <?php
 require_once __DIR__ . '/../dao/QuizDao.php';
-require_once __DIR__ . '/../dao/MaterialDao.php';
 
 class QuizService {
     private $quizDao;
-    private $materialDao;
 
     public function __construct() {
         $this->quizDao = new QuizDao();
-        $this->materialDao = new MaterialDao();
+    }
+    public function createQuiz($data) {
+        // Validasi data input
+        if (empty($data['title']) || empty($data['material_id'])) {
+            throw new Exception("Data tidak valid, title dan material_id diperlukan.");
+        }
+
+        // Memasukkan quiz baru ke dalam database
+        $quizId = $this->quizDao->insertQuiz($data); // Memanggil metode insertQuiz di QuizDao
+        if ($quizId) {
+            return ['last_insert_id' => $quizId];
+        } else {
+            throw new Exception("Quiz creation failed.");
+        }
+    }
+    
+    
+
+    public function getAllQuizzes() {
+        // Mengambil semua quizzes
+        return $this->quizDao->getAllQuizzes();
     }
 
-    public function createQuiz($quiz) {
-        // Validasi: title tidak boleh kosong
-        if (empty($quiz['title'])) {
+    public function getQuizById($id) {
+        // Mendapatkan quiz berdasarkan ID
+        return $this->quizDao->getQuizById($id);
+    }
+
+    public function updateQuiz($quizId, $data) {
+        // Validasi dan update data quiz
+        if (empty($data['title'])) {
             throw new Exception("Quiz title cannot be empty");
         }
 
-        // Validasi: material_id harus valid
-        $material = $this->materialDao->getMaterialById($quiz['material_id']);
-        if (!$material) {
-            throw new Exception("Invalid material ID");
-        }
-
-        // Logika Bisnis: Cegah duplikat quiz dengan title yang sama dalam satu material
-        $existing = $this->quizDao->getQuizByTitleAndMaterialId($quiz['title'], $quiz['material_id']);
-        if ($existing) {
-            throw new Exception("Quiz with this title already exists for the material");
-        }
-
-
-        // Pengolahan: trim dan sanitasi input
-        $quiz['title'] = htmlspecialchars(trim($quiz['title']));
-
-        return $this->quizDao->insertQuiz($quiz);
+        // Mengupdate quiz berdasarkan ID
+        return $this->quizDao->updateQuiz($data, $quizId);
     }
 
     public function deleteQuiz($quizId) {
-        // Opsional: hapus semua question dan option terkait
+        // Hapus quiz dan semua dependensinya
         return $this->quizDao->deleteQuizAndDependencies($quizId);
     }
 }
