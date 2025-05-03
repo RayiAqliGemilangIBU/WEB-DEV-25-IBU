@@ -2,6 +2,7 @@
 require_once 'BaseDao.php';
 
 class UserDao extends BaseDao {
+     protected $table = 'user';
 
     public function insert($table, $data) {
         // Menyusun query insert dinamis
@@ -26,6 +27,14 @@ class UserDao extends BaseDao {
         }
     }
 
+    public function getAllUser() {
+        return $this->findAll($this->table);
+    }
+
+    public function getUserById($id) {
+        return $this->findById($this->table,'user_id', $id);
+    }
+    
     // Fungsi untuk update data user
     public function updateUser($data, $id) {
         // Menentukan nama tabel dan kolom ID
@@ -33,7 +42,7 @@ class UserDao extends BaseDao {
         $idField = 'user_id'; // Kolom ID
             
         // Memanggil fungsi update dari BaseDao
-        return $this->update($table, $data, $idField, $id);
+        return $this->update($this->table, $data, $idField, $id);
     }
 
     // Fungsi untuk verifikasi kredensial login (email dan password)

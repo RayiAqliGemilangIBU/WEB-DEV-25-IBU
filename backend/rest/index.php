@@ -6,7 +6,7 @@ require_once __DIR__ . '/util/JwtExtractor.php';
 require_once __DIR__ . '/services/QuizService.php';
 require_once __DIR__ . '/services/QuestionService.php';
 require_once __DIR__ . '/services/OptionItemService.php';
-
+require_once __DIR__ . '/services/UserService.php';
 
 
 // ------------------------------ Token taker
@@ -382,5 +382,58 @@ Flight::route('GET /optionitem/check/@question_id/@content', function ($question
     }
 });
 
+
+
+
+
+// -------------------------------User
+
+$userService = new UserService();
+
+// GET all users
+Flight::route('GET /user', function () use ($userService) {
+    Flight::json($userService->getAllUser());
+});
+
+// GET user by ID
+Flight::route('GET /user/@id', function ($id) use ($userService) {
+    $user = $userService->getUserById($id);
+    if ($user) {
+        Flight::json($user);
+    } else {
+        Flight::halt(404, "User not found");
+    }
+});
+
+// GET user by email
+Flight::route('GET /user/email/@email', function ($email) use ($userService) {
+    $user = $userService->getUserByEmail($email);
+    if ($user) {
+        Flight::json($user);
+    } else {
+        Flight::halt(404, "User with email $email not found");
+    }
+});
+
+// PUT update user
+Flight::route('PUT /user/@id', function ($id) use ($userService) {
+    $data = Flight::request()->data->getData();
+    try {
+        $userService->updateUser($id, $data);
+        Flight::json(["message" => "User updated"]);
+    } catch (Exception $e) {
+        Flight::halt(400, $e->getMessage());
+    }
+});
+
+// DELETE user
+Flight::route('DELETE /user/@id', function ($id) use ($userService) {
+    try {
+        $userService->deleteUser($id);
+        Flight::json(["message" => "User deleted"]);
+    } catch (Exception $e) {
+        Flight::halt(500, $e->getMessage());
+    }
+});
 
 Flight::start();
