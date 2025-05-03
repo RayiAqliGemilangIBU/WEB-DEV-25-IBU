@@ -5,7 +5,7 @@ require_once __DIR__ . '/services/TextMaterialService.php';
 require_once __DIR__ . '/util/JwtExtractor.php';
 require_once __DIR__ . '/services/QuizService.php';
 require_once __DIR__ . '/services/QuestionService.php';
-require_once __DIR__ . '/services/QuestionService.php';
+require_once __DIR__ . '/services/OptionItemService.php';
 
 
 
@@ -318,61 +318,67 @@ Flight::route('DELETE /question/@id', function ($id) use ($questionService) {
 
 // -------------------------------Optionitem
 
-$optionItemService = new OptionItemService(); // Inisialisasi service untuk optionitem
+$optionService = new OptionItemService();
 
-// Mengambil semua opsi soal
-Flight::route('GET /optionitem', function () use ($optionItemService) {
+// GET all option items
+Flight::route('GET /optionitem', function () use ($optionService) {
+    Flight::json($optionService->getAllOptionItems());
+});
+
+// GET option item by ID
+Flight::route('GET /optionitem/@id', function ($id) use ($optionService) {
+    $option = $optionService->getOptionItemById($id);
+    if ($option) {
+        Flight::json($option);
+    } else {
+        Flight::halt(404, "Option item not found");
+    }
+});
+
+// POST create option item
+Flight::route('POST /optionitem', function () use ($optionService) {
+    $data = Flight::request()->data->getData();
     try {
-        $options = $optionItemService->getAllOptions();
-        Flight::json($options);
+        $created = $optionService->createOptionItem($data);
+        Flight::json(["message" => "Option item created", "option_id" => $created['last_insert_id']]);
+    } catch (Exception $e) {
+        Flight::halt(400, $e->getMessage());
+    }
+});
+
+// PUT update option item
+Flight::route('PUT /optionitem/@id', function ($id) use ($optionService) {
+    $data = Flight::request()->data->getData();
+    try {
+        $optionService->updateOptionItem($id, $data);
+        Flight::json(["message" => "Option item updated"]);
+    } catch (Exception $e) {
+        Flight::halt(400, $e->getMessage());
+    }
+});
+
+// DELETE option item
+Flight::route('DELETE /optionitem/@id', function ($id) use ($optionService) {
+    try {
+        $optionService->deleteOptionItem($id);
+        Flight::json(["message" => "Option item deleted"]);
     } catch (Exception $e) {
         Flight::halt(500, $e->getMessage());
     }
 });
 
-// Mengambil opsi soal berdasarkan ID
-Flight::route('GET /optionitem/@id', function ($id) use ($optionItemService) {
-    try {
-        $option = $optionItemService->getOptionById($id);
-        if ($option) {
-            Flight::json($option);
-        } else {
-            Flight::halt(404, "Option not found");
-        }
-    } catch (Exception $e) {
-        Flight::halt(500, $e->getMessage());
-    }
+// GET options by question_id
+Flight::route('GET /optionitem/question/@question_id', function ($question_id) use ($optionService) {
+    Flight::json($optionService->getOptionsByQuestionId($question_id));
 });
 
-// Membuat opsi soal baru
-Flight::route('POST /optionitem', function () use ($optionItemService) {
-    $data = Flight::request()->data->getData(); // Ambil data dari body permintaan
-    try {
-        $created = $optionItemService->createOptionItem($data); // Simpan data opsi soal via service
-        Flight::json(["message" => "Option created", "option_id" => $created['last_insert_id']]);
-    } catch (Exception $e) {
-        Flight::halt(500, $e->getMessage());
-    }
-});
-
-// Mengupdate opsi soal berdasarkan ID
-Flight::route('PUT /optionitem/@id', function ($id) use ($optionItemService) {
-    $data = Flight::request()->data->getData(); // Ambil data dari request
-    try {
-        $optionItemService->updateOption($id, $data); // Update opsi soal via service
-        Flight::json(["message" => "Option updated"]);
-    } catch (Exception $e) {
-        Flight::halt(500, $e->getMessage());
-    }
-});
-
-// Menghapus opsi soal berdasarkan ID
-Flight::route('DELETE /optionitem/@id', function ($id) use ($optionItemService) {
-    try {
-        $optionItemService->deleteOptionItem($id);
-        Flight::json(["message" => "Option deleted"]);
-    } catch (Exception $e) {
-        Flight::halt(500, $e->getMessage());
+// GET check option content by question_id
+Flight::route('GET /optionitem/check/@question_id/@content', function ($question_id, $content) use ($optionService) {
+    $result = $optionService->checkOptionContent($question_id, $content);
+    if ($result) {
+        Flight::json($result);
+    } else {
+        Flight::halt(404, "Option content not found for this question");
     }
 });
 

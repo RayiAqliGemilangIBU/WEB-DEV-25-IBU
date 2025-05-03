@@ -4,38 +4,40 @@ require_once __DIR__ . '/../dao/OptionItemDao.php';
 class OptionItemService {
     private $dao;
 
-
     public function __construct() {
         $this->dao = new OptionItemDao();
     }
 
-    public function getAllOptions() {
-        return $this->dao->getAllOptions();
+    public function getAllOptionItems() {
+        return $this->dao->getAllOptionItems();
     }
 
-    public function getOptionsByQuestionId($questionId) {
-        return $this->dao->getOptionsByQuestionId($questionId);
-    }
-
-    public function getOptionById($id) {
-        return $this->dao->getOptionById($id);
+    public function getOptionItemById($id) {
+        return $this->dao->getOptionItemById($id);
     }
 
     public function createOptionItem($data) {
-        // Optional: periksa apakah option dengan text sama sudah ada di pertanyaan yang sama
-        return $this->dao->insertOption($data);
+        if (empty($data['question_id']) || empty($data['option_text']) || !isset($data['is_correct'])) {
+            throw new Exception("Invalid data: question_id, option_text, and is_correct are required.");
+        }
+        $id = $this->dao->insertOptionItem($data);
+        return ['last_insert_id' => $id];
     }
+    
 
-    public function updateOption($id, $data) {
-        return $this->dao->updateOption($data, $id); 
+    public function updateOptionItem($id, $data) {
+        return $this->dao->updateOptionItem($data, $id);
     }
 
     public function deleteOptionItem($id) {
-        return $this->dao->deleteOption($id);
+        return $this->dao->deleteOptionItem($id);
     }
 
-    public function createOption($data) {
-        return $this->dao->insertOptionItem($data);
+    public function getOptionsByQuestionId($question_id) {
+        return $this->dao->getOptionsByQuestionId($question_id);
     }
-    
+
+    public function checkOptionContent($question_id, $content) {
+        return $this->dao->checkOptionContentByQuestionId($question_id, $content);
+    }
 }
