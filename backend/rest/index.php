@@ -7,7 +7,7 @@ require_once __DIR__ . '/services/QuizService.php';
 require_once __DIR__ . '/services/QuestionService.php';
 require_once __DIR__ . '/services/OptionItemService.php';
 require_once __DIR__ . '/services/UserService.php';
-
+require_once __DIR__ . '/services/StudentAnswerService.php';
 
 // ------------------------------ Token taker
 
@@ -436,4 +436,94 @@ Flight::route('DELETE /user/@id', function ($id) use ($userService) {
     }
 });
 
+
+// Inisialisasi layanan
+$studentAnswerService = new StudentAnswerService();
+
+// ------------------------------- Student Answer Routes
+
+
+// ------------------------------- Student Answer
+
+// GET all student answers
+Flight::route('GET /studentAnswer', function () use ($studentAnswerService) {
+    Flight::json($studentAnswerService->getAllAnswers());
+});
+
+// GET student answer by ID
+Flight::route('GET /studentAnswer/@id', function ($id) use ($studentAnswerService) {
+    $answer = $studentAnswerService->getAnswerById($id);
+    if ($answer) {
+        Flight::json($answer);
+    } else {
+        Flight::halt(404, "Answer not found");
+    }
+});
+
+// GET all student answers by student ID
+Flight::route('GET /studentAnswer/student/@user_id', function ($user_id) use ($studentAnswerService) {
+    $answers = $studentAnswerService->getAnswersByStudentId($user_id);
+    Flight::json($answers);
+});
+
+// GET correct answer percentage by user_id
+Flight::route('GET /studentAnswer/correctPercentage/@user_id', function ($user_id) use ($studentAnswerService) {
+    try {
+        $percentage = $studentAnswerService->calculateCorrectAnswerPercentage($user_id);
+        Flight::json(["correct_answer_percentage" => $percentage]);
+    } catch (Exception $e) {
+        Flight::halt(400, $e->getMessage());
+    }
+});
+
+// GET correct answer percentage by email
+Flight::route('GET /studentAnswer/correctPercentage/email/@email', function ($email) use ($studentAnswerService, $userService) {
+    // Get user_id based on email
+    $user = $userService->getUserByEmail($email);
+
+    if (!$user) {
+        Flight::halt(404, "User with email $email not found");
+    }
+
+    try {
+        $percentage = $studentAnswerService->calculateCorrectAnswerPercentage($user['user_id']);
+        Flight::json(["correct_answer_percentage" => $percentage]);
+    } catch (Exception $e) {
+        Flight::halt(400, $e->getMessage());
+    }
+});
+
+// POST create student answer
+Flight::route('POST /studentAnswer', function () use ($studentAnswerService) {
+    $data = Flight::request()->data->getData();
+
+    try {
+        $studentAnswerService->createAnswer($data);
+        Flight::json(["message" => "Answer created successfully"]);
+    } catch (Exception $e) {
+        Flight::halt(400, $e->getMessage());
+    }
+});
+
+// PUT update student answer
+Flight::route('PUT /studentAnswer/@id', function ($id) use ($studentAnswerService) {
+    $data = Flight::request()->data->getData();
+
+    try {
+        $studentAnswerService->updateAnswer($data, $id);
+        Flight::json(["message" => "Answer updated"]);
+    } catch (Exception $e) {
+        Flight::halt(400, $e->getMessage());
+    }
+});
+
+// DELETE student answer by ID
+Flight::route('DELETE /studentAnswer/@id', function ($id) use ($studentAnswerService) {
+    try {
+        $studentAnswerService->deleteAnswer($id);
+        Flight::json(["message" => "Answer deleted"]);
+    } catch (Exception $e) {
+        Flight::halt(500, $e->getMessage());
+    }
+});
 Flight::start();
