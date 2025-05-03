@@ -4,6 +4,9 @@ require_once __DIR__ . '/services/MaterialService.php';
 require_once __DIR__ . '/services/TextMaterialService.php';
 require_once __DIR__ . '/util/JwtExtractor.php';
 require_once __DIR__ . '/services/QuizService.php';
+require_once __DIR__ . '/services/QuestionService.php';
+require_once __DIR__ . '/services/QuestionService.php';
+
 
 
 // ------------------------------ Token taker
@@ -247,6 +250,127 @@ Flight::route('DELETE /quiz/@id', function ($id) {
     try {
         $service->deleteQuiz($id);
         Flight::json(["message" => "Quiz and its dependencies deleted"]);
+    } catch (Exception $e) {
+        Flight::halt(500, $e->getMessage());
+    }
+});
+// ------------------------------- Question
+
+$questionService = new QuestionService(); // Inisialisasi service di luar route
+
+// Mengambil semua pertanyaan
+Flight::route('GET /question', function () use ($questionService) {
+    try {
+        $questions = $questionService->getAllQuestions();
+        Flight::json($questions);
+    } catch (Exception $e) {
+        Flight::halt(500, $e->getMessage());
+    }
+});
+
+// Mengambil pertanyaan berdasarkan ID
+Flight::route('GET /question/@id', function ($id) use ($questionService) {
+    try {
+        $question = $questionService->getQuestionById($id);
+        if ($question) {
+            Flight::json($question);
+        } else {
+            Flight::halt(404, "Question not found");
+        }
+    } catch (Exception $e) {
+        Flight::halt(500, $e->getMessage());
+    }
+});
+
+// Membuat pertanyaan baru
+Flight::route('POST /question', function () use ($questionService) {
+    $data = Flight::request()->data->getData(); // Ambil data dari body permintaan
+    error_log(print_r($data, true)); // Log untuk debugging
+
+    try {
+        $created = $questionService->createQuestion($data); // Simpan data via service
+        Flight::json(["message" => "Question created", "question_id" => $created['last_insert_id']]);
+    } catch (Exception $e) {
+        Flight::halt(500, $e->getMessage());
+    }
+});
+
+// Mengupdate pertanyaan berdasarkan ID
+Flight::route('PUT /question/@id', function ($id) use ($questionService) {
+    $data = Flight::request()->data->getData(); // Ambil data dari request
+    try {
+        $questionService->updateQuestion($data, $id); // Update via service
+        Flight::json(["message" => "Question updated"]);
+    } catch (Exception $e) {
+        Flight::halt(500, $e->getMessage());
+    }
+});
+
+// Menghapus pertanyaan berdasarkan ID
+Flight::route('DELETE /question/@id', function ($id) use ($questionService) {
+    try {
+        $questionService->deleteQuestion($id);
+        Flight::json(["message" => "Question deleted"]);
+    } catch (Exception $e) {
+        Flight::halt(500, $e->getMessage());
+    }
+});
+
+// -------------------------------Optionitem
+
+$optionItemService = new OptionItemService(); // Inisialisasi service untuk optionitem
+
+// Mengambil semua opsi soal
+Flight::route('GET /optionitem', function () use ($optionItemService) {
+    try {
+        $options = $optionItemService->getAllOptions();
+        Flight::json($options);
+    } catch (Exception $e) {
+        Flight::halt(500, $e->getMessage());
+    }
+});
+
+// Mengambil opsi soal berdasarkan ID
+Flight::route('GET /optionitem/@id', function ($id) use ($optionItemService) {
+    try {
+        $option = $optionItemService->getOptionById($id);
+        if ($option) {
+            Flight::json($option);
+        } else {
+            Flight::halt(404, "Option not found");
+        }
+    } catch (Exception $e) {
+        Flight::halt(500, $e->getMessage());
+    }
+});
+
+// Membuat opsi soal baru
+Flight::route('POST /optionitem', function () use ($optionItemService) {
+    $data = Flight::request()->data->getData(); // Ambil data dari body permintaan
+    try {
+        $created = $optionItemService->createOptionItem($data); // Simpan data opsi soal via service
+        Flight::json(["message" => "Option created", "option_id" => $created['last_insert_id']]);
+    } catch (Exception $e) {
+        Flight::halt(500, $e->getMessage());
+    }
+});
+
+// Mengupdate opsi soal berdasarkan ID
+Flight::route('PUT /optionitem/@id', function ($id) use ($optionItemService) {
+    $data = Flight::request()->data->getData(); // Ambil data dari request
+    try {
+        $optionItemService->updateOption($id, $data); // Update opsi soal via service
+        Flight::json(["message" => "Option updated"]);
+    } catch (Exception $e) {
+        Flight::halt(500, $e->getMessage());
+    }
+});
+
+// Menghapus opsi soal berdasarkan ID
+Flight::route('DELETE /optionitem/@id', function ($id) use ($optionItemService) {
+    try {
+        $optionItemService->deleteOptionItem($id);
+        Flight::json(["message" => "Option deleted"]);
     } catch (Exception $e) {
         Flight::halt(500, $e->getMessage());
     }

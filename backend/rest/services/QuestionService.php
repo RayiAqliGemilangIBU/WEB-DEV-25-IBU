@@ -9,18 +9,19 @@ class QuestionService {
         $this->questionDao = new QuestionDao();
     }
 
-    public function createQuiz($data) {
+    public function createQuestion($data) {
         // Validasi data input
-        if (empty($data['title']) || empty($data['material_id'])) {
-            throw new Exception("Data tidak valid, title dan material_id diperlukan.");
+        if (empty($data['quiz_id']) || empty($data['header']) || empty($data['explanation'])) {
+            throw new Exception("Data tidak valid. 'quiz_id', 'header', dan 'explanation' diperlukan.");
         }
-
-        // Memasukkan quiz baru ke dalam database
-        $quizId = $this->quizDao->insertQuiz($data); // Memanggil metode insertQuiz di QuizDao
-        if ($quizId) {
-            return ['last_insert_id' => $quizId];
+    
+        // Memasukkan question baru ke database via DAO
+        $questionId = $this->questionDao->insertQuestion($data); // Panggil DAO
+    
+        if ($questionId) {
+            return ['last_insert_id' => $questionId];
         } else {
-            throw new Exception("Quiz creation failed.");
+            throw new Exception("Question creation failed.");
         }
     }
 
