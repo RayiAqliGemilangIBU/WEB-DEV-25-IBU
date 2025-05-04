@@ -18,6 +18,8 @@ class StudentAnswerDao extends BaseDao {
         echo "Inserting answer with data: ";
         print_r($data);
         return $this->insert($this->table, $data);
+
+        
     }
     
 
