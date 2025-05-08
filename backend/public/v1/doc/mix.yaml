@@ -1,0 +1,266 @@
+openapi: 3.1.0
+info:
+  title: ChemLP Full API Collection
+  description: Kumpulan API MIST dan TextMaterial di ChemLP
+  contact: {}
+  version: '1.0'
+jsonSchemaDialect: https://json-schema.org/draft/2020-12/schema
+servers:
+- url: http://localhost/WEB-DEV-25-IBU/backend/rest
+  variables: {}
+paths:
+  /materials:
+    get:
+      tags:
+      - Material API
+      summary: GET All Materials
+      operationId: GETAllMaterials
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+    post:
+      tags:
+      - Material API
+      summary: POST Create Material
+      operationId: POSTCreateMaterial
+      parameters: []
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/POSTCreateMaterialRequest'
+              - examples:
+                - title: Asam Basa
+                  description: Materi tentang sifat asam dan basa.
+              contentMediaType: application/json
+            example:
+              title: Asam Basa
+              description: Materi tentang sifat asam dan basa.
+        required: true
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+    parameters: []
+  /materials/1:
+    get:
+      tags:
+      - Material API
+      summary: GET Material by ID
+      operationId: GETMaterialbyID
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+    put:
+      tags:
+      - Material API
+      summary: PUT Update Material
+      operationId: PUTUpdateMaterial
+      parameters: []
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/PUTUpdateMaterialRequest'
+              - examples:
+                - title: Revisi Asam Basa
+                  description: Revisi deskripsi materi asam dan basa.
+              contentMediaType: application/json
+            example:
+              title: Revisi Asam Basa
+              description: Revisi deskripsi materi asam dan basa.
+        required: true
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+    parameters: []
+  /materials/3:
+    delete:
+      tags:
+      - Material API
+      summary: DELETE Material
+      operationId: DELETEMaterial
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+    parameters: []
+  /textmaterials:
+    post:
+      tags:
+      - TextMaterial API
+      summary: Create TextMaterial
+      operationId: CreateTextMaterial
+      parameters: []
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/CreateTextMaterialRequest'
+              - examples:
+                - title: Test API
+                  content: uiiia uuiiia uuu iiauu iiau iia uiuuu iiiia uuuiiuaa uiiia uuiiia uuu iiauu iiau iia uiuuu iiiia uuuiiua uiiia uuiiia uuu iiauu iiau iia uiuuu iiiia uuuiiua uiiia uuiiia uuu iiauu iiau iia uiuuu iiiia uuuiiua
+                  image_path: images/kimia1.jpg
+              contentMediaType: application/json
+            example:
+              title: Test API
+              content: uiiia uuiiia uuu iiauu iiau iia uiuuu iiiia uuuiiuaa uiiia uuiiia uuu iiauu iiau iia uiuuu iiiia uuuiiua uiiia uuiiia uuu iiauu iiau iia uiuuu iiiia uuuiiua uiiia uuiiia uuu iiauu iiau iia uiuuu iiiia uuuiiua
+              image_path: images/kimia1.jpg
+        required: true
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+    get:
+      tags:
+      - TextMaterial API
+      summary: Get All TextMaterials
+      operationId: GetAllTextMaterials
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+    parameters: []
+  /textmaterials/1:
+    get:
+      tags:
+      - TextMaterial API
+      summary: Get TextMaterials by Material ID
+      operationId: GetTextMaterialsbyMaterialID
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+    put:
+      tags:
+      - TextMaterial API
+      summary: Update TextMaterial
+      operationId: UpdateTextMaterial
+      parameters: []
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/UpdateTextMaterialRequest'
+              - examples:
+                - title: Pendahuluan Kimia Lanjutan
+                  content: uiiia uuiiia uuu iiauu iiau iia uiuuu iiiia uuuiiuaa uiiia uuiiia uuu iiauu iiau iia uiuuu iiiia uuuiiua uiiia uuiiia uuu iiauu iiau iia uiuuu iiiia uuuiiua uiiia uuiiia uuu iiauu iiau iia uiuuu iiiia uuuiiua
+                  image_path: images/kimia2.jpg
+              contentMediaType: application/json
+            example:
+              title: Pendahuluan Kimia Lanjutan
+              content: uiiia uuiiia uuu iiauu iiau iia uiuuu iiiia uuuiiuaa uiiia uuiiia uuu iiauu iiau iia uiuuu iiiia uuuiiua uiiia uuiiia uuu iiauu iiau iia uiuuu iiiia uuuiiua uiiia uuiiia uuu iiauu iiau iia uiuuu iiiia uuuiiua
+              image_path: images/kimia2.jpg
+        required: true
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+    parameters: []
+  /textmaterials/id/4:
+    delete:
+      tags:
+      - TextMaterial API
+      summary: Delete TextMaterial by Text ID (Optional)
+      operationId: DeleteTextMaterialbyTextID(Optional)
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+    parameters: []
+components:
+  schemas:
+    POSTCreateMaterialRequest:
+      title: POSTCreateMaterialRequest
+      required:
+      - title
+      - description
+      type: object
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+      examples:
+      - title: Asam Basa
+        description: Materi tentang sifat asam dan basa.
+    PUTUpdateMaterialRequest:
+      title: PUTUpdateMaterialRequest
+      required:
+      - title
+      - description
+      type: object
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+      examples:
+      - title: Revisi Asam Basa
+        description: Revisi deskripsi materi asam dan basa.
+    CreateTextMaterialRequest:
+      title: CreateTextMaterialRequest
+      required:
+      - title
+      - content
+      - image_path
+      type: object
+      properties:
+        title:
+          type: string
+        content:
+          type: string
+        image_path:
+          type: string
+      examples:
+      - title: Test API
+        content: uiiia uuiiia uuu iiauu iiau iia uiuuu iiiia uuuiiuaa uiiia uuiiia uuu iiauu iiau iia uiuuu iiiia uuuiiua uiiia uuiiia uuu iiauu iiau iia uiuuu iiiia uuuiiua uiiia uuiiia uuu iiauu iiau iia uiuuu iiiia uuuiiua
+        image_path: images/kimia1.jpg
+    UpdateTextMaterialRequest:
+      title: UpdateTextMaterialRequest
+      required:
+      - title
+      - content
+      - image_path
+      type: object
+      properties:
+        title:
+          type: string
+        content:
+          type: string
+        image_path:
+          type: string
+      examples:
+      - title: Pendahuluan Kimia Lanjutan
+        content: uiiia uuiiia uuu iiauu iiau iia uiuuu iiiia uuuiiuaa uiiia uuiiia uuu iiauu iiau iia uiuuu iiiia uuuiiua uiiia uuiiia uuu iiauu iiau iia uiuuu iiiia uuuiiua uiiia uuiiia uuu iiauu iiau iia uiuuu iiiia uuuiiua
+        image_path: images/kimia2.jpg
+tags:
+- name: Material API
+- name: TextMaterial API

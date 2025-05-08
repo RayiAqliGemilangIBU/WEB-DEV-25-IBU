@@ -1,0 +1,778 @@
+openapi: 3.1.0
+info:
+  title: ChemLP Full API Collection
+  description: Kumpulan lengkap API untuk proyek ChemLP
+  contact: {}
+  version: '1.0'
+jsonSchemaDialect: https://json-schema.org/draft/2020-12/schema
+servers:
+- url: http://localhost/WEB-DEV-25-IBU/backend/rest
+  variables: {}
+paths:
+  /user:
+    get:
+      tags:
+      - User API
+      summary: Get All Users
+      operationId: GetAllUsers
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+    parameters: []
+  /user/1:
+    get:
+      tags:
+      - User API
+      summary: Get User by ID
+      operationId: GetUserbyID
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+    put:
+      tags:
+      - User API
+      summary: Update User
+      operationId: UpdateUser
+      parameters: []
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/UpdateUserRequest'
+              - examples:
+                - name: Updated Name
+                  email: updated@example.com
+              contentMediaType: application/json
+            example:
+              name: Updated Name
+              email: updated@example.com
+        required: true
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+    delete:
+      tags:
+      - User API
+      summary: Delete User
+      operationId: DeleteUser
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+    parameters: []
+  /user/email/test@example.com:
+    get:
+      tags:
+      - User API
+      summary: Get User by Email
+      operationId: GetUserbyEmail
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+    parameters: []
+  /materials:
+    get:
+      tags:
+      - Material API
+      summary: GET All Materials
+      operationId: GETAllMaterials
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+    post:
+      tags:
+      - Material API
+      summary: POST Create Material
+      operationId: POSTCreateMaterial
+      parameters: []
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/POSTCreateMaterialRequest'
+              - examples:
+                - title: Asam Basa
+                  description: Materi tentang sifat asam dan basa.
+              contentMediaType: application/json
+            example:
+              title: Asam Basa
+              description: Materi tentang sifat asam dan basa.
+        required: true
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+    parameters: []
+  /materials/1:
+    get:
+      tags:
+      - Material API
+      summary: GET Material by ID
+      operationId: GETMaterialbyID
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+    put:
+      tags:
+      - Material API
+      summary: PUT Update Material
+      operationId: PUTUpdateMaterial
+      parameters: []
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/PUTUpdateMaterialRequest'
+              - examples:
+                - title: Revisi Asam Basa
+                  description: Revisi deskripsi materi asam dan basa.
+              contentMediaType: application/json
+            example:
+              title: Revisi Asam Basa
+              description: Revisi deskripsi materi asam dan basa.
+        required: true
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+    parameters: []
+  /materials/3:
+    delete:
+      tags:
+      - Material API
+      summary: DELETE Material
+      operationId: DELETEMaterial
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+    parameters: []
+  /question:
+    get:
+      tags:
+      - Question API
+      summary: Get All Questions
+      operationId: GetAllQuestions
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+    post:
+      tags:
+      - Question API
+      summary: Create Question
+      operationId: CreateQuestion
+      parameters: []
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/CreateQuestionRequest'
+              - examples:
+                - quiz_id: 1
+                  header: Contoh pertanyaan baru
+                  explanation: Ini adalah penjelasan untuk pertanyaan tersebut
+              contentMediaType: application/json
+            example:
+              quiz_id: 1
+              header: Contoh pertanyaan baru
+              explanation: Ini adalah penjelasan untuk pertanyaan tersebut
+        required: true
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+    parameters: []
+  /question/1:
+    get:
+      tags:
+      - Question API
+      summary: Get Question by ID
+      operationId: GetQuestionbyID
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+    put:
+      tags:
+      - Question API
+      summary: Update Question by ID
+      operationId: UpdateQuestionbyID
+      parameters: []
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/UpdateQuestionbyIDRequest'
+              - examples:
+                - header: Apa itu molekul?
+                  explanation: Molekul adalah gabungan dari dua atau lebih atom.
+              contentMediaType: application/json
+            example:
+              header: Apa itu molekul?
+              explanation: Molekul adalah gabungan dari dua atau lebih atom.
+        required: true
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+    parameters: []
+  /textmaterials:
+    post:
+      tags:
+      - TextMaterial API
+      summary: Create TextMaterial
+      operationId: CreateTextMaterial
+      parameters: []
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/CreateTextMaterialRequest'
+              - examples:
+                - title: Test API
+                  content: uiiia uuiiia uuu iiauu iiau iia uiuuu iiiia uuuiiuaa uiiia uuiiia uuu iiauu iiau iia uiuuu iiiia uuuiiua uiiia uuiiia uuu iiauu iiau iia uiuuu iiiia uuuiiua uiiia uuiiia uuu iiauu iiau iia uiuuu iiiia uuuiiua
+                  image_path: images/kimia1.jpg
+              contentMediaType: application/json
+            example:
+              title: Test API
+              content: uiiia uuiiia uuu iiauu iiau iia uiuuu iiiia uuuiiuaa uiiia uuiiia uuu iiauu iiau iia uiuuu iiiia uuuiiua uiiia uuiiia uuu iiauu iiau iia uiuuu iiiia uuuiiua uiiia uuiiia uuu iiauu iiau iia uiuuu iiiia uuuiiua
+              image_path: images/kimia1.jpg
+        required: true
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+    get:
+      tags:
+      - TextMaterial API
+      summary: Get All TextMaterials
+      operationId: GetAllTextMaterials
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+    parameters: []
+  /textmaterials/1:
+    get:
+      tags:
+      - TextMaterial API
+      summary: Get TextMaterials by Material ID
+      operationId: GetTextMaterialsbyMaterialID
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+    put:
+      tags:
+      - TextMaterial API
+      summary: Update TextMaterial
+      operationId: UpdateTextMaterial
+      parameters: []
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/UpdateTextMaterialRequest'
+              - examples:
+                - title: Pendahuluan Kimia Lanjutan
+                  content: uiiia uuiiia uuu iiauu iiau iia uiuuu iiiia uuuiiuaa uiiia uuiiia uuu iiauu iiau iia uiuuu iiiia uuuiiua uiiia uuiiia uuu iiauu iiau iia uiuuu iiiia uuuiiua uiiia uuiiia uuu iiauu iiau iia uiuuu iiiia uuuiiua
+                  image_path: images/kimia2.jpg
+              contentMediaType: application/json
+            example:
+              title: Pendahuluan Kimia Lanjutan
+              content: uiiia uuiiia uuu iiauu iiau iia uiuuu iiiia uuuiiuaa uiiia uuiiia uuu iiauu iiau iia uiuuu iiiia uuuiiua uiiia uuiiia uuu iiauu iiau iia uiuuu iiiia uuuiiua uiiia uuiiia uuu iiauu iiau iia uiuuu iiiia uuuiiua
+              image_path: images/kimia2.jpg
+        required: true
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+    parameters: []
+  /textmaterials/id/4:
+    delete:
+      tags:
+      - TextMaterial API
+      summary: Delete TextMaterial by Text ID (Optional)
+      operationId: DeleteTextMaterialbyTextID(Optional)
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+    parameters: []
+  /studentAnswer:
+    get:
+      tags:
+      - Student Answer API
+      summary: Get All Student Answers
+      operationId: GetAllStudentAnswers
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+    post:
+      tags:
+      - Student Answer API
+      summary: Create Student Answer
+      operationId: CreateStudentAnswer
+      parameters: []
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/CreateStudentAnswerRequest'
+              - examples:
+                - user_id: 1
+                  question_id: 1
+                  selected_option_id: 2
+              contentMediaType: application/json
+            example:
+              user_id: 1
+              question_id: 1
+              selected_option_id: 2
+        required: true
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+    parameters: []
+  /studentAnswer/1:
+    get:
+      tags:
+      - Student Answer API
+      summary: Get Student Answer by ID
+      operationId: GetStudentAnswerbyID
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+    put:
+      tags:
+      - Student Answer API
+      summary: Update Student Answer
+      operationId: UpdateStudentAnswer
+      parameters: []
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/UpdateStudentAnswerRequest'
+              - examples:
+                - selected_option_id: 3
+              contentMediaType: application/json
+            example:
+              selected_option_id: 3
+        required: true
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+    delete:
+      tags:
+      - Student Answer API
+      summary: Delete Student Answer
+      operationId: DeleteStudentAnswer
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+    parameters: []
+  /studentAnswer/student/1:
+    get:
+      tags:
+      - Student Answer API
+      summary: Get Student Answers by User ID
+      operationId: GetStudentAnswersbyUserID
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+    parameters: []
+  /studentAnswer/correctPercentage/1:
+    get:
+      tags:
+      - Student Answer API
+      summary: Get Correct Answer Percentage by User ID
+      operationId: GetCorrectAnswerPercentagebyUserID
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+    parameters: []
+  /studentAnswer/correctPercentage/email/johndoe@example.com:
+    get:
+      tags:
+      - Student Answer API
+      summary: Get Correct Answer Percentage by Email
+      operationId: GetCorrectAnswerPercentagebyEmail
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+    parameters: []
+  /optionitem:
+    get:
+      tags:
+      - OptionItem API
+      summary: Get All OptionItems
+      operationId: GetAllOptionItems
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+    post:
+      tags:
+      - OptionItem API
+      summary: Create OptionItem
+      operationId: CreateOptionItem
+      parameters: []
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/CreateOptionItemRequest'
+              - examples:
+                - question_id: 1
+                  option_text: Sample option
+                  is_correct: true
+                  image_path: path/to/image.jpg
+              contentMediaType: application/json
+            example:
+              question_id: 1
+              option_text: Sample option
+              is_correct: true
+              image_path: path/to/image.jpg
+        required: true
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+    parameters: []
+  /optionitem/1:
+    get:
+      tags:
+      - OptionItem API
+      summary: Get OptionItem by ID
+      operationId: GetOptionItembyID
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+    put:
+      tags:
+      - OptionItem API
+      summary: Update OptionItem
+      operationId: UpdateOptionItem
+      parameters: []
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/UpdateOptionItemRequest'
+              - examples:
+                - question_id: 1
+                  option_text: Sample option
+                  is_correct: true
+                  image_path: path/to/image.jpg
+              contentMediaType: application/json
+            example:
+              question_id: 1
+              option_text: Sample option
+              is_correct: true
+              image_path: path/to/image.jpg
+        required: true
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+    parameters: []
+  /optionitem/question/2:
+    get:
+      tags:
+      - OptionItem API
+      summary: Get Options by Question ID
+      operationId: GetOptionsbyQuestionID
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+    parameters: []
+components:
+  schemas:
+    UpdateUserRequest:
+      title: UpdateUserRequest
+      required:
+      - name
+      - email
+      type: object
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+      examples:
+      - name: Updated Name
+        email: updated@example.com
+    POSTCreateMaterialRequest:
+      title: POSTCreateMaterialRequest
+      required:
+      - title
+      - description
+      type: object
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+      examples:
+      - title: Asam Basa
+        description: Materi tentang sifat asam dan basa.
+    PUTUpdateMaterialRequest:
+      title: PUTUpdateMaterialRequest
+      required:
+      - title
+      - description
+      type: object
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+      examples:
+      - title: Revisi Asam Basa
+        description: Revisi deskripsi materi asam dan basa.
+    CreateQuestionRequest:
+      title: CreateQuestionRequest
+      required:
+      - quiz_id
+      - header
+      - explanation
+      type: object
+      properties:
+        quiz_id:
+          type: integer
+          contentEncoding: int32
+        header:
+          type: string
+        explanation:
+          type: string
+      examples:
+      - quiz_id: 1
+        header: Contoh pertanyaan baru
+        explanation: Ini adalah penjelasan untuk pertanyaan tersebut
+    UpdateQuestionbyIDRequest:
+      title: UpdateQuestionbyIDRequest
+      required:
+      - header
+      - explanation
+      type: object
+      properties:
+        header:
+          type: string
+        explanation:
+          type: string
+      examples:
+      - header: Apa itu molekul?
+        explanation: Molekul adalah gabungan dari dua atau lebih atom.
+    CreateTextMaterialRequest:
+      title: CreateTextMaterialRequest
+      required:
+      - title
+      - content
+      - image_path
+      type: object
+      properties:
+        title:
+          type: string
+        content:
+          type: string
+        image_path:
+          type: string
+      examples:
+      - title: Test API
+        content: uiiia uuiiia uuu iiauu iiau iia uiuuu iiiia uuuiiuaa uiiia uuiiia uuu iiauu iiau iia uiuuu iiiia uuuiiua uiiia uuiiia uuu iiauu iiau iia uiuuu iiiia uuuiiua uiiia uuiiia uuu iiauu iiau iia uiuuu iiiia uuuiiua
+        image_path: images/kimia1.jpg
+    UpdateTextMaterialRequest:
+      title: UpdateTextMaterialRequest
+      required:
+      - title
+      - content
+      - image_path
+      type: object
+      properties:
+        title:
+          type: string
+        content:
+          type: string
+        image_path:
+          type: string
+      examples:
+      - title: Pendahuluan Kimia Lanjutan
+        content: uiiia uuiiia uuu iiauu iiau iia uiuuu iiiia uuuiiuaa uiiia uuiiia uuu iiauu iiau iia uiuuu iiiia uuuiiua uiiia uuiiia uuu iiauu iiau iia uiuuu iiiia uuuiiua uiiia uuiiia uuu iiauu iiau iia uiuuu iiiia uuuiiua
+        image_path: images/kimia2.jpg
+    CreateStudentAnswerRequest:
+      title: CreateStudentAnswerRequest
+      required:
+      - user_id
+      - question_id
+      - selected_option_id
+      type: object
+      properties:
+        user_id:
+          type: integer
+          contentEncoding: int32
+        question_id:
+          type: integer
+          contentEncoding: int32
+        selected_option_id:
+          type: integer
+          contentEncoding: int32
+      examples:
+      - user_id: 1
+        question_id: 1
+        selected_option_id: 2
+    UpdateStudentAnswerRequest:
+      title: UpdateStudentAnswerRequest
+      required:
+      - selected_option_id
+      type: object
+      properties:
+        selected_option_id:
+          type: integer
+          contentEncoding: int32
+      examples:
+      - selected_option_id: 3
+    CreateOptionItemRequest:
+      title: CreateOptionItemRequest
+      required:
+      - question_id
+      - option_text
+      - is_correct
+      - image_path
+      type: object
+      properties:
+        question_id:
+          type: integer
+          contentEncoding: int32
+        option_text:
+          type: string
+        is_correct:
+          type: boolean
+        image_path:
+          type: string
+      examples:
+      - question_id: 1
+        option_text: Sample option
+        is_correct: true
+        image_path: path/to/image.jpg
+    UpdateOptionItemRequest:
+      title: UpdateOptionItemRequest
+      required:
+      - question_id
+      - option_text
+      - is_correct
+      - image_path
+      type: object
+      properties:
+        question_id:
+          type: integer
+          contentEncoding: int32
+        option_text:
+          type: string
+        is_correct:
+          type: boolean
+        image_path:
+          type: string
+      examples:
+      - question_id: 1
+        option_text: Sample option
+        is_correct: true
+        image_path: path/to/image.jpg
+tags:
+- name: User API
+- name: Material API
+- name: Question API
+- name: TextMaterial API
+- name: Student Answer API
+- name: OptionItem API

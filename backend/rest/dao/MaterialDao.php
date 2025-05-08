@@ -25,13 +25,19 @@ class MaterialDao extends BaseDao {
     }
 
     // UPDATE
-    public function updateMaterial($data, $id) {
+    public function updateMaterial($id, $data) {
         return $this->update($this->table, $data, 'material_id', $id);
     }
 
     // DELETE
     public function deleteMaterial($id) {
         return $this->delete($this->table, 'material_id', $id);
+    }
+
+    public function getMaterialByTitle($title) {
+        $stmt = $this->conn->prepare("SELECT * FROM $this->table WHERE title = ?");
+        $stmt->execute([$title]);
+        return $stmt->fetch();
     }
 }
 ?>

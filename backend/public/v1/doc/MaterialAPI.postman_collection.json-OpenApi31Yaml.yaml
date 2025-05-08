@@ -1,0 +1,134 @@
+openapi: 3.1.0
+info:
+  title: Material API
+  contact: {}
+  version: '1.0'
+jsonSchemaDialect: https://json-schema.org/draft/2020-12/schema
+servers:
+- url: http://localhost/WEB-DEV-25-IBU/backend/rest
+  variables: {}
+paths:
+  /materials:
+    get:
+      tags:
+      - Misc
+      summary: GET All Materials
+      operationId: GETAllMaterials
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+    post:
+      tags:
+      - Misc
+      summary: POST Create Material
+      operationId: POSTCreateMaterial
+      parameters: []
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/POSTCreateMaterialRequest'
+              - examples:
+                - title: Asam Basa
+                  description: Materi tentang sifat asam dan basa.
+              contentMediaType: application/json
+            example:
+              title: Asam Basa
+              description: Materi tentang sifat asam dan basa.
+        required: true
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+    parameters: []
+  /materials/1:
+    get:
+      tags:
+      - Misc
+      summary: GET Material by ID
+      operationId: GETMaterialbyID
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+    put:
+      tags:
+      - Misc
+      summary: PUT Update Material
+      operationId: PUTUpdateMaterial
+      parameters: []
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/PUTUpdateMaterialRequest'
+              - examples:
+                - title: Revisi Asam Basa
+                  description: Revisi deskripsi materi asam dan basa.
+              contentMediaType: application/json
+            example:
+              title: Revisi Asam Basa
+              description: Revisi deskripsi materi asam dan basa.
+        required: true
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+    parameters: []
+  /materials/3:
+    delete:
+      tags:
+      - Misc
+      summary: DELETE Material
+      operationId: DELETEMaterial
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+    parameters: []
+components:
+  schemas:
+    POSTCreateMaterialRequest:
+      title: POSTCreateMaterialRequest
+      required:
+      - title
+      - description
+      type: object
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+      examples:
+      - title: Asam Basa
+        description: Materi tentang sifat asam dan basa.
+    PUTUpdateMaterialRequest:
+      title: PUTUpdateMaterialRequest
+      required:
+      - title
+      - description
+      type: object
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+      examples:
+      - title: Revisi Asam Basa
+        description: Revisi deskripsi materi asam dan basa.
+tags:
+- name: Misc
+  description: ''
