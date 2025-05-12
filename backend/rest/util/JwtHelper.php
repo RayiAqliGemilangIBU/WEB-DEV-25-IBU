@@ -4,7 +4,7 @@ use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
 
 class JwtHelper {
-    private $secretKey = 'your_secret_key';
+    private $secretKey = 'UIIAUUIIA';
 
     public function generateJwt($userData) {
         $payload = [
@@ -12,10 +12,10 @@ class JwtHelper {
             'email' => $userData['email'],
             'role' => $userData['role'],
             'iat' => time(),
-            'exp' => time() + (10 * 365 * 24 * 60 * 60) // 10 tahun
+            'exp' => time() + (10 * 365 * 24 * 60 * 60) 
         ];
 
-        return JWT::encode($payload, $this->secretKey, 'HS256');
+        return JWT::encode($payload, $this->secretKey, ' ');
     }
 
     public function validateJwt($token) {

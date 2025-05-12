@@ -10,68 +10,21 @@ require_once __DIR__ . '/services/UserService.php';
 require_once __DIR__ . '/services/StudentAnswerService.php';
 require __DIR__ . '/../../vendor/autoload.php'; // Penting agar anotasi dikenali
 
-// ------------------------------------Matrial 
-
-/**
- * @OA\Info(title="My API", version="1.0.0")
- */
 
 
 
 
- /**
- * @OA\Schema(
- *   schema="Material",
- *   type="object",
- *   @OA\Property(property="id", type="integer"),
- *   @OA\Property(property="title", type="string"),
- *   @OA\Property(property="content", type="string")
- * )
- */
 
 // Inisialisasi service
 $materialService = new MaterialService();
 
-/**
- * @OA\Get(
- *     path="/materials",
- *     summary="Get all materials",
- *     tags={"Materials"},
- *     @OA\Response(
- *         response=200,
- *         description="List of materials",
- *         @OA\JsonContent(type="array", @OA\Items(ref="#/components/schemas/Material"))
- *     )
- * )
- */
+
 Flight::route('GET /materials', function() use ($materialService) {
     $materials = $materialService->getAllMaterials();
     Flight::json($materials);
 });
 
-/**
- * @OA\Get(
- *     path="/materials/{id}",
- *     summary="Get material by ID",
- *     tags={"Materials"},
- *     @OA\Parameter(
- *         name="id",
- *         in="path",
- *         required=true,
- *         description="Material ID",
- *         @OA\Schema(type="integer")
- *     ),
- *     @OA\Response(
- *         response=200,
- *         description="Material found",
- *         @OA\JsonContent(ref="#/components/schemas/Material")
- *     ),
- *     @OA\Response(
- *         response=404,
- *         description="Material not found"
- *     )
- * )
- */
+
 Flight::route('GET /materials/@id', function($id) use ($materialService) {
     $material = $materialService->getMaterialById($id);
     if ($material) {
@@ -81,35 +34,7 @@ Flight::route('GET /materials/@id', function($id) use ($materialService) {
     }
 });
 
-/**
- * @OA\Post(
- *     path="/materials",
- *     summary="Create a new material",
- *     tags={"Materials"},
- *     @OA\RequestBody(
- *         required=true,
- *         description="Material data",
- *         @OA\JsonContent(
- *             required={"title", "description"},
- *             @OA\Property(property="title", type="string"),
- *             @OA\Property(property="description", type="string")
- *         )
- *     ),
- *     @OA\Response(
- *         response=201,
- *         description="Material created",
- *         @OA\JsonContent(
- *             @OA\Property(property="success", type="boolean", example=true),
- *             @OA\Property(property="message", type="string", example="Material created"),
- *             @OA\Property(property="data", ref="#/components/schemas/Material")
- *         )
- *     ),
- *     @OA\Response(
- *         response=400,
- *         description="Bad Request"
- *     )
- * )
- */
+
 Flight::route('POST /materials', function() use ($materialService) {
     $data = Flight::request()->data->getData();
     try {
@@ -221,9 +146,7 @@ Flight::route('DELETE /materials/@id', function($id) use ($materialService) {
 // ----------- text Material
 $textMaterialService = new TextMaterialService();
 
-// $jwtHelper = new JwtHelper(); // atau apapun nama class JWT Anda
 
-// $textMaterialService = new TextMaterialService($textMaterialDao, $jwtHelper);
 /**
  * POST /textmaterials
  * Membuat TextMaterial baru
