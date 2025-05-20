@@ -2,6 +2,7 @@
 
 require_once __DIR__ . '/../dao/StudentAnswerDao.php';
 require_once __DIR__ . '/../dao/OptionItemDao.php';
+require_once __DIR__ . '/BaseService.php';
 
 class StudentAnswerService {
     private $studentAnswerDao;
