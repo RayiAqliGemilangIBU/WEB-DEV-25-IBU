@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/../vendor/autoload.php';
+
 require_once __DIR__ . '/../services/MaterialService.php';
 require_once __DIR__ . '/../services/TextMaterialService.php';
 require_once __DIR__ . '/../util/JwtExtractor.php';
@@ -166,6 +166,59 @@ Flight::route('DELETE /user/@id', function ($id) use ($userService) {
     try {
         $userService->deleteUser($id);
         Flight::json(["success" => true, "message" => "User deleted"]);
+    } catch (Exception $e) {
+        Flight::halt(500, $e->getMessage());
+    }
+});
+
+/**
+ * @OA\Post(
+ *     path="/user/register",
+ *     summary="Register a new user",
+ *     tags={"Users"},
+ *     @OA\RequestBody(
+ *         required=true,
+ *         @OA\JsonContent(
+ *             required={"username", "email", "password", "role"},
+ *             @OA\Property(property="name", type="string", example="john_doe"),
+ *             @OA\Property(property="email", type="string", example="john@example.com"),
+ *             @OA\Property(property="password", type="string", example="secret123"),
+ *             @OA\Property(property="role", type="string", example="student")
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=201,
+ *         description="User registered successfully",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="success", type="boolean", example=true),
+ *             @OA\Property(property="message", type="string", example="User registered"),
+ *             @OA\Property(property="data", type="object",
+ *                 @OA\Property(property="user_id", type="integer", example=1),
+ *                 @OA\Property(property="name", type="string", example="john_doe"),
+ *                 @OA\Property(property="email", type="string", example="john@example.com"),
+ *                 @OA\Property(property="role", type="string", example="student")
+ *             )
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=400,
+ *         description="Invalid input or user already exists"
+ *     ),
+ *     @OA\Response(
+ *         response=500,
+ *         description="Internal Server Error"
+ *     )
+ * )
+ */
+Flight::route('POST /user/register', function () use ($userService) {
+    try {
+        $data = Flight::request()->data->getData();
+        $newUser = $userService->registerUser($data);
+        Flight::json([
+            "success" => true,
+            "message" => "User registered",
+            "data" => $newUser
+        ], 201);
     } catch (Exception $e) {
         Flight::halt(500, $e->getMessage());
     }

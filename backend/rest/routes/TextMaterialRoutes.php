@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/../vendor/autoload.php';
+
 require_once __DIR__ . '/../services/MaterialService.php';
 require_once __DIR__ . '/../services/TextMaterialService.php';
 require_once __DIR__ . '/../util/JwtExtractor.php';
@@ -8,7 +8,7 @@ require_once __DIR__ . '/../services/QuestionService.php';
 require_once __DIR__ . '/../services/OptionItemService.php';
 require_once __DIR__ . '/../services/UserService.php';
 require_once __DIR__ . '/../services/StudentAnswerService.php';
-require __DIR__ . '/../../vendor/autoload.php'; // Penting agar anotasi dikenali
+
 
 
 $textMaterialService = new TextMaterialService();
