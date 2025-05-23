@@ -1,81 +1,58 @@
 <?php
 require_once __DIR__ . '/../dao/UserDao.php';
-require_once __DIR__ . '/../util/JwtHelper.php';
 require_once __DIR__ . '/../config/config.php';
+require_once __DIR__ . '/../../vendor/autoload.php';
 
 use Firebase\JWT\JWT;
+use Firebase\JWT\Key;
 
 class AuthService {
+
     private $userDao;
-    private $jwtHelper;
 
     public function __construct() {
-        $this->userDao = new UserDao(Database::connect());
-        $this->jwtHelper = new JwtHelper();
+        $this->userDao = new UserDao();
     }
 
-    // Fungsi untuk login
-    public function authenticateUser($email, $password) {
-        // Cek apakah email sudah terdaftar
+    public function login($email, $password) {
         $user = $this->userDao->getUserByEmail($email);
+
         if (!$user) {
-            return ["status" => false, "message" => "Email atau password salah"];
+            return ['error' => 'User not found'];
         }
 
-        // Verifikasi password
-        if (password_verify($password, $user['password'])) {
-            // Jika password valid, buat JWT
-            $jwt = $this->jwtHelper->generateJwt($user);
-            return ["status" => true, "token" => $jwt];
-        } else {
-            return ["status" => false, "message" => "Email atau password salah"];
+        if (!password_verify($password, $user['password'])) {
+            return ['error' => 'Invalid password'];
         }
-    }
 
-    // Fungsi untuk register
-    public function registerUser($email, $password, $name, $role) {
-        // Hash password sebelum disimpan
-        $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
-        $data = [
-            'email' => $email,
-            'password' => $hashedPassword,
-            'name' => $name,
-            'role' => $role,
-            'created_at' => date('Y-m-d H:i:s')
+        $payload = [
+            'sub' => $user['user_id'],
+            'email' => $user['email'],
+            'role' => $user['role'],
+            'iat' => time(),
+            'exp' => time() + (60 * 60 * 24) // expires in 1 day
         ];
-        
-        // Periksa apakah email sudah terdaftar
-        $existingUser = $this->userDao->getUserByEmail($email);
-        if ($existingUser) {
-            return ["status" => false, "message" => "Email sudah terdaftar"];
-        }
 
-        // Insert data user baru
-        $this->userDao->insert('user', $data);
-        return ["status" => true, "message" => "User berhasil didaftarkan"];
+        $jwt = JWT::encode($payload, Database::JWT_SECRET(), 'HS256');
+
+        return [
+            'token' => $jwt,
+            'user' => [
+                'user_id' => $user['user_id'],
+                'email' => $user['email'],
+                'name' => $user['name'],
+                'role' => $user['role']
+            ]
+        ];
     }
 
-    // Fungsi untuk memverifikasi JWT dan memberikan akses berdasarkan role
-    public function verifyAccess($jwt, $requiredRole) {
-        $userData = $this->jwtHelper->validateJwt($jwt);
-        
-        if (!$userData) {
-            return ["status" => false, "message" => "Token tidak valid"];
+    public function decodeToken($jwt) {
+        try {
+            $decoded = JWT::decode($jwt, new Key(Database::JWT_SECRET(), 'HS256'));
+            return (array) $decoded;
+        } catch (Exception $e) {
+            return ['error' => 'Invalid token'];
         }
-
-        if ($userData['role'] !== $requiredRole && $requiredRole !== 'Any') {
-            return ["status" => false, "message" => "Akses ditolak"];
-        }
-
-        return ["status" => true, "data" => $userData];
     }
-
-    public function logoutUser($token){
-    // Belum ada mekanisme blacklist token, jadi kita anggap logout berhasil
-    return [
-        'status' => true,
-        'message' => 'User logged out successfully'
-    ];
 }
-
-}
+?>
