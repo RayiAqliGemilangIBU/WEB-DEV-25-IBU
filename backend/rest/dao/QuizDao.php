@@ -29,5 +29,16 @@ class QuizDao extends BaseDao {
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
+    public function deleteQuizAndDependencies($quizId) {
+        // Hapus optionitem
+        $this->conn->prepare("DELETE FROM optionitem WHERE question_id IN (SELECT question_id FROM question WHERE quiz_id = :quiz_id)")
+                  ->execute(['quiz_id' => $quizId]);
+        // Hapus question
+        $this->conn->prepare("DELETE FROM question WHERE quiz_id = :quiz_id")
+                  ->execute(['quiz_id' => $quizId]);
+        // Hapus quiz
+        return $this->delete("quiz", "quiz_id", $quizId);
+    }
+
     
 }
