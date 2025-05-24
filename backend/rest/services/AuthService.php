@@ -1,51 +1,40 @@
 <?php
 require_once __DIR__ . '/../dao/UserDao.php';
 require_once __DIR__ . '/../config/config.php';
-require_once __DIR__ . '/../../vendor/autoload.php';
+require_once __DIR__ . '/../vendor/autoload.php';
+require_once __DIR__ . '/../dao/AuthDao.php';
 
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
-
 class AuthService {
-
-    private $userDao;
+    private $authDao;
 
     public function __construct() {
-        $this->userDao = new UserDao();
+        $this->authDao = new AuthDao();
     }
 
     public function login($email, $password) {
-        $user = $this->userDao->getUserByEmail($email);
+        $user = $this->authDao->getUserByEmail($email);
 
-        if (!$user) {
-            return ['error' => 'User not found'];
+        if (!$user || !password_verify($password, $user['password'])) {
+            return null;
         }
 
-        if (!password_verify($password, $user['password'])) {
-            return ['error' => 'Invalid password'];
-        }
+        unset($user['password']); // Jangan kirim password
 
         $payload = [
             'sub' => $user['user_id'],
-            'email' => $user['email'],
             'role' => $user['role'],
-            'iat' => time(),
-            'exp' => time() + (60 * 60 * 24) // expires in 1 day
+            'email' => $user['email'],
+            'exp' => time() + (60 * 30) // Token 5 menit
         ];
 
         $jwt = JWT::encode($payload, Database::JWT_SECRET(), 'HS256');
 
-        return [
-            'token' => $jwt,
-            'user' => [
-                'user_id' => $user['user_id'],
-                'email' => $user['email'],
-                'name' => $user['name'],
-                'role' => $user['role']
-            ]
-        ];
+        return ['token' => $jwt, 'user' => $user];
     }
 
+    
     public function decodeToken($jwt) {
         try {
             $decoded = JWT::decode($jwt, new Key(Database::JWT_SECRET(), 'HS256'));
@@ -54,5 +43,6 @@ class AuthService {
             return ['error' => 'Invalid token'];
         }
     }
+
+
 }
-?>

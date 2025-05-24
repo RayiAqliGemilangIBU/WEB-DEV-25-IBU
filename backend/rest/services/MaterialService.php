@@ -25,10 +25,10 @@ class MaterialService extends BaseService {
             throw new Exception("Material dengan judul ini sudah ada.");
         }
 
-        return $this->dao->insert([
+        return $this->dao->insert($this->table, [
             'title' => $title,
             'description' => $description
-        ], $this->table);
+        ]);
     }
 
     public function updateMaterial($id, $data) {

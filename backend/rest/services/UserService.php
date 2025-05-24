@@ -14,26 +14,34 @@ class UserService extends BaseService {
          $this->table = 'user'; 
     }
 
-    public function registerUser($userData)
-    {
-        return $this->dao->insert($userData); // ✅ gunakan insert()
+public function registerUser($userData)
+
+{
+    error_log("RAW userData: " . file_get_contents("php://input"));
+    error_log("DECODED userData: " . print_r($userData, true));
+
+
+    foreach ($userData as $key => $value) {
+    $userData[$key] = trim($value); // buang spasi, termasuk NBSP
+}
+    // Validasi: pastikan semua field penting tersedia
+    if (!isset($userData['name'], $userData['email'], $userData['password'], $userData['role'])) {
+        throw new Exception("Data not complete.");
     }
 
-    public function loginUser($email, $password) {
-        $user = $this->dao->authenticate($email, $password);
-        if (!$user) {
-            return ['success' => false, 'message' => 'Invalid credentials'];
-        }
+    // Hash password
+    $userData['password'] = password_hash($userData['password'], PASSWORD_DEFAULT);
 
-        $payload = [
-            'user_id' => $user['user_id'],
-            'email' => $user['email'],
-            'exp' => time() + (60 * 60)
-        ];
+    // Logging isi data sebelum insert
+    error_log("DATA INSERT: " . print_r($userData, true));
 
-        $jwt = $this->generateJWT($payload);
-        return ['success' => true, 'token' => $jwt, 'user' => $user];
-    }
+    // Insert ke DB
+    return $this->dao->insert('user', $userData);
+}
+
+
+
+
 
     public function updateUser($id, $data) {
         return $this->update($data, $id);

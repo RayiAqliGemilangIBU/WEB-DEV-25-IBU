@@ -1,7 +1,7 @@
 <?php
 require_once __DIR__ . '/../dao/TextMaterialDao.php';
 require_once __DIR__ . '/../dao/MaterialDao.php';
-require_once __DIR__ . '/../util/JwtHelper.php';
+// require_once __DIR__ . '/../util/JwtHelper.php';
 
 class TextMaterialService {
     private $dao;
@@ -11,7 +11,7 @@ class TextMaterialService {
     public function __construct() {
         $this->dao = new TextMaterialDao();
         $this->materialDao = new MaterialDao();
-        $this->jwtHelper = new JwtHelper();
+        
     }
 
     // CREATE: Menambahkan text material baru

@@ -2,7 +2,7 @@
 
 require_once __DIR__ . '/../services/MaterialService.php';
 require_once __DIR__ . '/../services/TextMaterialService.php';
-require_once __DIR__ . '/../util/JwtExtractor.php';
+// require_once __DIR__ . '/../util/JwtExtractor.php';
 require_once __DIR__ . '/../services/QuizService.php';
 require_once __DIR__ . '/../services/QuestionService.php';
 require_once __DIR__ . '/../services/OptionItemService.php';

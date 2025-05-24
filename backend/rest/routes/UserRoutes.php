@@ -2,13 +2,15 @@
 
 require_once __DIR__ . '/../services/MaterialService.php';
 require_once __DIR__ . '/../services/TextMaterialService.php';
-require_once __DIR__ . '/../util/JwtExtractor.php';
+
 require_once __DIR__ . '/../services/QuizService.php';
 require_once __DIR__ . '/../services/QuestionService.php';
 require_once __DIR__ . '/../services/OptionItemService.php';
 require_once __DIR__ . '/../services/UserService.php';
 require_once __DIR__ . '/../services/StudentAnswerService.php';
-// require __DIR__ . '/../../vendor/autoload.php';
+require_once __DIR__ . '/../middleware/jwtMiddleware.php';
+
+
 
 $userService = new UserService();
 
@@ -222,4 +224,15 @@ Flight::route('POST /user/register', function () use ($userService) {
     } catch (Exception $e) {
         Flight::halt(500, $e->getMessage());
     }
+});
+
+Flight::route('GET /users/@id', function ($id) {
+    Flight::middleware(); // cek JWT
+    $user = Flight::get('user');
+
+    if ($user['sub'] != $id && $user['role'] != 'admin') {
+        Flight::halt(403, "Access denied");
+    }
+
+    // lanjutkan akses user
 });
