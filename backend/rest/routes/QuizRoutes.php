@@ -89,6 +89,10 @@ Flight::route('GET /quiz/@id', function ($id) use ($quizService) {
  * )
  */
 Flight::route('POST /quiz', function () use ($quizService) {
+
+    Flight::middleware();
+    (RoleMiddleware::requireRole('Admin'))();
+
     $data = Flight::request()->data->getData();
     try {
         $created = $quizService->createQuiz($data);
@@ -128,6 +132,11 @@ Flight::route('POST /quiz', function () use ($quizService) {
  * )
  */
 Flight::route('PUT /quiz/@quiz_id', function ($quiz_id) use ($quizService) {
+
+
+    Flight::middleware();
+    (RoleMiddleware::requireRole('Admin'))();
+
     $data = Flight::request()->data->getData();
     try {
         $updatedQuiz = $quizService->updateQuiz($quiz_id, $data);
@@ -160,6 +169,11 @@ Flight::route('PUT /quiz/@quiz_id', function ($quiz_id) use ($quizService) {
  * )
  */
 Flight::route('DELETE /quiz/@id', function ($id) use ($quizService) {
+
+
+    Flight::middleware();
+    (RoleMiddleware::requireRole('Admin'))();
+
     try {
         $quizService->deleteQuiz($id);
         Flight::json(["success" => true, "message" => "Quiz and its dependencies deleted"]);
@@ -167,36 +181,3 @@ Flight::route('DELETE /quiz/@id', function ($id) use ($quizService) {
         Flight::halt(500, $e->getMessage());
     }
 });
-
-/**
- * @OA\Get(
- *     path="/question/quiz/{quiz_id}",
- *     summary="Get all questions by quiz ID",
- *     tags={"Questions"},
- *     @OA\Parameter(
- *         name="quiz_id",
- *         in="path",
- *         required=true,
- *         description="ID of the quiz",
- *         @OA\Schema(type="integer")
- *     ),
- *     @OA\Response(
- *         response=200,
- *         description="List of questions for a specific quiz",
- *         @OA\JsonContent(type="array", @OA\Items(type="object"))
- *     ),
- *     @OA\Response(
- *         response=400,
- *         description="Invalid quiz ID"
- *     )
- * )
- */
-Flight::route('GET /question/quiz/@quiz_id', function($quiz_id) use ($questionService) {
-    try {
-        $questions = $questionService->getQuestionsByQuizId($quiz_id);
-        Flight::json(["success" => true, "data" => $questions]);
-    } catch (Exception $e) {
-        Flight::halt(400, $e->getMessage());
-    }
-});
-
