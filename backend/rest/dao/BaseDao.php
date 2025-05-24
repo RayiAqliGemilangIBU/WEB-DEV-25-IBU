@@ -17,9 +17,7 @@ class BaseDao {
     $sql = "INSERT INTO `$table` ($columns) VALUES ($placeholders)";
     $stmt = $this->conn->prepare($sql);
 
-    // Debug: Log query dan data
-    error_log("Query: $sql");
-    error_log("Data user: " . print_r($data, true));
+
 
     // Menjalankan query
     $stmt->execute($data);
