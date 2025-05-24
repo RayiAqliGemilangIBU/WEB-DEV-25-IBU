@@ -49,4 +49,13 @@ class QuestionService {
     public function getQuestionById($id) {
         return $this->questionDao->getQuestionById($id);
     }
+
+    // Ambil semua pertanyaan berdasarkan quiz_id
+    public function getQuestionsByQuizId($quizId) {
+        if (empty($quizId)) {
+            throw new Exception("quiz_id tidak boleh kosong.");
+        }
+
+        return $this->questionDao->getQuestionsByQuizId($quizId);
+    }
 }

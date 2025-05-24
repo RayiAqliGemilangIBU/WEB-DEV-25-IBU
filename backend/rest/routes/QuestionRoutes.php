@@ -70,6 +70,10 @@ Flight::route('GET /question/@id', function ($id) use ($questionService) {
  * )
  */
 Flight::route('POST /question', function () use ($questionService) {
+
+    Flight::middleware();
+    (RoleMiddleware::requireRole('Admin'))();
+
     $data = Flight::request()->data->getData();
     try {
         $created = $questionService->createQuestion($data);
@@ -101,6 +105,11 @@ Flight::route('POST /question', function () use ($questionService) {
  * )
  */
 Flight::route('PUT /question/@id', function ($id) use ($questionService) {
+
+    Flight::middleware();
+    (RoleMiddleware::requireRole('Admin'))();
+
+
     $data = Flight::request()->data->getData();
     try {
         $questionService->updateQuestion($data, $id);
@@ -125,6 +134,10 @@ Flight::route('PUT /question/@id', function ($id) use ($questionService) {
  * )
  */
 Flight::route('DELETE /question/@id', function ($id) use ($questionService) {
+
+        Flight::middleware();
+    (RoleMiddleware::requireRole('Admin'))();
+
     try {
         $questionService->deleteQuestion($id);
         Flight::json(["success" => true, "message" => "Question deleted"]);
