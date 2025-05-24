@@ -48,4 +48,14 @@ class QuizService {
         // Hapus quiz dan semua dependensinya
         return $this->quizDao->deleteQuizAndDependencies($quizId);
     }
+
+
+    public function getQuizByMaterialId($materialId) {
+    if (empty($materialId)) {
+        throw new Exception("material_id tidak boleh kosong.");
+    }
+
+    return $this->quizDao->getQuizByMaterialId($materialId);
+}
+
 }

@@ -181,3 +181,36 @@ Flight::route('DELETE /quiz/@id', function ($id) use ($quizService) {
         Flight::halt(500, $e->getMessage());
     }
 });
+
+
+/**
+ * @OA\Get(
+ *     path="/quiz/material/{material_id}",
+ *     summary="Get quizzes by material ID",
+ *     tags={"Quizzes"},
+ *     @OA\Parameter(
+ *         name="material_id",
+ *         in="path",
+ *         required=true,
+ *         description="ID of the related material",
+ *         @OA\Schema(type="integer")
+ *     ),
+ *     @OA\Response(
+ *         response=200,
+ *         description="List of quizzes for a specific material",
+ *         @OA\JsonContent(type="array", @OA\Items(type="object"))
+ *     ),
+ *     @OA\Response(
+ *         response=400,
+ *         description="Invalid material ID"
+ *     )
+ * )
+ */
+Flight::route('GET /quiz/material/@material_id', function($material_id) use ($quizService) {
+    try {
+        $quizzes = $quizService->getQuizByMaterialId($material_id);
+        Flight::json(["success" => true, "data" => $quizzes]);
+    } catch (Exception $e) {
+        Flight::halt(400, $e->getMessage());
+    }
+});
