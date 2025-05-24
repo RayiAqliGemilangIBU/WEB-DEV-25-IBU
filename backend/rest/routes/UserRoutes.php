@@ -30,6 +30,9 @@ $userService = new UserService();
  * )
  */
 Flight::route('GET /user', function () use ($userService) {
+    Flight::middleware();
+    (RoleMiddleware::requireRole('Admin'))();
+
     $users = $userService->getAllUser();
     Flight::json(["success" => true, "data" => $users]);
 });
@@ -132,6 +135,8 @@ Flight::route('GET /user/email/@email', function ($email) use ($userService) {
  * )
  */
 Flight::route('PUT /user/@id', function ($id) use ($userService) {
+
+
     $data = Flight::request()->data->getData();
     try {
         $userService->updateUser($id, $data);
@@ -165,6 +170,9 @@ Flight::route('PUT /user/@id', function ($id) use ($userService) {
  * )
  */
 Flight::route('DELETE /user/@id', function ($id) use ($userService) {
+    Flight::middleware();
+    (RoleMiddleware::requireRole('Admin'))();
+
     try {
         $userService->deleteUser($id);
         Flight::json(["success" => true, "message" => "User deleted"]);

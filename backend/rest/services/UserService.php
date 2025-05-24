@@ -44,8 +44,17 @@ public function registerUser($userData)
 
 
     public function updateUser($id, $data) {
-        return $this->update($data, $id);
+        if (isset($data['password']) && !empty($data['password'])) {
+            // Hash password sebelum dikirim ke BaseDao
+            $data['password'] = password_hash($data['password'], PASSWORD_DEFAULT);
+        } else {
+            // Jika tidak ada password, jangan update password
+            unset($data['password']);
+        }
+
+        return $this->update($data, $id);  // Panggil fungsi dari BaseService
     }
+
 
     public function getUserByEmail($email) {
         return $this->dao->getUserByEmail($email);
