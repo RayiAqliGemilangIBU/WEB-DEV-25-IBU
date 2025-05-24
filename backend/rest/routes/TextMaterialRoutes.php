@@ -214,6 +214,10 @@ Flight::route('PUT /textmaterials/@text_id', function($text_id) use ($textMateri
  * )
  */
 Flight::route('DELETE /textmaterials/id/@text_id', function($text_id) use ($textMaterialService) {
+
+    Flight::middleware();
+    (RoleMiddleware::requireRole('Admin'))();
+
     try {
         $deleted = $textMaterialService->deleteTextMaterialById($text_id);
         Flight::json(["success" => true, "message" => "TextMaterial deleted", "deleted" => $deleted]);
