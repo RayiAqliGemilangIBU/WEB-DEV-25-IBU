@@ -12,11 +12,14 @@ $(document).ready(function () {
       load: "study.html",
     });
   
-    app.route({
-      view: "profile",
-      load: "profile.html",
-    });
-  
+app.route({
+  view: "profile",
+  load: "profile.html",
+  onReady: function () {
+    ProfileController.init();
+
+  }
+});
     app.route({
       view: "select2",
       load: "select2.html",
