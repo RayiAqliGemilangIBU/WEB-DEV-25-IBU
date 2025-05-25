@@ -1,148 +1,122 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>customers Information & JSON</title>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Form Validation</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ChemLP | Dashboard</title>
 
+    <!-- CSS -->
     <link rel="stylesheet" href="../css/styleProduct.css">
-    
-    <!-- Bootstrap CSS -->
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Toastr CSS -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet">
-    <!-- jQuery -->
+    <link rel="stylesheet" href="../css/spapp.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.0.3/css/dataTables.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
+    <style>
+        @import url('https://cdn.jsdelivr.net/npm/@tailwindcss/forms@0.3.4/dist/forms.min.css');
+    </style>
+
+    <!-- JS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <!-- jQuery Validate -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script>
-    <!-- jQuery BlockUI -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.blockUI/2.70/jquery.blockUI.min.js"></script>
-    <!-- Toastr JS -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-    <!-- Bootstrap Bundle with Popper -->
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Bootstrap CSS -->
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <!--Datatable CSS-->
-    <link href="https://cdn.datatables.net/2.0.3/css/dataTables.dataTables.min.css" rel="stylesheet">
-    <!-- Toastr -->
-    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/customers Information/libs/toastr.js/latest/css/toastr.min.css">
-    <!--Select2 CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-    <!--SPAPP CSS-->
-    <link rel="stylesheet" href="../css/spapp.css" />
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-    <!-- jQuery -->
-    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-    <!-- jQuery -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <!-- jQuery BlockUI -->
-    <script src="https://cdnjs.cloudflare.com/customers Information/libs/jquery.blockUI/2.70/jquery.blockUI.min.js"></script>
-    <!--Datatable JS-->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.datatables.net/2.0.3/js/dataTables.min.js"></script>
-    <!-- Toastr -->
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/customers Information/libs/toastr.js/latest/js/toastr.min.js"></script>
-     <!-- Toastr CSS -->
-     <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet">
-     <!--Highcharts JS-->    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script src="https://code.highcharts.com/highcharts.js"></script>
     <script src="https://code.highcharts.com/modules/series-label.js"></script>
     <script src="https://code.highcharts.com/modules/exporting.js"></script>
     <script src="https://code.highcharts.com/modules/export-data.js"></script>
-    <!--Select2 JS-->
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-    <!--SPAPP JS-->
+
+    <!-- Custom JS -->
     <script src="../js/jquery.spapp.js"></script>
     <script src="../js/custom.js"></script>
-    <script src="../js/student-service.js"></script>
-    <!-- <script src="utils/constants.js"></script>
-    <script src="utils/utils.js"></script>
-    <script src="utils/rest-client.js"></script> -->
-    <script src="../js/user-service.js"></script>
-    <!--Tailwind-->
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <style>
-        @import url('https://cdn.jsdelivr.net/npm/@tailwindcss/forms@0.3.4/dist/forms.min.css');
-    </style>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Custom JS -->
+    <script src="../utils/constants.js"></script>
+    <script src="../utils/utils.js"></script>
+    <script src="../utils/rest-client.js"></script>
+    <script src="../services/user-service.js"></script>
+
 </head>
 <body>
 
+    <!-- Navigation Bar -->
     <div>
         <div class="sm:hidden">
             <label for="Tab" class="sr-only">Tab</label>
             <select id="Tab" class="w-full rounded-md border-gray-200" onchange="location = this.value;">
                 <option value="#customersInformation">Customers Information</option>
-                <option value="#study">study</option>
-                <option value="#profile">profile</option>
+                <option value="#study">Study</option>
+                <option value="#profile">Profile</option>
                 <option value="#product">Product</option>
                 <option value="#faq">FAQs</option>
                 <option value="javascript:void(0);" onclick="UserService.logout()">Logout</option>
             </select>
         </div>
-    
+
         <div class="hidden sm:block bg-white fixed top-0 w-full z-10 border-b border-gray-200">
             <div class="container mx-auto px-4">
                 <nav id="tabs" class="flex gap-6" aria-label="Tabs">
-                    <!-- Content will be injected by JavaScript -->
+                    <!-- Tabs will be injected here -->
                 </nav>
             </div>
         </div>
     </div>
-    
+
+    <!-- Main Content -->
     <main id="spapp" role="main" class="mt-32">
-        <section id="customersInformation" class="p-8"></section>
+        <section id="customersInformation" class="p-8" data-load="customersInformation.html"></section>
         <section id="study" class="p-8"></section>
         <section id="profile" class="p-8"></section>
         <section id="product" class="p-8"></section>
         <section id="faq" class="p-8" data-load="tpl/faq.html"></section>
     </main>
-    
+
+    <!-- Navigation & Content Handling -->
     <script>
         let user = JSON.parse(localStorage.getItem("user"));
-    
-        if (user) {
-            let navContent = '';
-            let mainContent = '';
-    
-            if (!user.admin) {
-                navContent = `
-                    <a href="#study" class="shrink-0 rounded-lg p-2 text-sm font-medium text-gray-500 hover:bg-gray-50 hover:text-gray-700">study</a>
-                    <a href="#profile" class="shrink-0 rounded-lg p-2 text-sm font-medium text-gray-500 hover:bg-gray-50 hover:text-gray-700">profile</a>
-                    <a href="javascript:void(0);" class="shrink-0 rounded-lg p-2 text-sm font-medium text-gray-500 hover:bg-gray-50 hover:text-gray-700" onclick="UserService.logout()">Logout</a>
-                `;
-                mainContent = `
-                    <section id="study"></section>
-                    <section id="profile"></section>
-                `;
-                window.location.hash = "#profile"; // Direct to the product page
-            } else {
-                navContent = `
-                    <a href="#customersInformation" class="shrink-0 rounded-lg p-2 text-sm font-medium text-gray-500 hover:bg-gray-50 hover:text-gray-700">students Information</a>
-                    <a href="#profile" class="shrink-0 rounded-lg p-2 text-sm font-medium text-gray-500 hover:bg-gray-50 hover:text-gray-700">profile</a>
-                    <a href="javascript:void(0);" class="shrink-0 rounded-lg p-2 text-sm font-medium text-gray-500 hover:bg-gray-50 hover:text-gray-700" onclick="UserService.logout()">Logout</a>
-                `;
-                mainContent = `
-                    <section id="customersInformation" data-load="customersInformation.html"></section>
-                    <section id="profile"></section>
-                `;
-                window.location.hash = "#profile"; // Direct to the customers information page
-            }
-    
-            // Update the content of nav and main
-            $("#tabs").html(navContent);
-            $("#spapp").html(mainContent);
-        } else {
-            window.location.replace("login.html");
-        }
+
+if (user) {
+  let navContent = '';
+  let mainContent = '';
+
+  // Cek role case-insensitive agar aman
+  if (user.role && user.role.toLowerCase() === "admin") {
+    // Admin view
+    navContent = `
+      <a href="#customersInformation" class="shrink-0 rounded-lg p-2 text-sm font-medium text-gray-500 hover:bg-gray-50 hover:text-gray-700">Students Info</a>
+      <a href="#profile" class="shrink-0 rounded-lg p-2 text-sm font-medium text-gray-500 hover:bg-gray-50 hover:text-gray-700">Profile</a>
+      <a href="javascript:void(0);" class="shrink-0 rounded-lg p-2 text-sm font-medium text-gray-500 hover:bg-gray-50 hover:text-gray-700" onclick="UserService.logout()">Logout</a>
+    `;
+    mainContent = `
+      <section id="customersInformation" data-load="customersInformation.html"></section>
+      <section id="profile"></section>
+    `;
+    window.location.hash = "#customersInformation";
+  } else {
+    // Non-admin (student) view
+    navContent = `
+      <a href="#study" class="shrink-0 rounded-lg p-2 text-sm font-medium text-gray-500 hover:bg-gray-50 hover:text-gray-700">Study</a>
+      <a href="#profile" class="shrink-0 rounded-lg p-2 text-sm font-medium text-gray-500 hover:bg-gray-50 hover:text-gray-700">Profile</a>
+      <a href="javascript:void(0);" class="shrink-0 rounded-lg p-2 text-sm font-medium text-gray-500 hover:bg-gray-50 hover:text-gray-700" onclick="UserService.logout()">Logout</a>
+    `;
+    mainContent = `
+      <section id="study"></section>
+      <section id="profile"></section>
+    `;
+    window.location.hash = "#study";
+  }
+
+  $("#tabs").html(navContent);
+  $("#spapp").html(mainContent);
+} else {
+  window.location.replace("login.html");
+}
+
+
     </script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-    </body>
+</body>
 </html>

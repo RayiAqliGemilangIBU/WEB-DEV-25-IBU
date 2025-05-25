@@ -4,10 +4,10 @@ let RestClient = {
       url: Constants.PROJECT_BASE_URL + url,
       type: "GET",
       beforeSend: function (xhr) {
-        xhr.setRequestHeader(
-          "Authentication",
-          localStorage.getItem("user_token")
-        );
+        let token = localStorage.getItem("user_token");
+        if (token) {
+          xhr.setRequestHeader("Authorization", "Bearer " + token);
+        }
       },
       success: function (response) {
         if (callback) callback(response);
@@ -23,25 +23,25 @@ let RestClient = {
       url: Constants.PROJECT_BASE_URL + url,
       type: method,
       beforeSend: function (xhr) {
-        xhr.setRequestHeader(
-          "Authentication",
-          localStorage.getItem("user_token")
-        );
+        let token = localStorage.getItem("user_token");
+        if (token) {
+          xhr.setRequestHeader("Authorization", "Bearer " + token);
+        }
       },
       data: data
     })
-      .done(function (response) {
-        if (callback) callback(response);
-      })
-      .fail(function (jqXHR) {
-        if (error_callback) {
-          error_callback(jqXHR);
-        } else if (jqXHR.responseJSON && jqXHR.responseJSON.message) {
-          toastr.error(jqXHR.responseJSON.message);
-        } else {
-          toastr.error("Terjadi kesalahan pada permintaan.");
-        }
-      });
+    .done(function (response) {
+      if (callback) callback(response);
+    })
+    .fail(function (jqXHR) {
+      if (error_callback) {
+        error_callback(jqXHR);
+      } else if (jqXHR.responseJSON && jqXHR.responseJSON.message) {
+        toastr.error(jqXHR.responseJSON.message);
+      } else {
+        toastr.error("Terjadi kesalahan pada permintaan.");
+      }
+    });
   },
 
   post: function (url, data, callback, error_callback) {
