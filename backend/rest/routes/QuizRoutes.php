@@ -1,5 +1,4 @@
 <?php
-require_once __DIR__ . '/../vendor/autoload.php';
 require_once __DIR__ . '/../services/QuizService.php';
 require_once __DIR__ . '/../services/MaterialService.php';
 require_once __DIR__ . '/../services/TextMaterialService.php';
@@ -7,8 +6,7 @@ require_once __DIR__ . '/../services/QuestionService.php';
 require_once __DIR__ . '/../services/OptionItemService.php';
 require_once __DIR__ . '/../services/UserService.php';
 require_once __DIR__ . '/../services/StudentAnswerService.php';
-require_once __DIR__ . '/../util/JwtExtractor.php';
-require __DIR__ . '/../../vendor/autoload.php'; // Untuk mengenali anotasi
+require_once __DIR__ . '/../middleware/RoleMiddleware.php';
 
 $quizService = new QuizService();
 
@@ -91,6 +89,10 @@ Flight::route('GET /quiz/@id', function ($id) use ($quizService) {
  * )
  */
 Flight::route('POST /quiz', function () use ($quizService) {
+
+    Flight::middleware();
+    (RoleMiddleware::requireRole('Admin'))();
+
     $data = Flight::request()->data->getData();
     try {
         $created = $quizService->createQuiz($data);
@@ -130,6 +132,11 @@ Flight::route('POST /quiz', function () use ($quizService) {
  * )
  */
 Flight::route('PUT /quiz/@quiz_id', function ($quiz_id) use ($quizService) {
+
+
+    Flight::middleware();
+    (RoleMiddleware::requireRole('Admin'))();
+
     $data = Flight::request()->data->getData();
     try {
         $updatedQuiz = $quizService->updateQuiz($quiz_id, $data);
@@ -162,10 +169,48 @@ Flight::route('PUT /quiz/@quiz_id', function ($quiz_id) use ($quizService) {
  * )
  */
 Flight::route('DELETE /quiz/@id', function ($id) use ($quizService) {
+
+
+    Flight::middleware();
+    (RoleMiddleware::requireRole('Admin'))();
+
     try {
         $quizService->deleteQuiz($id);
         Flight::json(["success" => true, "message" => "Quiz and its dependencies deleted"]);
     } catch (Exception $e) {
         Flight::halt(500, $e->getMessage());
+    }
+});
+
+
+/**
+ * @OA\Get(
+ *     path="/quiz/material/{material_id}",
+ *     summary="Get quizzes by material ID",
+ *     tags={"Quizzes"},
+ *     @OA\Parameter(
+ *         name="material_id",
+ *         in="path",
+ *         required=true,
+ *         description="ID of the related material",
+ *         @OA\Schema(type="integer")
+ *     ),
+ *     @OA\Response(
+ *         response=200,
+ *         description="List of quizzes for a specific material",
+ *         @OA\JsonContent(type="array", @OA\Items(type="object"))
+ *     ),
+ *     @OA\Response(
+ *         response=400,
+ *         description="Invalid material ID"
+ *     )
+ * )
+ */
+Flight::route('GET /quiz/material/@material_id', function($material_id) use ($quizService) {
+    try {
+        $quizzes = $quizService->getQuizByMaterialId($material_id);
+        Flight::json(["success" => true, "data" => $quizzes]);
+    } catch (Exception $e) {
+        Flight::halt(400, $e->getMessage());
     }
 });

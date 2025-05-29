@@ -3,10 +3,15 @@ require_once __DIR__ . '/BaseDao.php';
 
 class MaterialDao extends BaseDao {
 
-    private $table = 'material';
+    protected $table = 'material';
 
     public function __construct() {
+         $this->table = 'material';
         parent::__construct();
+    }
+
+    public function getTable() {
+        return $this->table;
     }
 
     // CREATE

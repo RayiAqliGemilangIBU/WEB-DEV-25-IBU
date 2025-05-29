@@ -1,14 +1,14 @@
 <?php
-require_once __DIR__ . '/../vendor/autoload.php';
 require_once __DIR__ . '/../services/MaterialService.php';
 require_once __DIR__ . '/../services/TextMaterialService.php';
-require_once __DIR__ . '/../util/JwtExtractor.php';
+// require_once __DIR__ . '/../util/JwtExtractor.php';
 require_once __DIR__ . '/../services/QuizService.php';
 require_once __DIR__ . '/../services/QuestionService.php';
 require_once __DIR__ . '/../services/OptionItemService.php';
 require_once __DIR__ . '/../services/UserService.php';
 require_once __DIR__ . '/../services/StudentAnswerService.php';
-require __DIR__ . '/../../vendor/autoload.php'; // Penting agar anotasi dikenali
+require_once __DIR__ . '/../middleware/RoleMiddleware.php';
+
 
 
 
@@ -107,6 +107,10 @@ Flight::route('GET /materials/@id', function($id) use ($materialService) {
  * )
  */
 Flight::route('POST /materials', function() use ($materialService) {
+
+    Flight::middleware();
+    (RoleMiddleware::requireRole('Admin'))();
+
     $data = Flight::request()->data->getData();
     try {
         if (empty($data['title']) || empty($data['description'])) {
@@ -114,7 +118,7 @@ Flight::route('POST /materials', function() use ($materialService) {
         }
 
         $created = $materialService->createMaterial($data);
-        Flight::json(["success" => true, "message" => "Material created", "data" => $created], 201);
+        Flight::json(["success" => true, "message" => "Material created", "id" => $created], 201);
     } catch (Exception $e) {
         Flight::json(["success" => false, "message" => $e->getMessage()], 400);
     }
@@ -160,6 +164,10 @@ Flight::route('POST /materials', function() use ($materialService) {
  * )
  */
 Flight::route('PUT /materials/@id', function($id) use ($materialService) {
+
+    Flight::middleware();
+    (RoleMiddleware::requireRole('Admin'))();
+
     $data = Flight::request()->data->getData();
     try {
         // Validasi data (contoh)
@@ -205,6 +213,9 @@ Flight::route('PUT /materials/@id', function($id) use ($materialService) {
  * )
  */
 Flight::route('DELETE /materials/@id', function($id) use ($materialService) {
+    Flight::middleware(); //for auth
+    (RoleMiddleware::requireRole('Admin'))();//for auth
+
     $deleted = $materialService->deleteMaterial($id);
     if ($deleted) {
         Flight::json(["success" => true, "message" => "Material deleted"]);

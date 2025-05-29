@@ -2,7 +2,90 @@
 require_once __DIR__ . '/../dao/UserDao.php';
 require_once __DIR__ . '/BaseService.php';
 
-// class UserService {
+
+class UserService extends BaseService {
+    private $secretKey = 'your_secret_key';
+
+    // protected $table = 'user';
+
+
+    public function __construct() {
+        parent::__construct(new UserDao());
+         $this->table = 'user'; 
+    }
+
+public function registerUser($userData)
+
+{
+    error_log("RAW userData: " . file_get_contents("php://input"));
+    error_log("DECODED userData: " . print_r($userData, true));
+
+
+    foreach ($userData as $key => $value) {
+    $userData[$key] = trim($value); // buang spasi, termasuk NBSP
+}
+    // Validasi: pastikan semua field penting tersedia
+    if (!isset($userData['name'], $userData['email'], $userData['password'], $userData['role'])) {
+        throw new Exception("Data not complete.");
+    }
+
+    // Hash password
+    $userData['password'] = password_hash($userData['password'], PASSWORD_DEFAULT);
+
+    // Logging isi data sebelum insert
+    error_log("DATA INSERT: " . print_r($userData, true));
+
+    // Insert ke DB
+    return $this->dao->insert('user', $userData);
+}
+
+
+
+
+
+    public function updateUser($id, $data) {
+        if (isset($data['password']) && !empty($data['password'])) {
+            // Hash password sebelum dikirim ke BaseDao
+            $data['password'] = password_hash($data['password'], PASSWORD_DEFAULT);
+        } else {
+            // Jika tidak ada password, jangan update password
+            unset($data['password']);
+        }
+
+        return $this->update($data, $id);  // Panggil fungsi dari BaseService
+    }
+
+
+    public function getUserByEmail($email) {
+        return $this->dao->getUserByEmail($email);
+    }
+
+    public function getUserByToken($token) {
+        $decoded = $this->validateJWT($token);
+        if (!$decoded) return null;
+
+        return $this->dao->getUserByEmail($decoded->email);
+    }
+
+    public function getUserById($id) {
+        $user = $this->getById($this->table, 'user_id', $id);
+        if (!$user) {
+            Flight::halt(404, "User not found");
+        }
+        return $user;
+    }
+
+    public function getAllUser() {
+        return $this->getAll();
+    }
+
+    public function deleteUser($id) {
+        return $this->delete($id); // memanggil delete dari BaseService
+    }
+
+
+
+    // class UserService {
 //     private $userDao;
 
 //     public function __construct() {
@@ -98,69 +181,6 @@ require_once __DIR__ . '/BaseService.php';
 // <?php
 // require_once __DIR__ . '/../dao/UserDao.php';
 // require_once __DIR__ . '/BaseService.php';
-
-class UserService extends BaseService {
-    private $secretKey = 'your_secret_key';
-
-    public function __construct() {
-        parent::__construct(new UserDao());
-    }
-
-    public function registerUser($data) {
-        if ($this->dao->emailExists($data['email'])) {
-            return ['success' => false, 'message' => 'Email already registered'];
-        }
-
-        $data['password'] = password_hash($data['password'], PASSWORD_DEFAULT);
-        $userId = $this->dao->create($data);
-
-        return $userId
-            ? ['success' => true, 'user_id' => $userId]
-            : ['success' => false, 'message' => 'Registration failed'];
-    }
-
-    public function loginUser($email, $password) {
-        $user = $this->dao->authenticate($email, $password);
-        if (!$user) {
-            return ['success' => false, 'message' => 'Invalid credentials'];
-        }
-
-        $payload = [
-            'user_id' => $user['user_id'],
-            'email' => $user['email'],
-            'exp' => time() + (60 * 60)
-        ];
-
-        $jwt = $this->generateJWT($payload);
-        return ['success' => true, 'token' => $jwt, 'user' => $user];
-    }
-
-    public function updateUser($id, $data) {
-        return $this->update($data, $id);
-    }
-
-    public function getUserByEmail($email) {
-        return $this->dao->getUserByEmail($email);
-    }
-
-    public function getUserByToken($token) {
-        $decoded = $this->validateJWT($token);
-        if (!$decoded) return null;
-
-        return $this->dao->getUserByEmail($decoded->email);
-    }
-
-    public function getUserById($id) {
-        $user = $this->getById($id);
-        if (!$user) {
-            Flight::halt(404, "User not found");
-        }
-        return $user;
-    }
-
-    public function getAllUser() {
-        return $this->getAll();
-    }
 
     // private function generateJWT($payload) {
     //     $header = json_encode(['typ' => 'JWT', 'alg' => 'HS256']);

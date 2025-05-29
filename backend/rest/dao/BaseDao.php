@@ -8,20 +8,23 @@ class BaseDao {
         $this->conn = Database::connect();
     }
 
-    public function insert($table, $data) {
-        // Menentukan kolom dan nilai yang akan dimasukkan
-        $columns = implode(", ", array_keys($data));
-        $placeholders = ":" . implode(", :", array_keys($data));
-    
-        // Menyiapkan query insert
-        $stmt = $this->conn->prepare("INSERT INTO $table ($columns) VALUES ($placeholders)");
-        
-        // Menjalankan query dengan data
-        $stmt->execute($data);
-        
-        // Mengembalikan ID terakhir yang dimasukkan
-        return $this->conn->lastInsertId();
-    }
+ public function insert($table, $data) {
+    // Escape kolom menggunakan backtick untuk menghindari konflik dengan keyword SQL
+    $columns = implode(", ", array_map(fn($col) => "`$col`", array_keys($data)));
+    $placeholders = ":" . implode(", :", array_keys($data));
+
+    // Menyiapkan query insert
+    $sql = "INSERT INTO `$table` ($columns) VALUES ($placeholders)";
+    $stmt = $this->conn->prepare($sql);
+
+
+
+    // Menjalankan query
+    $stmt->execute($data);
+
+    // Mengembalikan ID terakhir yang dimasukkan
+    return $this->conn->lastInsertId();
+}
 
     public function findAll($table) {
         $stmt = $this->conn->query("SELECT * FROM $table");

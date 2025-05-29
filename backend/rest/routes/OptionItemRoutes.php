@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/../services/OptionItemService.php';
+require_once __DIR__ . '/../middleware/RoleMiddleware.php';
 
 $optionService = new OptionItemService();
 
@@ -52,6 +53,11 @@ Flight::route('GET /optionitem/@id', function ($id) use ($optionService) {
  * )
  */
 Flight::route('POST /optionitem', function () use ($optionService) {
+
+    Flight::middleware();
+    (RoleMiddleware::requireRole('Admin'))();
+
+
     $data = Flight::request()->data->getData();
     try {
         $created = $optionService->createOptionItem($data);
@@ -78,6 +84,10 @@ Flight::route('POST /optionitem', function () use ($optionService) {
  * )
  */
 Flight::route('PUT /optionitem/@id', function ($id) use ($optionService) {
+
+    Flight::middleware();
+    (RoleMiddleware::requireRole('Admin'))();
+
     $data = Flight::request()->data->getData();
     try {
         $optionService->updateOptionItem($id, $data);
@@ -97,6 +107,10 @@ Flight::route('PUT /optionitem/@id', function ($id) use ($optionService) {
  * )
  */
 Flight::route('DELETE /optionitem/@id', function ($id) use ($optionService) {
+
+    Flight::middleware();
+    (RoleMiddleware::requireRole('Admin'))();
+
     try {
         $optionService->deleteOptionItem($id);
         Flight::json(["success" => true, "message" => "Option item deleted"]);
@@ -115,25 +129,7 @@ Flight::route('DELETE /optionitem/@id', function ($id) use ($optionService) {
  * )
  */
 Flight::route('GET /optionitem/question/@question_id', function ($question_id) use ($optionService) {
+
     Flight::json($optionService->getOptionsByQuestionId($question_id));
 });
 
-/**
- * @OA\Get(
- *     path="/optionitem/check/{question_id}/{content}",
- *     summary="Check option content by question ID",
- *     tags={"OptionItems"},
- *     @OA\Parameter(name="question_id", in="path", required=true, @OA\Schema(type="integer")),
- *     @OA\Parameter(name="content", in="path", required=true, @OA\Schema(type="string")),
- *     @OA\Response(response=200, description="Option found"),
- *     @OA\Response(response=404, description="Option not found")
- * )
- */
-Flight::route('GET /optionitem/check/@question_id/@content', function ($question_id, $content) use ($optionService) {
-    $result = $optionService->checkOptionContent($question_id, $content);
-    if ($result) {
-        Flight::json($result);
-    } else {
-        Flight::halt(404, "Option content not found for this question");
-    }
-});

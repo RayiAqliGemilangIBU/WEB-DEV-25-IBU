@@ -1,14 +1,15 @@
 <?php
-require_once __DIR__ . '/../vendor/autoload.php';
+
 require_once __DIR__ . '/../services/MaterialService.php';
 require_once __DIR__ . '/../services/TextMaterialService.php';
-require_once __DIR__ . '/../util/JwtExtractor.php';
+// require_once __DIR__ . '/../util/JwtExtractor.php';
 require_once __DIR__ . '/../services/QuizService.php';
 require_once __DIR__ . '/../services/QuestionService.php';
 require_once __DIR__ . '/../services/OptionItemService.php';
 require_once __DIR__ . '/../services/UserService.php';
 require_once __DIR__ . '/../services/StudentAnswerService.php';
-require __DIR__ . '/../../vendor/autoload.php'; // Penting agar anotasi dikenali
+require_once __DIR__ . '/../middleware/RoleMiddleware.php';
+
 
 
 $textMaterialService = new TextMaterialService();
@@ -41,6 +42,10 @@ $textMaterialService = new TextMaterialService();
  * )
  */
 Flight::route('POST /textmaterials', function() use ($textMaterialService) {
+
+    Flight::middleware();
+    (RoleMiddleware::requireRole('Admin'))();
+
     $data = Flight::request()->data->getData();
 
     try {
@@ -76,6 +81,39 @@ Flight::route('GET /textmaterials', function() use ($textMaterialService) {
     $list = $textMaterialService->getAllTextMaterials();
     Flight::json(["success" => true, "data" => $list]);
 });
+
+/**
+ * @OA\Get(
+ *     path="/textmaterial/{id}",
+ *     summary="Get text material by ID",
+ *     tags={"TextMaterials"},
+ *     @OA\Parameter(
+ *         name="id",
+ *         in="path",
+ *         required=true,
+ *         description="ID of the text material",
+ *         @OA\Schema(type="integer")
+ *     ),
+ *     @OA\Response(
+ *         response=200,
+ *         description="Text material detail",
+ *         @OA\JsonContent(type="object")
+ *     ),
+ *     @OA\Response(
+ *         response=400,
+ *         description="Invalid text material ID"
+ *     )
+ * )
+ */
+Flight::route('GET /textmaterial/@id', function($id) use ($textMaterialService) {
+    try {
+        $textMaterial = $textMaterialService->getTextMaterialById($id);
+        Flight::json(["success" => true, "data" => $textMaterial]);
+    } catch (Exception $e) {
+        Flight::halt(400, $e->getMessage());
+    }
+});
+
 
 /**
  * @OA\Get(
@@ -137,6 +175,10 @@ Flight::route('GET /textmaterials/@material_id', function($material_id) use ($te
  * )
  */
 Flight::route('PUT /textmaterials/@text_id', function($text_id) use ($textMaterialService) {
+
+    Flight::middleware();
+    (RoleMiddleware::requireRole('Admin'))();
+
     $data = Flight::request()->data->getData();
 
     try {
@@ -172,6 +214,10 @@ Flight::route('PUT /textmaterials/@text_id', function($text_id) use ($textMateri
  * )
  */
 Flight::route('DELETE /textmaterials/id/@text_id', function($text_id) use ($textMaterialService) {
+
+    Flight::middleware();
+    (RoleMiddleware::requireRole('Admin'))();
+
     try {
         $deleted = $textMaterialService->deleteTextMaterialById($text_id);
         Flight::json(["success" => true, "message" => "TextMaterial deleted", "deleted" => $deleted]);
