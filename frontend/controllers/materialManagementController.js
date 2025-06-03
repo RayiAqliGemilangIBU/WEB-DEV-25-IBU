@@ -164,15 +164,18 @@ window.MaterialManagementController = {
         );
     },
 
-    showEditMaterialModal: function (materialId, materialData) {
-        this.currentEditingMaterialId = materialId; 
 
-        $('#editMaterialId').val(materialId); // ID diubah ke camelCase
-        $('#editMaterialTitle').val(materialData.title || ''); // ID diubah ke camelCase
-        $('#editMaterialDescription').val(materialData.description || ''); // ID diubah ke camelCase
+        showEditMaterialModal: function (materialId, materialData) {
+            // Add a specific log here to confirm it's called
+            console.log("MaterialManagementController: Attempting to show edit modal for material ID:", materialId, "Data:", materialData); // <-- ADD THIS LOG
+            this.currentEditingMaterialId = materialId;
 
-        $('#editMaterialModal').removeClass('hidden').addClass('flex'); 
-    },
+            $('#editMaterialId').val(materialId);
+            $('#editMaterialTitle').val(materialData.title || '');
+            $('#editMaterialDescription').val(materialData.description || '');
+
+            $('#editMaterialModal').removeClass('hidden').addClass('flex');
+        },
 
     hideEditMaterialModal: function() {
         $('#editMaterialModal').removeClass('flex').addClass('hidden');
