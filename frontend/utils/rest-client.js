@@ -48,8 +48,10 @@ let RestClient = {
     RestClient.request(url, "POST", data, callback, error_callback);
   },
 
-  delete: function (url, data, callback, error_callback) {
-    RestClient.request(url, "DELETE", data, callback, error_callback);
+  delete: function (url, callback, error_callback) { // Hapus parameter 'data' yang tidak digunakan
+    // Panggil 'request' dengan 'undefined' untuk argumen data, 
+    // karena DELETE dengan ID di URL biasanya tidak punya body.
+    RestClient.request(url, "DELETE", undefined, callback, error_callback); 
   },
 
   patch: function (url, data, callback, error_callback) {
