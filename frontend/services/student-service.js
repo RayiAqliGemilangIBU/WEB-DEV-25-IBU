@@ -28,6 +28,25 @@ const StudentService = {
                 errorCallback(error);
             }
         );
+    },
+
+    updateUser: function(userId, userData, successCallback, errorCallback) {
+        console.log(`UserService: Attempting to update user ID: ${userId} with data:`, userData);
+        // Endpoint is PUT /user/{id}
+        RestClient.put(`user/${userId}`, userData, 
+            function(response) {
+                console.log(`UserService: Successfully updated user ID: ${userId}`, response);
+                if (typeof successCallback === 'function') {
+                    successCallback(response);
+                }
+            },
+            function(error) {
+                console.error(`UserService: Error updating user ID: ${userId}`, error);
+                if (typeof errorCallback === 'function') {
+                    errorCallback(error);
+                }
+            }
+        );
     }
 };
 

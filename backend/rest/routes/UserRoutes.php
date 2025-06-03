@@ -295,3 +295,73 @@ Flight::route('GET /students', function () use ($userService) {
         Flight::json(['error' => $e->getMessage()], 500);
     }
 });
+
+/**
+ * @OA\Post(
+ * path="/students",
+ * summary="Add a new student",
+ * description="Registers a new user with the 'Student' role. Only accessible by Admin.",
+ * tags={"Students"},
+ * security={{"bearerAuth": {}}},
+ * @OA\RequestBody(
+ * required=true,
+ * @OA\JsonContent(
+ * required={"name", "email", "password"},
+ * @OA\Property(property="name", type="string", example="Jane Student"),
+ * @OA\Property(property="email", type="string", example="jane.student@example.com"),
+ * @OA\Property(property="password", type="string", example="studentpass123")
+ * )
+ * ),
+ * @OA\Response(
+ * response=201,
+ * description="Student added successfully",
+ * @OA\JsonContent(
+ * @OA\Property(property="success", type="boolean", example=true),
+ * @OA\Property(property="message", type="string", example="Student added successfully"),
+ * @OA\Property(property="data", type="object",
+ * @OA\Property(property="user_id", type="integer", example=2),
+ * @OA\Property(property="name", type="string", example="Jane Student"),
+ * @OA\Property(property="email", type="string", example="jane.student@example.com"),
+ * @OA\Property(property="role", type="string", example="Student")
+ * )
+ * )
+ * ),
+ * @OA\Response(
+ * response=400,
+ * description="Invalid input or email already exists"
+ * ),
+ * @OA\Response(
+ * response=401,
+ * description="Unauthorized - JWT token is missing or invalid"
+ * ),
+ * @OA\Response(
+ * response=403,
+ * description="Forbidden - User does not have the required role (Admin)"
+ * ),
+ * @OA\Response(
+ * response=500,
+ * description="Internal Server Error"
+ * )
+ * )
+ */
+Flight::route('POST /students', function () use ($userService) {
+    Flight::middleware();
+    (RoleMiddleware::requireRole('Admin'))(); 
+
+    try {
+        $data = Flight::request()->data->getData();
+        $newStudentId = $userService->addStudent($data); 
+        $newStudent = $userService->getUserById($newStudentId); 
+        
+      
+        unset($newStudent['password']);
+
+        Flight::json([
+            "success" => true,
+            "message" => "Student added successfully",
+            "data" => $newStudent
+        ], 201);
+    } catch (Exception $e) {
+        Flight::halt(400, $e->getMessage());
+    }
+});
