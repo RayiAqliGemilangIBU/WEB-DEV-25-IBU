@@ -9,6 +9,7 @@
           defaultView  : $("main#spapp > section:last-child").attr("id"),
           templateDir: "../views/",
           pageNotFound: false,
+         
         },
         options
       );

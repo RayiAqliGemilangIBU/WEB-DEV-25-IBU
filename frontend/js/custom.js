@@ -2,16 +2,23 @@ $(document).ready(function () {
     $("main#spapp > section").height($(document).height() - 60);
   
    setupNavigation();
+    var app = $.spapp({ 
+        pageNotFound: "error_404", // ID section untuk 404
+        defaultView: $("main#spapp > section.active").attr("id") || "students", // Set default view yang aktif
+        templateDir: "./", // <--- UBAH INI! Ini berarti folder 'views' itu sendiri.
+        controllersDir: "../controllers/", // Path ini sudah benar (relatif ke Index.html di views)
+        // ... opsi lainnya jika ada
+    });
 
     var app = $.spapp({ pageNotFound: "error_404" }); // initialize
     
-    app.route({
-      view: "StudentInformastion",
-      load: "students.html",
-    });
+    // app.route({
+    //   view: "students",
+    //   load: "students.html",
+    // });
     
     app.route({
-      view: "StudentInformastion",
+      view: "students",
       load: "students.html",
       onCreate: function() { 
         console.log("CUSTOM.JS: Route #StudentInformastion - onCreate CALLED.");
@@ -23,6 +30,21 @@ $(document).ready(function () {
         }
       }
     });
+
+    // Rute untuk Menambah Siswa
+    app.route({
+      view: "addStudent",    
+      onCreate: function() { 
+        console.log("CUSTOM.JS: Route #addStudent - onCreate CALLED. Attempting to init AddStudentController.");
+        if (typeof AddStudentController !== 'undefined' && AddStudentController.init) {
+          console.log("CUSTOM.JS: AddStudentController IS defined. Calling init().");
+          AddStudentController.init();
+        } else {
+          console.error("CUSTOM.JS: AddStudentController IS UNDEFINED when #addStudent onCreate was called.");
+        }
+      }
+    });
+  
     
   
     app.route({
@@ -51,7 +73,9 @@ $(document).ready(function () {
       view: "product",
       load: "product.html",
     });
-  
+    $(window).on('hashchange', function() {
+        console.log("Hash changed detected by window.onhashchange:", window.location.hash);
+    });
   
     // run app
     app.run();

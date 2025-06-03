@@ -21,6 +21,7 @@ const StudentsController = {
         this.setupModalEventHandlers(); // Setup event handlers for the edit modal
     },
 
+
     // Sets up event listeners for the modal form and buttons.
     // This should be called once during initialization.
     setupModalEventHandlers: function() {
@@ -210,6 +211,10 @@ const StudentsController = {
             );
         }
     }
+
+
+
+    
 };
 
 // Developer log, ensuring the correct controller name is referenced.

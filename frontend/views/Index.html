@@ -36,6 +36,7 @@
     <script src="../services/student-service.js"></script> 
     <script src="../controllers/profileController.js"></script> 
     <script src="../controllers/studentsController.js"></script>
+    <script src="../controllers/addStudentController.js"></script>
     <script src="../utils/constants.js"></script>
     <script src="../utils/utils.js"></script>
     <script src="../utils/rest-client.js"></script>
@@ -55,9 +56,10 @@
         <div class="sm:hidden">
             <label for="Tab" class="sr-only">Tab</label>
             <select id="Tab" class="w-full rounded-md border-gray-200" onchange="location = this.value;">
-                <option value="#StudentInformastion">Student Informastion</option>
+                <option value="#students">Student Informastion</option>
                 <option value="#study">Study</option>
                 <option value="#profile">Profile</option>
+                <option value="#addStudent">AddStudent</option>
                 <option value="#product">Product</option>
                 <option value="#faq">FAQs</option>
                 <option value="javascript:void(0);" onclick="UserService.logout()">Logout</option>
@@ -75,7 +77,8 @@
 
     <!-- Main Content -->
     <main id="spapp" role="main" class="mt-32">
-        <section id="StudentInformastion" class="p-8" data-load="students.html"></section>
+        <section id="students" class="p-8" data-load="students.html"></section>
+        <section id="addStudent" class="p-8" data-load="addStudent.html"></section> 
         <section id="study" class="p-8"></section>
         <section id="profile" class="p-8"></section>
         <section id="product" class="p-8"></section>

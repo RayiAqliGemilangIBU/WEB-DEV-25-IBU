@@ -47,7 +47,23 @@ const StudentService = {
                 }
             }
         );
+    },
+
+
+   addStudent: function(studentData, successCallback, errorCallback) {
+        console.log("StudentService: Attempting to add new student with data:", studentData);
+        RestClient.post("students", studentData, 
+            function(response) {
+                console.log("StudentService: Successfully added new student", response);
+                successCallback(response);
+            },
+            function(error) {
+                console.error("StudentService: Error adding new student", error);
+                errorCallback(error);
+            }
+        );
     }
+
 };
 
 console.log("student-service.js - Execution finished. StudentService object defined as:", typeof StudentService, StudentService); // LOG B
