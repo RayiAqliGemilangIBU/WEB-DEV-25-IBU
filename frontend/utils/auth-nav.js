@@ -12,15 +12,15 @@ function setupNavigation() {
 
   if (user.role && user.role.toLowerCase() === "admin") {
     navContent = `
-      <a href="#customersInformation" class="shrink-0 rounded-lg p-2 text-sm font-medium text-gray-500 hover:bg-gray-50 hover:text-gray-700">Students Info</a>
+      <a href="#StudentInformastion" class="shrink-0 rounded-lg p-2 text-sm font-medium text-gray-500 hover:bg-gray-50 hover:text-gray-700">Students Info</a>
       <a href="#profile" class="shrink-0 rounded-lg p-2 text-sm font-medium text-gray-500 hover:bg-gray-50 hover:text-gray-700">Profile</a>
       <a href="javascript:void(0);" class="shrink-0 rounded-lg p-2 text-sm font-medium text-gray-500 hover:bg-gray-50 hover:text-gray-700" onclick="UserService.logout()">Logout</a>
     `;
     mainContent = `
-      <section id="customersInformation" data-load="customersInformation.html"></section>
+      <section id="StudentInformastion" data-load="students.html"></section>
       <section id="profile"></section>
     `;
-    targetHash = "#customersInformation";
+    targetHash = "#StudentInformastion";
   } else {
     navContent = `
       <a href="#study" class="shrink-0 rounded-lg p-2 text-sm font-medium text-gray-500 hover:bg-gray-50 hover:text-gray-700">Study</a>

@@ -19,7 +19,6 @@ require_once __DIR__ . '/routes/UserRoutes.php';
 require_once __DIR__ . '/routes/StudentAnswerRoutes.php';
 
 
-// Opsional: aktifkan logging error di FlightPHP (sangat membantu untuk debugging)
 Flight::set('flight.log_errors', true);
 
 // Jalankan aplikasi

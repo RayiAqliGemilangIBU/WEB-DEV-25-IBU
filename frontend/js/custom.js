@@ -4,9 +4,10 @@ $(document).ready(function () {
    setupNavigation();
 
     var app = $.spapp({ pageNotFound: "error_404" }); // initialize
+    
     app.route({
-      view: "customers Information",
-      load: "customers Information.html",
+      view: "StudentInformastion",
+      load: "students.html",
     });
     
     app.route({
@@ -23,10 +24,6 @@ $(document).ready(function () {
       }
     });
 
-    app.route({
-      view: "select2",
-      load: "select2.html",
-    });
   
     app.route({
       view: "faq",
