@@ -1,26 +1,25 @@
 $(document).ready(function () {
+    // 1. Set tinggi main content (ini baik-baik saja di awal)
     $("main#spapp > section").height($(document).height() - 60);
-  
-   setupNavigation();
-    var app = $.spapp({ 
-        pageNotFound: "error_404", // ID section untuk 404
-        defaultView: $("main#spapp > section.active").attr("id") || "students", // Set default view yang aktif
-        templateDir: "./", // <--- UBAH INI! Ini berarti folder 'views' itu sendiri.
-        controllersDir: "../controllers/", // Path ini sudah benar (relatif ke Index.html di views)
-        // ... opsi lainnya jika ada
+
+    // 2. Inisialisasi SPApp terlebih dahulu dengan semua konfigurasinya.
+    // Ini membuat instance router dan menyiapkan properti dasarnya.
+    var app = $.spapp({
+        pageNotFound: "error_404",
+        defaultView: $("main#spapp > section.active").attr("id") || "students",
+        templateDir: "./", // Path ini sudah benar (relatif ke Index.html di views)
+        controllersDir: "../controllers/", // Path ini sudah benar (relatif ke custom.js di frontend/js/)
     });
 
-    var app = $.spapp({ pageNotFound: "error_404" }); // initialize
-    
-    // app.route({
-    //   view: "students",
-    //   load: "students.html",
-    // });
-    
+    // 3. Definisikan SEMUA rute Anda di sini.
+    // Ini sangat penting. Semua definisi rute (view, load, onCreate callbacks)
+    // harus didaftarkan ke instance 'app' sebelum 'app.run()' dipanggil.
+
+    // Rute untuk Student Information
     app.route({
       view: "students",
       load: "students.html",
-      onCreate: function() { 
+      onCreate: function() {
         console.log("CUSTOM.JS: Route #StudentInformastion - onCreate CALLED.");
         if (typeof StudentsController !== 'undefined' && StudentsController.init) {
           console.log("CUSTOM.JS: StudentsController IS defined. Calling init().");
@@ -33,8 +32,9 @@ $(document).ready(function () {
 
     // Rute untuk Menambah Siswa
     app.route({
-      view: "addStudent",    
-      onCreate: function() { 
+      view: "addStudent",
+      load: "addStudent.html", // Pastikan ini ada jika Anda punya addStudent.html
+      onCreate: function() {
         console.log("CUSTOM.JS: Route #addStudent - onCreate CALLED. Attempting to init AddStudentController.");
         if (typeof AddStudentController !== 'undefined' && AddStudentController.init) {
           console.log("CUSTOM.JS: AddStudentController IS defined. Calling init().");
@@ -44,16 +44,12 @@ $(document).ready(function () {
         }
       }
     });
-  
-    
-  
+
+    // Rute untuk Profil Pengguna
     app.route({
       view: "profile",
       load: "profile.html",
-      // onReady: function () {  // << DIKOMENTARI SEMENTARA
-      //   ProfileController.init();
-      // },
-      onCreate: function() { // << GUNAKAN onCreate
+      onCreate: function() {
         console.log("Rute #profile onCreate dipanggil. Mencoba init ProfileController.");
         if (typeof ProfileController !== 'undefined') {
           ProfileController.init();
@@ -63,21 +59,45 @@ $(document).ready(function () {
       }
     });
 
-  
+    // Rute untuk Material Management (yang kita perbaiki!)
+    app.route({
+      view: "materialManagement", // ID view baru (camelCase)
+      load: "materialManagement.html", // File HTML halaman baru (camelCase)
+      onCreate: function() {
+        console.log("CUSTOM.JS: Route #materialManagement - onCreate CALLED. Attempting to init MaterialManagementController.");
+        if (typeof MaterialManagementController !== 'undefined' && MaterialManagementController.init) {
+          console.log("CUSTOM.JS: MaterialManagementController IS defined. Calling init().");
+          MaterialManagementController.init();
+        } else {
+          console.error("CUSTOM.JS: MaterialManagementController IS UNDEFINED when #materialManagement onCreate was called.");
+        }
+      }
+    });
+
+    // Rute lainnya
     app.route({
       view: "faq",
       load: "faq.html",
     });
-  
+
     app.route({
       view: "product",
       load: "product.html",
     });
+
+    // Tambahkan listener hashchange untuk debugging (opsional, sudah ada)
     $(window).on('hashchange', function() {
         console.log("Hash changed detected by window.onhashchange:", window.location.hash);
     });
-  
-    // run app
+
+    // 4. Jalankan router SPApp.
+    // Ini akan memproses hash saat ini di URL dan memuat view/controller yang sesuai.
     app.run();
-  });
-  
+
+    // 5. Terakhir, panggil setupNavigation().
+    // Fungsi ini akan menangani pengalihan ke login jika tidak ada pengguna,
+    // atau mengatur hash awal berdasarkan peran pengguna. Karena 'app.run()' sudah
+    // menjalankan router, setiap perubahan hash oleh 'setupNavigation()' akan
+    // ditangani dengan benar oleh SPApp yang kini sudah sepenuhnya terkonfigurasi.
+    setupNavigation();
+});

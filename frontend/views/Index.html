@@ -31,16 +31,22 @@
     <script src="https://code.highcharts.com/modules/exporting.js"></script>
     <script src="https://code.highcharts.com/modules/export-data.js"></script>
 
-      <!-- Custom JS -->
-    <script src="../services/user-service.js"></script> 
-    <script src="../services/student-service.js"></script> 
-    <script src="../controllers/profileController.js"></script> 
-    <script src="../controllers/studentsController.js"></script>
-    <script src="../controllers/addStudentController.js"></script>
+
     <script src="../utils/constants.js"></script>
     <script src="../utils/utils.js"></script>
     <script src="../utils/rest-client.js"></script>
     <script src="../utils/auth-nav.js"></script>
+
+    
+    <!-- Custom JS -->
+    <script src="../services/user-service.js"></script> 
+    <script src="../services/student-service.js"></script> 
+    <script src="../services/material-service.js"></script> 
+    <script src="../controllers/profileController.js"></script> 
+    <script src="../controllers/studentsController.js"></script>
+    <script src="../controllers/addStudentController.js"></script>
+    <script src="../controllers/materialManagementController.js"></script>
+
 
     <!-- Custom JS SPA -->
 
@@ -59,6 +65,7 @@
                 <option value="#students">Student Informastion</option>
                 <option value="#study">Study</option>
                 <option value="#profile">Profile</option>
+                <option value="#materialManagement">Material Management</option>
                 <option value="#addStudent">AddStudent</option>
                 <option value="#product">Product</option>
                 <option value="#faq">FAQs</option>
@@ -78,6 +85,7 @@
     <!-- Main Content -->
     <main id="spapp" role="main" class="mt-32">
         <section id="students" class="p-8" data-load="students.html"></section>
+        <section id="materialManagement" class="p-8" data-load="materialManagement.html"></section>
         <section id="addStudent" class="p-8" data-load="addStudent.html"></section> 
         <section id="study" class="p-8"></section>
         <section id="profile" class="p-8"></section>
