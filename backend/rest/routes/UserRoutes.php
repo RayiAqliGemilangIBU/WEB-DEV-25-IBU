@@ -244,3 +244,54 @@ Flight::route('GET /users/@id', function ($id) {
 
     // lanjutkan akses user
 });
+
+/**
+ * @OA\Get(
+ * path="/students",
+ * summary="Get all users with the role 'Student'",
+ * description="Retrieves a list of all users who are registered as students. Password fields are omitted.",
+ * tags={"Students"},
+ * security={{"bearerAuth": {}}},
+ * @OA\Response(
+ * response=200,
+ * description="A list of students",
+ * @OA\JsonContent(
+ * type="array",
+ * @OA\Items(
+ * @OA\Property(property="user_id", type="integer", example=1),
+ * @OA\Property(property="name", type="string", example="John Doe"),
+ * @OA\Property(property="email", type="string", example="john.doe@example.com"),
+ * @OA\Property(property="address", type="string", example="123 Main St", nullable=true),
+ * @OA\Property(property="phone_number", type="string", example="+0987654321", nullable=true),
+ * @OA\Property(property="date_of_birth", type="string", format="date", example="1999-05-15", nullable=true),
+ * @OA\Property(property="role", type="string", example="Student"),
+ * @OA\Property(property="created_at", type="string", format="date-time", example="2024-01-10 10:00:00")
+ * )
+ * )
+ * ),
+ * @OA\Response(
+ * response=404, 
+ * description="No students found",
+ * @OA\JsonContent(
+ * @OA\Property(property="message", type="string", example="No students found")
+ * )
+ * ),
+ * @OA\Response(response=401, description="Unauthorized - JWT token is missing or invalid"),
+ * @OA\Response(response=500, description="Internal Server Error")
+ * )
+ */
+Flight::route('GET /students', function () use ($userService) {
+    Flight::middleware();
+    try {
+        // Assuming "Student" is the exact string used for the role in your database
+        $students = $userService->getUsersByRole("Student"); 
+        
+        if (empty($students)) {
+            Flight::json(['message' => 'No students found'], 404);
+        } else {
+            Flight::json($students, 200);
+        }
+    } catch (Exception $e) {
+        Flight::json(['error' => $e->getMessage()], 500);
+    }
+});

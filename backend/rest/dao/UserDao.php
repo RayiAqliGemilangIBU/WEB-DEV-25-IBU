@@ -109,4 +109,12 @@ class UserDao extends BaseDao {
             $stmt->execute();
             return $stmt->fetch(PDO::FETCH_ASSOC); // return 1 row (user) atau false
         }
+
+
+        public function getUsersByRole($role) {
+            $stmt = $this->conn->prepare("SELECT * FROM {$this->table} WHERE role = :role ORDER BY user_id ASC");
+            $stmt->bindParam(':role', $role, PDO::PARAM_STR);
+            $stmt->execute();
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        }
 }

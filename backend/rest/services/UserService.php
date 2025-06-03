@@ -83,6 +83,28 @@ public function registerUser($userData)
         return $this->delete($id); // memanggil delete dari BaseService
     }
 
+    public function getUsersByRole($role) {
+    // Ensure $this->dao is an instance of UserDao
+    if (!($this->dao instanceof UserDao)) {
+        // This should ideally not happen if constructor is correct
+        // but as a safeguard or if dao property can be something else.
+        // Or, if your BaseService structure means $this->dao is generic,
+        // you might need to cast or call a specific UserDao method.
+        // For now, assuming $this->dao is always UserDao instance for UserService.
+        throw new Exception("DAO is not an instance of UserDao in UserService.");
+    }
+
+    $users = $this->dao->getUsersByRole($role);
+    
+    // Remove password field from each user before returning
+    // and any other fields you don't want to send to the frontend.
+    foreach ($users as &$user) { // Use reference to modify array directly
+        unset($user['password']);
+        // unset($user['token']); // If you have a token column you want to hide
+    }
+    return $users;
+    }   
+
 
 
     // class UserService {
