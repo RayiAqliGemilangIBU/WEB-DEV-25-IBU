@@ -74,6 +74,20 @@ $(document).ready(function () {
       }
     });
 
+    app.route({
+    view: "textMaterial/:materialId", // :materialId adalah parameter dinamis
+    load: "textMaterial.html",
+    onCreate: function(materialId) { // Parameter materialId akan otomatis dilewatkan
+        console.log(`CUSTOM.JS: Route #textMaterial/${materialId} - onCreate CALLED.`);
+        if (typeof TextMaterialController !== 'undefined' && TextMaterialController.init) {
+            console.log("CUSTOM.JS: TextMaterialController IS defined. Calling init().");
+            TextMaterialController.init(materialId); // Lewatkan materialId ke init()
+        } else {
+            console.error("CUSTOM.JS: TextMaterialController IS UNDEFINED when #textMaterial onCreate was called.");
+        }
+    }
+    });
+
     // Rute lainnya
     app.route({
       view: "faq",

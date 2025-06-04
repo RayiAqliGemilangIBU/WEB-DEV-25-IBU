@@ -60,11 +60,14 @@ window.MaterialManagementController = {
             // window.location.hash = `#/quizPage/${materialId}`; // Contoh navigasi ke halaman kuis
         });
 
+        
         $('#materials-table').off('click', '.text-material-btn').on('click', '.text-material-btn', function() {
             const materialId = $(this).data('id');
-            console.log(`Navigating to Text for Material ID: ${materialId}`);
-            toastr.info(`Navigating to Text for Material ID: ${materialId}`, "Feature Coming Soon");
-            // window.location.hash = `#/textMaterialPage/${materialId}`; // Contoh navigasi ke halaman teks materi
+            // Navigasi ke rute SPA baru: #textMaterial/ID_MATERI
+            // Ini akan memicu rute yang akan kita definisikan di custom.js
+            window.location.hash = `textMaterial/${materialId}`;
+            console.log(`Navigating to text material page for Material ID: ${materialId}`);
+            toastr.info(`Loading Text Material for ID: ${materialId}`);
         });
     },
 
