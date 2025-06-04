@@ -5,7 +5,7 @@ require_once __DIR__ . '/../dao/QuizDao.php';   // Untuk validasi quiz_id
 
 class QuestionService {
     private $questionDao;
-    private $quizDao; // Untuk validasi keberadaan kuis
+    private $quizDao;
 
     public function __construct() {
         $this->questionDao = new QuestionDao();
@@ -44,7 +44,6 @@ class QuestionService {
         }
     }
 
-
     public function getQuestionsByQuizId($quiz_id) {
         if (empty($quiz_id)) {
             throw new Exception("Quiz ID cannot be empty.");
@@ -55,6 +54,7 @@ class QuestionService {
             $q['correct_is_true'] = (bool)$q['correct_is_true'];
             return $q;
         }, $questions);
+    }
 
     public function getQuestionById($question_id) {
         $question = $this->questionDao->getQuestionById($question_id);
@@ -64,13 +64,12 @@ class QuestionService {
         return $question;
     }
 
-
     public function updateQuestion($question_id, $data) {
         if (empty($question_id)) {
             throw new Exception("Question ID is required for update.");
         }
 
-       
+        // Validasi apakah pertanyaan ada
         $existingQuestion = $this->questionDao->getQuestionById($question_id);
         if (!$existingQuestion) {
             throw new Exception("Question with ID " . $question_id . " not found.");
@@ -119,5 +118,15 @@ class QuestionService {
             throw new Exception("Failed to delete question.");
         }
         return true;
+    }
+
+    public function getAllQuestions() {
+        $questions = $this->questionDao->getAllQuestions();
+        // Konversi boolean untuk output JSON dan tambahkan informasi kuis jika ada (dari JOIN di DAO)
+        return array_map(function($q) {
+            $q['correct_is_true'] = (bool)$q['correct_is_true'];
+            // Jika DAO mengembalikan quiz_title, itu akan ada di sini
+            return $q;
+        }, $questions);
     }
 }
