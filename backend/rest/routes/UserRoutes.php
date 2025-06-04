@@ -30,8 +30,8 @@ $userService = new UserService();
  * )
  */
 Flight::route('GET /user', function () use ($userService) {
-    // Flight::middleware();
-    // (RoleMiddleware::requireRole('Admin'))();
+    Flight::middleware();
+    (RoleMiddleware::requireRole('Admin'))();
 
     $users = $userService->getAllUser();
     Flight::json(["success" => true, "data" => $users]);
