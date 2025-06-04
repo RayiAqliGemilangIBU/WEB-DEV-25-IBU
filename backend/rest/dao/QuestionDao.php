@@ -53,4 +53,11 @@ class QuestionDao extends BaseDao {
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
         return $result ? (int)$result['count'] : 0;
     }
+
+    
+    public function getAllQuestions() {
+        // Menggunakan metode findAll dari BaseDao
+        return $this->findAll('question'); 
+  
+    }
 }
