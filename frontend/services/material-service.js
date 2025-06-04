@@ -61,7 +61,14 @@ var MaterialService = {
                 errorCallback(error);
             }
         );
-    }
+    },
+
+    getMaterialById: function(materialId, successCallback, errorCallback) {
+        RestClient.get(`${Constants.API_BASE_URL}/materials/${materialId}`,
+            successCallback,
+            errorCallback
+        );
+    },
 };
 
 console.log("material-service.js - Execution finished. MaterialService object defined as:", typeof MaterialService, MaterialService);

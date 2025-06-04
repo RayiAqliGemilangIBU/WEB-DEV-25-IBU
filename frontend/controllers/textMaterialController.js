@@ -1,93 +1,88 @@
 // frontend/controllers/textMaterialController.js
 
 const TextMaterialController = {
-    currentTextMaterial: null, // Untuk menyimpan data textMaterial yang sedang ditampilkan
-    isEditing: false,          // Status mode edit
+    currentTextMaterial: null,
+    isEditing: false,
 
     init: function (materialId) {
         console.log(`TextMaterialController.init() called for Material ID: ${materialId}`);
         if (!materialId) {
-            $('#text-material-status').text('Error: No material ID provided.');
-            $('#text-material-display').addClass('hidden');
-            $('#text-material-edit-form').addClass('hidden');
-            $('#editTextMaterialBtn').addClass('hidden');
+            $('#text-material-status').text('Error: No material ID provided.').removeClass('hidden'); // Tampilkan pesan error
+            $('#text-material-display').addClass('hidden'); // Sembunyikan display
+            $('#text-material-edit-form').addClass('hidden'); // Sembunyikan form
+            $('#editTextMaterialBtn').addClass('hidden'); // Sembunyikan tombol
             return;
         }
 
-        // Reset state
-        this.isEditing = false;
-        this.updateButtonState(); // Update tombol "Edit/Save"
-        $('#text-material-status').text('Loading text material details...');
-        $('#text-material-status').removeClass('hidden'); // Pastikan status terlihat
-        $('#text-material-display').addClass('hidden');
-        $('#text-material-edit-form').addClass('hidden');
+        // --- Perbaikan di init(): Pastikan status awal UI konsisten ---
+        this.isEditing = false; // Selalu mulai dalam mode tampilan
+        this.updateButtonState(); // Set tombol ke "Edit Material"
+
+        $('#text-material-status').text('Loading text material details...').removeClass('hidden'); // Tampilkan status loading
+        $('#text-material-display').addClass('hidden'); // Pastikan display tersembunyi awal
+        $('#text-material-edit-form').addClass('hidden'); // Pastikan form tersembunyi awal
         $('#editTextMaterialBtn').addClass('hidden'); // Sembunyikan tombol sampai data dimuat
 
         this.fetchTextMaterial(materialId);
-        this.bindEvents(); // Bind event setiap kali init dipanggil
+        this.bindEvents();
     },
 
     bindEvents: function() {
-        // Event listener untuk tombol Edit/Save
         $('#editTextMaterialBtn').off('click').on('click', () => {
-            // Jika dalam mode edit, tombol ini berfungsi sebagai submit form
             if (this.isEditing) {
-                $('#textMaterialForm').submit(); // Submit form secara manual
+                $('#textMaterialForm').submit();
             } else {
-                this.toggleEditMode(); // Masuk mode edit
+                this.toggleEditMode();
             }
         });
 
-        // Event listener untuk submit form edit
         $('#textMaterialForm').off('submit').on('submit', (event) => {
-            event.preventDefault(); // Mencegah reload halaman
+            event.preventDefault();
             this.saveTextMaterial();
         });
     },
 
     fetchTextMaterial: function(materialId) {
-        // Ambil text material berdasarkan material_id
         TextMaterialService.getTextMaterialByMaterialId(materialId,
             (response) => {
-                // Asumsi response adalah array, dan kita ambil yang pertama (jika hanya 1 text material per material)
-                if (response && response.length > 0) {
-                    this.currentTextMaterial = response[0];
+                if (response && typeof response === 'object' && Object.keys(response).length > 0) {
+                    this.currentTextMaterial = response;
                     this.renderTextMaterial();
-                    $('#text-material-status').addClass('hidden'); // Sembunyikan status loading
-                    $('#text-material-display').removeClass('hidden'); // Tampilkan display
-                    $('#editTextMaterialBtn').removeClass('hidden'); // Tampilkan tombol Edit/Save
+                    // --- Pastikan visibilitas diatur di renderTextMaterial atau di sini
+                    // $('#text-material-status').addClass('hidden'); // Akan diatur di renderTextMaterial
+                    // $('#text-material-display').removeClass('hidden'); // Akan diatur di renderTextMaterial
+                    $('#editTextMaterialBtn').removeClass('hidden'); // Tampilkan tombol Edit
                 } else {
-                    $('#text-material-status').text('No text material found for this Material ID. (You can add it via backend API)');
+                    $('#text-material-status').text('No text material found for this Material ID. (You can add it via backend API)').removeClass('hidden');
                     $('#text-material-display').addClass('hidden');
-                    $('#editTextMaterialBtn').addClass('hidden'); // Sembunyikan tombol jika tidak ada materi
+                    $('#text-material-edit-form').addClass('hidden'); // Tambahkan ini agar form juga tersembunyi
+                    $('#editTextMaterialBtn').addClass('hidden');
                 }
             },
+            // Tambahkan error_callback untuk fetchTextMaterial
             (error) => {
                 console.error("Failed to fetch text material:", error);
-                $('#text-material-status').text(`Failed to load text material: ${error.responseJSON?.message || error.statusText || 'Unknown error'}`);
+                const errorMessage = error.responseJSON?.message || error.statusText || 'Unknown error';
+                $('#text-material-status').text(`Error loading text material: ${errorMessage}`).removeClass('hidden');
                 $('#text-material-display').addClass('hidden');
-                $('#editTextMaterialBtn').addClass('hidden'); // Sembunyikan tombol jika ada error
+                $('#text-material-edit-form').addClass('hidden');
+                $('#editTextMaterialBtn').addClass('hidden');
             }
         );
     },
 
-    // Fungsi untuk mengambil judul materi dari material_id
-    // Ini membutuhkan MaterialService.getMaterialById atau serupa.
-    // Anda harus menambahkan ini ke MaterialService.js Anda jika belum ada, dan membuat endpoint di backend.
     fetchMaterialTitle: function(materialId, callback) {
-        // Asumsi MaterialService memiliki getMaterialById(id, success, error)
-        // Jika belum ada, Anda bisa membuat endpoint GET /materials/{id} di backend
         MaterialService.getMaterialById(materialId,
             (material) => {
                 if (material && material.title) {
                     callback(material.title);
                 } else {
-                    callback(`Material ID: ${materialId}`); // Fallback jika tidak ada judul
+                    callback(`Material ID: ${materialId}`);
                 }
             },
             (error) => {
                 console.error("Failed to fetch material title:", error);
-                callback(`Material ID: ${materialId}`); // Fallback jika gagal ambil judul
+                callback(`Material ID: ${materialId}`);
             }
         );
     },
@@ -95,42 +90,44 @@ const TextMaterialController = {
     renderTextMaterial: function() {
         if (!this.currentTextMaterial) {
             $('#text-material-tbody').empty().append('<tr><td colspan="2" class="text-center p-4">No text material data available.</td></tr>');
+            $('#text-material-status').text('No text material data available.').removeClass('hidden'); // Tampilkan pesan status
+            $('#text-material-display').addClass('hidden'); // Pastikan display tersembunyi
+            $('#text-material-edit-form').addClass('hidden'); // Pastikan form tersembunyi
+            $('#editTextMaterialBtn').addClass('hidden'); // Sembunyikan tombol edit
             return;
         }
 
         const tbody = $('#text-material-tbody');
-        tbody.empty(); // Bersihkan tabel
+        tbody.empty(); // Clear the table
 
         // Update judul halaman dengan judul materi
         this.fetchMaterialTitle(this.currentTextMaterial.material_id, (materialTitle) => {
             $('#text-material-title').text(`Text Material: ${materialTitle}`);
-            // Tambahkan baris Material Title ke tabel
-            tbody.append(`<tr><td class="px-6 py-4 font-bold">Material Title</td><td class="px-6 py-4">${materialTitle}</td></tr>`);
         });
 
-        // Tampilkan atribut textMaterial dalam bentuk Key-Value
+        // Display textMaterial attributes as Key-Value pairs
         const data = this.currentTextMaterial;
-        const displayKeys = ['text_id', 'title', 'content']; // Kunci yang ingin ditampilkan
+        const displayKeys = ['text_id', 'title', 'content']; // Keys to display
 
         displayKeys.forEach(key => {
             let label = key.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
             let value = data[key] !== null && data[key] !== undefined ? data[key] : 'N/A';
 
-            if (key === 'text_id') {
-                // text_id hanya ditampilkan, tidak bisa diedit
-                tbody.append(`<tr><td class="px-6 py-4 font-bold">${label}</td><td class="px-6 py-4">${value}</td></tr>`);
-            } else {
-                // Untuk title dan content
-                tbody.append(`
-                    <tr>
-                        <td class="px-6 py-4 font-bold">${label}</td>
-                        <td class="px-6 py-4">
-                            <span id="view-${key}">${value}</span>
-                        </td>
-                    </tr>
-                `);
-            }
+            tbody.append(`
+                <tr>
+                    <td class="px-6 py-4 font-bold">${label}</td>
+                    <td class="px-6 py-4">
+                        <span id="view-${key}">${value}</span>
+                    </td>
+                </tr>
+            `);
         });
+
+        // --- Perbaikan di renderTextMaterial(): Atur visibilitas UI setelah data siap ---
+        $('#text-material-status').addClass('hidden'); // Sembunyikan status (jika tadi terlihat)
+        $('#text-material-display').removeClass('hidden'); // Tampilkan tabel display
+        $('#text-material-edit-form').addClass('hidden'); // Pastikan form edit tersembunyi
+        $('#editTextMaterialBtn').removeClass('hidden'); // Pastikan tombol edit terlihat
     },
 
     toggleEditMode: function() {
@@ -149,10 +146,13 @@ const TextMaterialController = {
             $('#edit-text-content').val(this.currentTextMaterial.content);
 
         } else {
-            // Sembunyikan form edit, tampilkan tampilan tabel (setelah disimpan atau dibatalkan secara implisit)
+            // Sembunyikan form edit, tampilkan tampilan tabel (setelah save atau batal)
             $('#text-material-edit-form').addClass('hidden');
             $('#text-material-display').removeClass('hidden');
-            // Jika keluar dari mode edit tanpa save, data akan tetap yang lama
+            // Jika Anda ingin memastikan data terbaru dirender setelah keluar dari mode edit
+            // (misalnya jika user keluar tanpa save, atau jika saveTextMaterial gagal memicu render)
+            // Anda bisa panggil this.renderTextMaterial() lagi di sini, tapi
+            // saveTextMaterial sudah memanggilnya.
         }
     },
 
@@ -167,12 +167,12 @@ const TextMaterialController = {
 
     saveTextMaterial: function() {
         const textId = $('#edit-text-id').val();
-        const materialId = $('#edit-material-id').val(); // Pastikan material_id tetap ada
+        const materialId = $('#edit-material-id').val();
         const updatedTitle = $('#edit-text-title').val();
         const updatedContent = $('#edit-text-content').val();
 
         const updatedData = {
-            material_id: materialId, // Kirim kembali material_id
+            material_id: materialId, // Pastikan ini tetap dikirim
             title: updatedTitle,
             content: updatedContent
         };
@@ -180,17 +180,35 @@ const TextMaterialController = {
         TextMaterialService.updateTextMaterial(textId, updatedData,
             (response) => {
                 toastr.success("Text Material updated successfully!");
-                this.currentTextMaterial = response; // Update data lokal dengan respons terbaru
-                this.renderTextMaterial(); // Render ulang tampilan
+
+                // Pastikan response.updated adalah objek yang berisi data aktual
+                if (response && response.updated && typeof response.updated === 'object') {
+                    this.currentTextMaterial = response.updated;
+                } else {
+                    console.error("Backend response 'updated' property is not a valid object or is missing. Falling back to refetching data.", response);
+                    // Jika data respons tidak valid, paksa untuk fetch ulang dari server
+                    this.fetchTextMaterial(materialId); // Gunakan materialId yang tersedia
+                    return; // Penting: Hentikan eksekusi callback sukses di sini
+                }
+                
+                this.renderTextMaterial(); // Render ulang tampilan dengan data terbaru
                 this.isEditing = false; // Keluar dari mode edit
                 this.updateButtonState(); // Update tombol
-                // Pastikan status loading hilang dan display tampil kembali
-                $('#text-material-status').addClass('hidden');
-                $('#text-material-display').removeClass('hidden');
+                // Visibilitas div akan diatur oleh renderTextMaterial dan toggleEditMode
+                // $('#text-material-status').addClass('hidden'); // Sudah diatur di renderTextMaterial
+                // $('#text-material-display').removeClass('hidden'); // Sudah diatur di renderTextMaterial
             },
             (error) => {
                 console.error("Failed to save text material:", error);
-                toastr.error(`Failed to update text material: ${error.responseJSON?.message || error.statusText || 'Unknown error'}`, "Save Error");
+                const errorMessage = error.responseJSON?.message || error.statusText || 'Unknown error';
+                toastr.error(`Failed to update text material: ${errorMessage}`, "Save Error");
+
+                if (error.responseJSON) {
+                    console.error("Backend error response:", error.responseJSON);
+                }
+                // Jika save gagal, pastikan form edit tetap terlihat atau kembali ke tampilan awal
+                // this.toggleEditMode(); // Bisa kembali ke mode tampilan
+                // Atau biarkan di mode edit agar user bisa memperbaiki
             }
         );
     }

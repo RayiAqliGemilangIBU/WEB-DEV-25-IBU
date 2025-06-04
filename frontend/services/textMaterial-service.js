@@ -7,7 +7,7 @@ const TextMaterialService = {
     // Membutuhkan endpoint GET /text-materials/material/{materialId} di backend
     getTextMaterialByMaterialId: function(materialId, successCallback, errorCallback) {
         console.log(`TextMaterialService: Attempting to get text material for material ID: ${materialId}`);
-        RestClient.get(`text-materials/material/${materialId}`, // Asumsi endpoint
+        RestClient.get(`textmaterials/${materialId}`, // Asumsi endpoint
             function(response) {
                 console.log("TextMaterialService: Data received from RestClient", response);
                 successCallback(response);
@@ -23,7 +23,7 @@ const TextMaterialService = {
     // Membutuhkan endpoint PUT /text-materials/{textId} di backend
     updateTextMaterial: function(textId, textData, successCallback, errorCallback) {
         console.log(`TextMaterialService: Attempting to update text material ID: ${textId} with data:`, textData);
-        RestClient.put(`text-materials/${textId}`, textData, // Asumsi endpoint
+        RestClient.put(`textmaterials/${textId}`, textData, // Asumsi endpoint
             function(response) {
                 console.log(`TextMaterialService: Successfully updated text material ID: ${textId}`, response);
                 successCallback(response);

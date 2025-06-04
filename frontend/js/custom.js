@@ -75,17 +75,25 @@ $(document).ready(function () {
     });
 
     app.route({
-    view: "textMaterial/:materialId", // :materialId adalah parameter dinamis
-    load: "textMaterial.html",
-    onCreate: function(materialId) { // Parameter materialId akan otomatis dilewatkan
-        console.log(`CUSTOM.JS: Route #textMaterial/${materialId} - onCreate CALLED.`);
-        if (typeof TextMaterialController !== 'undefined' && TextMaterialController.init) {
-            console.log("CUSTOM.JS: TextMaterialController IS defined. Calling init().");
-            TextMaterialController.init(materialId); // Lewatkan materialId ke init()
-        } else {
-            console.error("CUSTOM.JS: TextMaterialController IS UNDEFINED when #textMaterial onCreate was called.");
+        view: "textMaterial", // Ini sudah benar
+        load: "textMaterial.html",
+        onCreate: function() {
+            // Ekstrak materialId secara manual dari URL hash (BARIS LAMA, TIDAK DIPERLUKAN LAGI UNTUK EKSTRAKSI)
+            // const hash = window.location.hash.slice(1);
+            // const parts = hash.split('/');
+            // const materialId = parts.length > 1 ? parts[1] : null;
+
+            // Ambil materialId dari variabel global sementara
+            const materialId = window.tempMaterialIdForTextPage;
+            window.tempMaterialIdForTextPage = null; // Bersihkan variabel setelah digunakan (opsional tapi baik)
+
+            console.log(`CUSTOM.JS: Route #textMaterial - onCreate CALLED. Attempting to init TextMaterialController with Material ID: ${materialId}`);
+            if (typeof TextMaterialController !== 'undefined' && TextMaterialController.init) {
+                TextMaterialController.init(materialId); // Lewatkan materialId yang sudah diekstrak
+            } else {
+                console.error("CUSTOM.JS: TextMaterialController IS UNDEFINED when #textMaterial onCreate was called.");
+            }
         }
-    }
     });
 
     // Rute lainnya

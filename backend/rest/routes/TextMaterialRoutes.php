@@ -139,7 +139,8 @@ Flight::route('GET /textmaterial/@id', function($id) use ($textMaterialService) 
  */
 Flight::route('GET /textmaterials/@material_id', function($material_id) use ($textMaterialService) {
     $list = $textMaterialService->getTextMaterialByMaterialId($material_id);
-    Flight::json(["success" => true, "data" => $list]);
+    // Flight::json(["success" => true, "data" => $list]);
+    Flight::json($list);
 });
 
 /**

@@ -63,10 +63,14 @@ window.MaterialManagementController = {
         
         $('#materials-table').off('click', '.text-material-btn').on('click', '.text-material-btn', function() {
             const materialId = $(this).data('id');
-            // Navigasi ke rute SPA baru: #textMaterial/ID_MATERI
-            // Ini akan memicu rute yang akan kita definisikan di custom.js
-            window.location.hash = `textMaterial/${materialId}`;
-            console.log(`Navigating to text material page for Material ID: ${materialId}`);
+            
+            // Simpan materialId di variabel global sementara
+            window.tempMaterialIdForTextPage = materialId; 
+
+            // Navigasi ke rute SPA dasar tanpa parameter di hash
+            window.location.hash = `textMaterial`; // <-- HANYA NAMA ROUTE DASAR
+            
+            console.log(`Navigating to text material page for Material ID: ${materialId} via global variable.`);
             toastr.info(`Loading Text Material for ID: ${materialId}`);
         });
     },
