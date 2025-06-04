@@ -11,8 +11,8 @@ class QuestionDao extends BaseDao {
 
     public function createQuestion($data) {
         // Pastikan field boolean dikonversi dengan benar jika perlu
-        if (isset($data['correct_is_true'])) {
-            $data['correct_is_true'] = filter_var($data['correct_is_true'], FILTER_VALIDATE_BOOLEAN) ? 1 : 0;
+        if (isset($data['answer'])) {
+            $data['answer'] = filter_var($data['answer'], FILTER_VALIDATE_BOOLEAN) ? 1 : 0;
         }
         return $this->insert('question', $data);
     }
@@ -20,8 +20,8 @@ class QuestionDao extends BaseDao {
 
     public function updateQuestion($question_id, $data) {
         // Pastikan field boolean dikonversi dengan benar jika perlu
-        if (isset($data['correct_is_true'])) {
-            $data['correct_is_true'] = filter_var($data['correct_is_true'], FILTER_VALIDATE_BOOLEAN) ? 1 : 0;
+        if (isset($data['answer'])) {
+            $data['answer'] = filter_var($data['answer'], FILTER_VALIDATE_BOOLEAN) ? 1 : 0;
         }
         return $this->update('question', $data, 'question_id', $question_id);
     }

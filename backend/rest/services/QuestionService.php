@@ -14,8 +14,8 @@ class QuestionService {
 
 
     public function addQuestionToQuiz($data) {
-        if (!isset($data['quiz_id']) || empty($data['header']) || !isset($data['correct_is_true'])) {
-            throw new Exception("Invalid data: quiz_id, header, and correct_is_true are required.");
+        if (!isset($data['quiz_id']) || empty($data['header']) || !isset($data['answer'])) {
+            throw new Exception("Invalid data: quiz_id, header, and answer are required.");
         }
 
         // Validasi apakah quiz_id ada
@@ -27,7 +27,7 @@ class QuestionService {
         // Set default explanation jika kosong
         $data['explanation'] = $data['explanation'] ?? '';
         // Pastikan boolean dikelola dengan benar
-        $data['correct_is_true'] = filter_var($data['correct_is_true'], FILTER_VALIDATE_BOOLEAN);
+        $data['answer'] = filter_var($data['answer'], FILTER_VALIDATE_BOOLEAN);
 
 
         $questionId = $this->questionDao->createQuestion($data);
@@ -37,7 +37,7 @@ class QuestionService {
                 throw new Exception("Failed to retrieve newly created question.");
             }
             // Konversi kembali boolean untuk output JSON yang konsisten jika perlu
-            $newQuestion['correct_is_true'] = (bool)$newQuestion['correct_is_true'];
+            $newQuestion['answer'] = (bool)$newQuestion['answer'];
             return $newQuestion;
         } else {
             throw new Exception("Question creation failed at DAO level.");
@@ -51,7 +51,7 @@ class QuestionService {
         $questions = $this->questionDao->getQuestionsByQuizId($quiz_id);
         // Konversi boolean untuk output JSON
         return array_map(function($q) {
-            $q['correct_is_true'] = (bool)$q['correct_is_true'];
+            $q['answer'] = (bool)$q['answer'];
             return $q;
         }, $questions);
     }
@@ -59,7 +59,7 @@ class QuestionService {
     public function getQuestionById($question_id) {
         $question = $this->questionDao->getQuestionById($question_id);
         if ($question) {
-            $question['correct_is_true'] = (bool)$question['correct_is_true'];
+            $question['answer'] = (bool)$question['answer'];
         }
         return $question;
     }
@@ -79,14 +79,14 @@ class QuestionService {
         $updateData = [];
         if (isset($data['header'])) $updateData['header'] = $data['header'];
         if (isset($data['explanation'])) $updateData['explanation'] = $data['explanation'];
-        if (isset($data['correct_is_true'])) {
-            $updateData['correct_is_true'] = filter_var($data['correct_is_true'], FILTER_VALIDATE_BOOLEAN);
+        if (isset($data['answer'])) {
+            $updateData['answer'] = filter_var($data['answer'], FILTER_VALIDATE_BOOLEAN);
         }
 
         if (empty($updateData)) {
             // Jika tidak ada data yang diupdate, kembalikan data yang ada
             // atau throw new Exception("No data provided for update.");
-            $existingQuestion['correct_is_true'] = (bool)$existingQuestion['correct_is_true'];
+            $existingQuestion['answer'] = (bool)$existingQuestion['answer'];
             return $existingQuestion; 
         }
 
@@ -96,7 +96,7 @@ class QuestionService {
             if (!$updatedQuestion) {
                 throw new Exception("Failed to retrieve updated question.");
             }
-            $updatedQuestion['correct_is_true'] = (bool)$updatedQuestion['correct_is_true'];
+            $updatedQuestion['answer'] = (bool)$updatedQuestion['answer'];
             return $updatedQuestion;
         } else {
             throw new Exception("Question update failed at DAO level.");
@@ -124,7 +124,7 @@ class QuestionService {
         $questions = $this->questionDao->getAllQuestions();
         // Konversi boolean untuk output JSON dan tambahkan informasi kuis jika ada (dari JOIN di DAO)
         return array_map(function($q) {
-            $q['correct_is_true'] = (bool)$q['correct_is_true'];
+            $q['answer'] = (bool)$q['answer'];
             // Jika DAO mengembalikan quiz_title, itu akan ada di sini
             return $q;
         }, $questions);

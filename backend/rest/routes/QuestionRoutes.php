@@ -26,7 +26,7 @@ $questionService = new QuestionService();
  *                     @OA\Property(property="quiz_id", type="integer", example=10),
  *                     @OA\Property(property="header", type="string", example="Is water an element?"),
  *                     @OA\Property(property="explanation", type="string", nullable=true, example="Water is a compound (H2O)."),
- *                     @OA\Property(property="correct_is_true", type="boolean", example=false)
+ *                     @OA\Property(property="answer", type="boolean", example=false)
  *                 )
  *             )
  *         )
@@ -37,7 +37,7 @@ $questionService = new QuestionService();
  * )
  */
 Flight::route('GET /question', function() use ($questionService) {
-    Flight::middleware('AuthMiddleware');
+    // Flight::middleware('AuthMiddleware');
     try {
         $questions = $questionService->getAllQuestions();
         Flight::json(["success" => true, "questions" => $questions]);
@@ -75,7 +75,7 @@ Flight::route('GET /question', function() use ($questionService) {
  *                     @OA\Property(property="quiz_id", type="integer", example=10),
  *                     @OA\Property(property="header", type="string", example="Is water an element?"),
  *                     @OA\Property(property="explanation", type="string", nullable=true, example="Water is a compound (H2O)."),
- *                     @OA\Property(property="correct_is_true", type="boolean", example=false)
+ *                     @OA\Property(property="answer", type="boolean", example=false)
  *                 )
  *             )
  *         )
@@ -86,7 +86,7 @@ Flight::route('GET /question', function() use ($questionService) {
  * )
  */
 Flight::route('GET /question/quiz/@quiz_id', function($quiz_id) use ($questionService) {
-    Flight::middleware('AuthMiddleware');
+    // Flight::middleware('AuthMiddleware');
     try {
         $questions = $questionService->getQuestionsByQuizId((int)$quiz_id);
         Flight::json(["success" => true, "questions" => $questions]);
@@ -106,11 +106,11 @@ Flight::route('GET /question/quiz/@quiz_id', function($quiz_id) use ($questionSe
  *     @OA\RequestBody(
  *         required=true,
  *         @OA\JsonContent(
- *             required={"quiz_id", "header", "correct_is_true"},
+ *             required={"quiz_id", "header", "answer"},
  *             @OA\Property(property="quiz_id", type="integer", example=1),
  *             @OA\Property(property="header", type="string", example="The Earth is flat."),
  *             @OA\Property(property="explanation", type="string", nullable=true, example="The Earth is an oblate spheroid."),
- *             @OA\Property(property="correct_is_true", type="boolean", example=false)
+ *             @OA\Property(property="answer", type="boolean", example=false)
  *         )
  *     ),
  *     @OA\Response(
@@ -124,7 +124,7 @@ Flight::route('GET /question/quiz/@quiz_id', function($quiz_id) use ($questionSe
  *                 @OA\Property(property="quiz_id", type="integer", example=1),
  *                 @OA\Property(property="header", type="string", example="The Earth is flat."),
  *                 @OA\Property(property="explanation", type="string", nullable=true, example="The Earth is an oblate spheroid."),
- *                 @OA\Property(property="correct_is_true", type="boolean", example=false)
+ *                 @OA\Property(property="answer", type="boolean", example=false)
  *             )
  *         )
  *     ),
@@ -170,7 +170,7 @@ Flight::route('POST /question', function () use ($questionService) {
  *         @OA\JsonContent(
  *             @OA\Property(property="header", type="string", example="Is the sky blue?"),
  *             @OA\Property(property="explanation", type="string", nullable=true, example="Due to Rayleigh scattering."),
- *             @OA\Property(property="correct_is_true", type="boolean", example=true)
+ *             @OA\Property(property="answer", type="boolean", example=true)
  *         )
  *     ),
  *     @OA\Response(
@@ -184,7 +184,7 @@ Flight::route('POST /question', function () use ($questionService) {
  *                 @OA\Property(property="quiz_id", type="integer", example=1),
  *                 @OA\Property(property="header", type="string", example="Is the sky blue?"),
  *                 @OA\Property(property="explanation", type="string", nullable=true, example="Due to Rayleigh scattering."),
- *                 @OA\Property(property="correct_is_true", type="boolean", example=true)
+ *                 @OA\Property(property="answer", type="boolean", example=true)
  *             )
  *         )
  *     ),
