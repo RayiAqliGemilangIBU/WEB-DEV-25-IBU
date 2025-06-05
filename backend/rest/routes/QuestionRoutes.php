@@ -46,6 +46,55 @@ Flight::route('GET /question', function() use ($questionService) {
     }
 });
 
+
+
+/**
+ * @OA\Get(
+ *     path="/question/{question_id}",
+ *     summary="Get a specific True/False question by ID",
+ *     tags={"Question"},
+ *     security={{"bearerAuth":{}}},
+ *     @OA\Parameter(
+ *         name="question_id",
+ *         in="path",
+ *         required=true,
+ *         description="The ID of the question to retrieve",
+ *         @OA\Schema(type="integer")
+ *     ),
+ *     @OA\Response(
+ *         response=200,
+ *         description="Question retrieved successfully",
+ *         @OA\JsonContent(
+ *             type="object",
+ *             @OA\Property(property="success", type="boolean", example=true),
+ *             @OA\Property(property="question", type="object",
+ *                 @OA\Property(property="question_id", type="integer", example=5),
+ *                 @OA\Property(property="quiz_id", type="integer", example=2),
+ *                 @OA\Property(property="header", type="string", example="Is fire hot?"),
+ *                 @OA\Property(property="explanation", type="string", nullable=true, example="Fire produces heat due to combustion."),
+ *                 @OA\Property(property="answer", type="boolean", example=true)
+ *             )
+ *         )
+ *     ),
+ *     @OA\Response(response=404, description="Question not found"),
+ *     @OA\Response(response=401, description="Unauthorized"),
+ *     @OA\Response(response=403, description="Forbidden")
+ * )
+ */
+Flight::route('GET /question/@question_id', function ($question_id) use ($questionService) {
+    // Flight::middleware('AuthMiddleware');
+    try {
+        $question = $questionService->getQuestionById((int)$question_id);
+        if ($question) {
+            Flight::json(["success" => true, "question" => $question]);
+        } else {
+            Flight::halt(404, json_encode(["success" => false, "message" => "Question not found"]));
+        }
+    } catch (Exception $e) {
+        Flight::halt(500, json_encode(["success" => false, "message" => $e->getMessage()]));
+    }
+});
+
 // ==================== GET QUESTIONS BY QUIZ ID ====================
 
 /**
