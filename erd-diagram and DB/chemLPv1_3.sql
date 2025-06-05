@@ -114,15 +114,3 @@ INSERT INTO textmaterial (material_id, title, content) VALUES
 'Chemical bonds are forces that hold atoms together. The main types are ionic bonds (transfer of electrons), covalent bonds (sharing of electrons), and metallic bonds (sea of delocalized electrons). These bonds determine the properties of compounds.'),
 (6, 'Common Reagents in Organic Synthesis',
 'The selection of the appropriate reagent is crucial in organic synthesis. Some common reagents include oxidizing agents like KMnO4 and CrO3, reducing agents like LiAlH4 and NaBH4, and Grignard reagents for carbon-carbon bond formation.');
-
--- Example Inserts for student_answer (if needed)
--- Assuming 'Student User' has user_id=2
--- Student User answers the first question (question_id=1) of the first quiz (quiz_id=1)
--- INSERT INTO student_answer (user_id, quiz_id, question_id, student_response) VALUES
--- (2, 1, 1, FALSE); -- Student User answered "False" for "A proton has a negative charge." (Student's answer is correct)
-
--- Student User answers the third question (question_id=3) of the first quiz (quiz_id=1)
--- INSERT INTO student_answer (user_id, quiz_id, question_id, student_response) VALUES
--- (2, 1, 3, TRUE);  -- Student User answered "True" for "Electrons are found inside the atomic nucleus." (Student's answer is incorrect)
-
-
