@@ -69,6 +69,17 @@ var MaterialService = {
             errorCallback
         );
     },
+
+
+    uploadMaterialFile: function(formData, successCallback, errorCallback) {
+    console.log("MaterialService: Attempting to upload material file.");
+
+    RestClient.post("materials/upload", formData, successCallback, errorCallback, {
+        processData: false, // Beritahu jQuery untuk tidak memproses data (FormData akan melakukannya)
+        contentType: false  // Beritahu jQuery untuk tidak mengatur Content-Type (FormData akan melakukannya)
+    });
+    
+    }
 };
 
 console.log("material-service.js - Execution finished. MaterialService object defined as:", typeof MaterialService, MaterialService);
