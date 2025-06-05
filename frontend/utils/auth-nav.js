@@ -24,6 +24,7 @@ function setupNavigation() {
       <section id="materialManagement" class="p-8" data-load="materialManagement.html"></section>
       <section id="textMaterial" class="p-8" data-load="textMaterial.html"></section>
       <section id="quizManagement" class="p-8" data-load="quizManagement.html"></section>
+      <section id="addMaterial" class="p-8" data-load="addMaterial.html"></section>
     `;
     targetHash = "#students";
   } else {

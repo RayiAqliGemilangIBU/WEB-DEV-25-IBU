@@ -130,7 +130,20 @@ $(document).ready(function () {
         }
     });
 
-    
+
+    app.route({
+    view: "addMaterial", // ID section di index.html
+    load: "addMaterial.html", // File yang akan dimuat
+    onCreate: function() {
+        console.log("CUSTOM.JS: Route #addMaterial - onCreate CALLED.");
+        if (typeof AddMaterialController !== 'undefined' && AddMaterialController.init) {
+            AddMaterialController.init();
+        } else {
+            console.error("CUSTOM.JS: AddMaterialController IS UNDEFINED.");
+        }
+    }
+    });
+
     // Rute lainnya
     app.route({
       view: "faq",
