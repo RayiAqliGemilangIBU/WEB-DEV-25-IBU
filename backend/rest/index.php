@@ -11,7 +11,6 @@ Flight::register('auth_service', 'AuthService');
 // ROUTES
 require_once __DIR__ . '/routes/AuthRoutes.php';
 require_once __DIR__ . '/routes/MaterialRoutes.php';
-require_once __DIR__ . '/routes/OptionItemRoutes.php';
 require_once __DIR__ . '/routes/QuestionRoutes.php';
 require_once __DIR__ . '/routes/QuizRoutes.php';
 require_once __DIR__ . '/routes/TextMaterialRoutes.php';
