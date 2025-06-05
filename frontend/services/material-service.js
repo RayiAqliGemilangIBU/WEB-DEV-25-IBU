@@ -72,13 +72,9 @@ var MaterialService = {
 
 
     uploadMaterialFile: function(formData, successCallback, errorCallback) {
-    console.log("MaterialService: Attempting to upload material file.");
-
-    RestClient.post("materials/upload", formData, successCallback, errorCallback, {
-        processData: false, // Beritahu jQuery untuk tidak memproses data (FormData akan melakukannya)
-        contentType: false  // Beritahu jQuery untuk tidak mengatur Content-Type (FormData akan melakukannya)
-    });
-    
+        console.log("MaterialService: Attempting to upload material file using RestClient.postFile.");
+        RestClient.postFile("materials/upload", formData, successCallback, errorCallback);
+        
     }
 };
 

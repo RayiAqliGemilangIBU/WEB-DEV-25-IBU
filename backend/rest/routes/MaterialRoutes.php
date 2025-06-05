@@ -223,3 +223,112 @@ Flight::route('DELETE /materials/@id', function($id) use ($materialService) {
         Flight::halt(404, 'Material not found');
     }
 });
+
+
+
+/**
+ * @OA\Post(
+ * path="/materials/upload",
+ * summary="Upload a CSV file to create a new material with its text content, quiz, and questions",
+ * tags={"Materials"},
+ * security={{"bearerAuth":{}}},
+ * @OA\RequestBody(
+ * required=true,
+ * description="CSV file containing all material data.",
+ * @OA\MediaType(
+ * mediaType="multipart/form-data",
+ * @OA\Schema(
+ * type="object",
+ * required={"material_file"},
+ * @OA\Property(
+ * property="material_file",
+ * type="string",
+ * format="binary",
+ * description="The CSV file to upload."
+ * )
+ * )
+ * )
+ * ),
+ * @OA\Response(
+ * response=201,
+ * description="Material, text material, quiz, and questions created successfully from file.",
+ * @OA\JsonContent(
+ * type="object",
+ * @OA\Property(property="success", type="boolean", example=true),
+ * @OA\Property(property="message", type="string", example="Material created successfully from file."),
+ * @OA\Property(property="material_id", type="integer", example=10),
+ * @OA\Property(property="quiz_id", type="integer", example=12)
+ * )
+ * ),
+ * @OA\Response(
+ * response=400,
+ * description="Bad Request - Invalid file, file format error, or data validation failed.",
+ * @OA\JsonContent(
+ * type="object",
+ * @OA\Property(property="success", type="boolean", example=false),
+ * @OA\Property(property="message", type="string", example="Error processing file: Invalid CSV format.")
+ * )
+ * ),
+ * @OA\Response(response=401, description="Unauthorized"),
+ * @OA\Response(response=403, description="Forbidden (User is not Admin)"),
+ * @OA\Response(response=500, description="Internal Server Error")
+ * )
+ */
+Flight::route('POST /materials/upload', function() use ($materialService) {
+    // Otentikasi dan Otorisasi (Admin)
+    Flight::middleware('AuthMiddleware'); // Pastikan middleware ini ada dan berfungsi
+    (new RoleMiddleware())->requireRole('Admin');
+
+    try {
+        // Periksa apakah file diunggah
+        if (!isset($_FILES['material_file']) || $_FILES['material_file']['error'] != UPLOAD_ERR_OK) {
+            Flight::halt(400, json_encode([
+                "success" => false,
+                "message" => "No file uploaded or there was an upload error. Please select a CSV file."
+            ]));
+            return;
+        }
+
+        $fileData = $_FILES['material_file'];
+
+        // Periksa tipe file (ekstensi)
+        $fileName = $fileData['name'];
+        $fileExtension = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
+        if ($fileExtension !== 'csv') {
+            Flight::halt(400, json_encode([
+                "success" => false,
+                "message" => "Invalid file type. Only .csv files are allowed."
+            ]));
+            return;
+        }
+
+        // Dapatkan ID pengguna yang sedang login (pembuat materi)
+        // Ini asumsi Anda memiliki cara untuk mendapatkan user_id dari token JWT
+        // yang mungkin sudah disimpan oleh AuthMiddleware Anda di Flight::get('user') atau cara lain.
+        $loggedInUser = Flight::get('user'); // Ini contoh, sesuaikan dengan implementasi Anda
+        if (!$loggedInUser || !isset($loggedInUser['sub'])) { // 'sub' biasanya berisi user_id di JWT payload
+            Flight::halt(401, json_encode(["success" => false, "message" => "User not authenticated or user ID not found in token."]));
+            return;
+        }
+        $createdByUserId = $loggedInUser['sub'];
+
+        // Panggil service untuk memproses file
+        $result = $materialService->createMaterialFromUploadedFile($fileData, $createdByUserId);
+
+        Flight::json([
+            "success" => true,
+            "message" => "Material, text material, quiz, and questions created successfully from file.",
+            "material_id" => $result['material_id'],
+            "quiz_id" => $result['quiz_id']
+            // Anda bisa menambahkan detail lain jika diperlukan
+        ], 201); // 201 Created
+
+    } catch (InvalidArgumentException $e) {
+        Flight::halt(400, json_encode(["success" => false, "message" => "Error processing file: " . $e->getMessage()]));
+    } catch (Exception $e) {
+        // Log error $e->getMessage() dan $e->getTraceAsString() di server Anda
+        error_log("Error in POST /materials/upload: " . $e->getMessage());
+        Flight::halt(500, json_encode(["success" => false, "message" => "An unexpected error occurred on the server."]));
+    }
+});
+
