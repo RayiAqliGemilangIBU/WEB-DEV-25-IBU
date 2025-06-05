@@ -44,12 +44,14 @@
     <script src="../services/student-service.js"></script> 
     <script src="../services/material-service.js"></script>
     <script src="../services/textMaterial-service.js"></script>
+    <script src="../services/quiz-service.js"></script>
 
     <script src="../controllers/profileController.js"></script> 
     <script src="../controllers/studentsController.js"></script>
     <script src="../controllers/addStudentController.js"></script>
     <script src="../controllers/materialManagementController.js"></script>
     <script src="../controllers/textMaterialController.js"></script>
+    <script src="../controllers/quizManagementController.js"></script>
 
 
     <!-- Custom JS SPA -->
@@ -72,6 +74,7 @@
                 <option value="#materialManagement">Material Management</option>
                 <option value="#textMaterial">Text Material</option>
                 <option value="#addStudent">AddStudent</option>
+                <option value="#quizManagement">quizManagement</option>
                 <option value="#product">Product</option>
                 <option value="#faq">FAQs</option>
                 <option value="javascript:void(0);" onclick="UserService.logout()">Logout</option>
@@ -96,6 +99,7 @@
         <section id="profile" class="p-8"></section>
         <section id="product" class="p-8"></section>
         <section id="textMaterial" class="p-8" data-load="textMaterial.html"></section>
+        <section id="quizManagement" class="p-8" data-load="quizManagement.html"></section>
         <section id="faq" class="p-8" data-load="tpl/faq.html"></section>
     </main>
 

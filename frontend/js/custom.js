@@ -96,6 +96,41 @@ $(document).ready(function () {
         }
     });
 
+    app.route({
+        view: "quizManagement",
+        load: "quizManagement.html",
+        onCreate: function() {
+            const materialId = window.tempMaterialIdForQuizPage;
+            const materialTitle = window.tempMaterialTitleForQuizPage;
+
+            window.tempMaterialIdForQuizPage = null;
+            window.tempMaterialTitleForQuizPage = null;
+
+            console.log(`CUSTOM.JS: Route #quizManagement - onCreate ENTERED. Material ID: ${materialId}, Title: ${materialTitle}`); // LOG A
+
+            if (!materialId) {
+                console.error("CUSTOM.JS: Material ID is missing for Quiz Management. Current hash:", window.location.hash); // LOG B
+                // Pertimbangkan untuk tidak langsung redirect di sini, biarkan controller yang menangani
+                // window.location.hash = "materialManagement"; // HINDARI REDIRECT OTOMATIS DI SINI UNTUK SEMENTARA
+                // return; 
+            }
+
+            if (typeof QuizManagementController !== 'undefined' && QuizManagementController.init) {
+                console.log("CUSTOM.JS: QuizManagementController IS defined. Preparing to call init(). Current hash:", window.location.hash); // LOG C
+                // Sedikit penundaan untuk melihat apakah hash berubah lagi
+                // setTimeout(function() {
+                //     console.log("CUSTOM.JS: Calling QuizManagementController.init() after short delay. Current hash:", window.location.hash); // LOG D
+                // QuizManagementController.init(materialId, materialTitle);
+                // }, 100); // Penundaan 100ms
+                QuizManagementController.init(materialId, materialTitle); // Coba tanpa penundaan dulu
+            } else {
+                console.error("CUSTOM.JS: QuizManagementController IS UNDEFINED when #quizManagement onCreate was called."); // LOG E
+            }
+            console.log("CUSTOM.JS: Route #quizManagement - onCreate EXITED. Current hash:", window.location.hash); // LOG F
+        }
+    });
+
+    
     // Rute lainnya
     app.route({
       view: "faq",

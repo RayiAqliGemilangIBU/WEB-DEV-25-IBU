@@ -3,9 +3,7 @@
 window.MaterialManagementController = {
 // const MaterialManagementController = {
     // Kolom yang akan dikecualikan dari tampilan otomatis di tabel
-    // created_by_user_id bisa ditampilkan, tapi mungkin lebih baik tampilkan nama usernya.
-    // Jika hanya ingin ID user, jangan masukkan ke excludedColumns.
-    excludedColumns: [], // Tidak perlu mengecualikan created_by_user_id jika ingin ditampilkan
+    excludedColumns: [], 
     
     // Menyimpan kunci kolom yang ditampilkan untuk pemetaan data yang konsisten.
     displayedColumnKeys: [],
@@ -20,12 +18,11 @@ window.MaterialManagementController = {
             titleElement.textContent = "Material Management"; 
         }
         this.fetchMaterials();
-        this.bindEvents(); 
+        this.bindEvents(); // bindEvents sudah dipanggil di sini, ini bagus.
     },
 
     bindEvents: function() {
         // Event untuk tombol "Edit" di tabel (delegated event)
-        // Menggunakan selector yang lebih spesifik untuk tombol di dalam tabel
         $('#materials-table').off('click', '.edit-material-btn').on('click', '.edit-material-btn', function() {
             const materialId = $(this).data('id');
             const materialTitle = $(this).data('title');
@@ -52,26 +49,49 @@ window.MaterialManagementController = {
         $('#cancelEditMaterialButton').off('click').on('click', this.hideEditMaterialModal);
         $('#editMaterialOverlay').off('click').on('click', this.hideEditMaterialModal);
         
-        // Event untuk tombol Quiz dan Text (jika ada halaman terkait)
+        // --- AWAL PERUBAHAN UNTUK TOMBOL QUIZ ---
         $('#materials-table').off('click', '.quiz-material-btn').on('click', '.quiz-material-btn', function() {
             const materialId = $(this).data('id');
-            console.log(`Navigating to Quiz for Material ID: ${materialId}`);
-            toastr.info(`Navigating to Quiz for Material ID: ${materialId}`, "Feature Coming Soon");
-            // window.location.hash = `#/quizPage/${materialId}`; // Contoh navigasi ke halaman kuis
-        });
+            const materialTitle = $(this).data('title'); // Ambil data-title dari tombol
 
+            console.log("MaterialManagementController: Quiz button clicked.");
+            console.log("Material ID from button:", materialId);
+            console.log("Material Title from button:", materialTitle);
+
+            if (!materialId) {
+                console.error("MaterialManagementController: Material ID is missing from quiz button data.");
+                toastr.error("Cannot open quiz management: Material ID is missing."); // Menggunakan toastr langsung
+                return; 
+            }
+            if (materialTitle === undefined) { 
+                console.warn("MaterialManagementController: Material Title is undefined from quiz button data. Check data-title attribute on the button.");
+                // Anda bisa memutuskan apakah akan melanjutkan atau tidak jika title undefined,
+                // tapi sebaiknya pastikan title ada dan bukan string kosong jika itu penting.
+                // Untuk saat ini, kita tetap lanjutkan meskipun title undefined, 
+                // tapi halaman quiz management mungkin tidak menampilkan judul materi.
+            }
+
+            // Simpan ke variabel global sementara SEBELUM mengubah hash
+            window.tempMaterialIdForQuizPage = materialId;
+            window.tempMaterialTitleForQuizPage = materialTitle; 
+
+            // Ubah hash untuk memicu SPApp router
+            window.location.hash = "quizManagement"; 
+        });
+        // --- AKHIR PERUBAHAN UNTUK TOMBOL QUIZ ---
         
         $('#materials-table').off('click', '.text-material-btn').on('click', '.text-material-btn', function() {
             const materialId = $(this).data('id');
+            // --- TAMBAHAN: Ambil dan teruskan materialTitle untuk textMaterial juga jika diperlukan ---
+            const materialTitle = $(this).data('title'); // Pastikan tombol .text-material-btn juga punya data-title
             
-            // Simpan materialId di variabel global sementara
             window.tempMaterialIdForTextPage = materialId; 
+            window.tempMaterialTitleForTextPage = materialTitle; // Simpan juga title jika TextMaterialController membutuhkannya
 
-            // Navigasi ke rute SPA dasar tanpa parameter di hash
-            window.location.hash = `textMaterial`; // <-- HANYA NAMA ROUTE DASAR
+            window.location.hash = `textMaterial`;
             
-            console.log(`Navigating to text material page for Material ID: ${materialId} via global variable.`);
-            toastr.info(`Loading Text Material for ID: ${materialId}`);
+            console.log(`MaterialManagementController: Navigating to text material page for Material ID: ${materialId}, Title: ${materialTitle}`);
+            // toastr.info(`Loading Text Material for ID: ${materialId}`); // Anda sudah menggunakan toastr di sini
         });
     },
 
@@ -97,10 +117,7 @@ window.MaterialManagementController = {
 
                 const headerRow = $('<tr></tr>');
                 MaterialManagementController.displayedColumnKeys = []; 
-
                 const firstMaterial = materials[0];
-
-                // Urutan kolom yang diinginkan: material_id, title, description, created_by_user_id, created_at
                 const orderedKeys = ['material_id', 'title', 'description', 'created_by_user_id', 'created_at'];
 
                 orderedKeys.forEach(key => {
@@ -125,33 +142,35 @@ window.MaterialManagementController = {
 
                     const actionsCell = $('<td class="px-6 py-4 whitespace-nowrap text-sm font-medium flex space-x-2"></td>');
                     
-                    // Tombol Quiz
-                    const quizButton = $(`<button class="bg-purple-600 hover:bg-purple-700 text-white font-semibold py-1 px-3 rounded-md text-xs shadow hover:shadow-md transition-all quiz-material-btn" data-id="${material.material_id}">
-                                            Quiz
-                                        </button>`);
+                    // Tombol Quiz (SUDAH BENAR dengan data-title)
+                    const quizButton = $(`<button class="bg-purple-600 hover:bg-purple-700 text-white font-semibold py-1 px-3 rounded-md text-xs shadow hover:shadow-md transition-all quiz-material-btn" 
+                                      data-id="${material.material_id}" 
+                                      data-title="${material.title}">
+                                      Quiz
+                                  </button>`);
                     
-                    // Tombol Text
-                    const textButton = $(`<button class="bg-yellow-600 hover:bg-yellow-700 text-white font-semibold py-1 px-3 rounded-md text-xs shadow hover:shadow-md transition-all text-material-btn" data-id="${material.material_id}">
-                                            Text
-                                        </button>`);
+                    // Tombol Text (TAMBAHKAN data-title JIKA DIPERLUKAN oleh textMaterialController)
+                    const textButton = $(`<button class="bg-yellow-600 hover:bg-yellow-700 text-white font-semibold py-1 px-3 rounded-md text-xs shadow hover:shadow-md transition-all text-material-btn" 
+                                       data-id="${material.material_id}" 
+                                       data-title="${material.title}"> 
+                                       Text
+                                   </button>`);
 
-                    // Tombol Edit
+                    // Tombol Edit (Sudah benar dengan data-title dan data-description)
                     const editButton = $(`<button class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-1 px-3 rounded-md text-xs shadow hover:shadow-md transition-all edit-material-btn" 
-                                            data-id="${material.material_id}" data-title="${material.title}" data-description="${material.description}">
-                                            Edit
-                                        </button>`);
+                                       data-id="${material.material_id}" data-title="${material.title}" data-description="${material.description}">
+                                       Edit
+                                   </button>`);
                     
-                    // Tombol Delete
                     const deleteButton = $(`<button class="bg-red-600 hover:bg-red-700 text-white font-semibold py-1 px-3 rounded-md text-xs shadow hover:shadow-md transition-all delete-material-btn" 
-                                            data-id="${material.material_id}">
-                                            Delete
-                                        </button>`);
+                                       data-id="${material.material_id}">
+                                       Delete
+                                   </button>`);
                     
                     actionsCell.append(quizButton).append(textButton).append(editButton).append(deleteButton);
                     dataRow.append(actionsCell);
                     tableBody.append(dataRow);
                 });
-
             },
             function (error) { 
                 loadingRow.hide();
@@ -171,18 +190,16 @@ window.MaterialManagementController = {
         );
     },
 
+    showEditMaterialModal: function (materialId, materialData) {
+        console.log("MaterialManagementController: Attempting to show edit modal for material ID:", materialId, "Data:", materialData);
+        this.currentEditingMaterialId = materialId;
 
-        showEditMaterialModal: function (materialId, materialData) {
-            // Add a specific log here to confirm it's called
-            console.log("MaterialManagementController: Attempting to show edit modal for material ID:", materialId, "Data:", materialData); // <-- ADD THIS LOG
-            this.currentEditingMaterialId = materialId;
+        $('#editMaterialId').val(materialId);
+        $('#editMaterialTitle').val(materialData.title || '');
+        $('#editMaterialDescription').val(materialData.description || '');
 
-            $('#editMaterialId').val(materialId);
-            $('#editMaterialTitle').val(materialData.title || '');
-            $('#editMaterialDescription').val(materialData.description || '');
-
-            $('#editMaterialModal').removeClass('hidden').addClass('flex');
-        },
+        $('#editMaterialModal').removeClass('hidden').addClass('flex');
+    },
 
     hideEditMaterialModal: function() {
         $('#editMaterialModal').removeClass('flex').addClass('hidden');
@@ -198,8 +215,8 @@ window.MaterialManagementController = {
             return;
         }
 
-        const title = $('#editMaterialTitle').val().trim(); // ID diubah ke camelCase
-        const description = $('#editMaterialDescription').val().trim(); // ID diubah ke camelCase
+        const title = $('#editMaterialTitle').val().trim();
+        const description = $('#editMaterialDescription').val().trim();
 
         if (!title || !description) {
             toastr.error("Title and Description fields are required.", "Validation Error");
@@ -217,7 +234,7 @@ window.MaterialManagementController = {
             function(response) { 
                 toastr.success("Material updated successfully!");
                 MaterialManagementController.hideEditMaterialModal(); 
-                MaterialManagementController.fetchMaterials(); // Refresh the material list
+                MaterialManagementController.fetchMaterials(); 
             },
             function(error) { 
                 console.error("MaterialManagementController: Error updating material:", error);
@@ -229,19 +246,30 @@ window.MaterialManagementController = {
 
     deleteMaterial: function (materialId) {
         console.log("MaterialManagementController: Attempting to delete material ID:", materialId);
-        if (confirm(`Are you sure you want to delete material with ID: ${materialId}? This action cannot be undone.`)) {
-            MaterialService.deleteMaterial(materialId,
-                function (response) { 
-                    toastr.success(`Material ID: ${materialId} has been deleted successfully.`);
-                    MaterialManagementController.fetchMaterials(); 
-                },
-                function (error) { 
-                    console.error("MaterialManagementController: Error deleting material via MaterialService:", error);
-                    const errorMsg = error.responseJSON?.message || error.responseJSON?.error || error.statusText || "An unknown error occurred while trying to delete the material.";
-                    toastr.error(`Failed to delete material ID: ${materialId}. ${errorMsg}`);
-                }
-            );
-        }
+        // Ganti confirm dengan SweetAlert jika Anda mau
+        Swal.fire({
+            title: 'Are you sure?',
+            text: `You want to delete material with ID: ${materialId}? This action cannot be undone.`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                MaterialService.deleteMaterial(materialId,
+                    function (response) { 
+                        toastr.success(`Material ID: ${materialId} has been deleted successfully.`);
+                        MaterialManagementController.fetchMaterials(); 
+                    },
+                    function (error) { 
+                        console.error("MaterialManagementController: Error deleting material via MaterialService:", error);
+                        const errorMsg = error.responseJSON?.message || error.responseJSON?.error || error.statusText || "An unknown error occurred while trying to delete the material.";
+                        toastr.error(`Failed to delete material ID: ${materialId}. ${errorMsg}`);
+                    }
+                );
+            }
+        });
     }
 };
 
