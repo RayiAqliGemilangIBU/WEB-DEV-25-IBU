@@ -144,6 +144,19 @@ $(document).ready(function () {
     }
     });
 
+    app.route({
+    view: "study",
+    load: "study.html", // Pastikan file ini ada di /frontend/views/
+    onCreate: function() {
+        console.log("CUSTOM.JS: Route #study - onCreate CALLED.");
+        if (typeof StudyController !== 'undefined' && StudyController.init) {
+            StudyController.init();
+        } else {
+            console.error("CUSTOM.JS: StudyController IS UNDEFINED.");
+        }
+    }
+    });
+
     // Rute lainnya
     app.route({
       view: "faq",
