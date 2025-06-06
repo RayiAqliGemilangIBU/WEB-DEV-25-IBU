@@ -34,8 +34,9 @@ function setupNavigation() {
       <a href="javascript:void(0);" class="shrink-0 rounded-lg p-2 text-sm font-medium text-gray-500 hover:bg-gray-50 hover:text-gray-700" onclick="UserService.logout()">Logout</a>
     `;
     mainContent = `
-      <section id="study"></section>
+     
       <section id="profile"></section>
+      <section id="study" class="h-full" data-load="study.html"></section>
     `;
     targetHash = "#study";
   }
