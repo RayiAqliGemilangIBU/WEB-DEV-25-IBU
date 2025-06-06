@@ -33,6 +33,18 @@ const TextMaterialService = {
                 errorCallback(error);
             }
         );
+    },
+
+    //FOr study 
+
+    getTextMaterialById: function(textId, successCallback, errorCallback) {
+        RestClient.get("textmaterials/" + textId, successCallback, errorCallback);
+    },
+
+    getAllTextMaterials: function(successCallback, errorCallback) {
+        // PASTIKAN PEMANGGILANNYA SEPERTI INI (HANYA DUA ATAU TIGA ARGUMEN YANG BENAR):
+        // Jika RestClient.get Anda: get(url, callback, error_callback)
+        RestClient.get("textmaterials", successCallback, errorCallback);
     }
 };
 

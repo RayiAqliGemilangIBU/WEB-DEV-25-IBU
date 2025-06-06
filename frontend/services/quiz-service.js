@@ -167,6 +167,8 @@ const QuizService = {
             console.log("QuizService (getQuestionById): SUCCESS CALLBACK from RestClient.get EXITED.");
         };
 
+        
+
         const internalErrorCallback = function(error) {
             console.error("QuizService (getQuestionById): ERROR CALLBACK from RestClient.get ENTERED. URL:", apiUrl, "Error:", JSON.stringify(error, null, 2));
             if (typeof errorCallbackFromController === 'function') {
@@ -176,5 +178,10 @@ const QuizService = {
         
         // --- BARIS YANG DIPERBAIKI ---
         RestClient.get(apiUrl, internalSuccessCallback, internalErrorCallback);
+    },
+
+    getAllQuizzes: function(successCallback, errorCallback) {
+        // Panggil RestClient.get dengan DUA argumen
+        RestClient.get("quiz", successCallback, errorCallback);
     }
 };
