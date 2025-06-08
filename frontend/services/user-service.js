@@ -20,6 +20,11 @@ let UserService = {
     window.location.href = "login.html";
   },
 
+  register: function(userData, successCallback, errorCallback) {
+
+    RestClient.post("Students", userData, successCallback, errorCallback);
+  },
+
   updateUser: function(userId, userData, successCallback, errorCallback) {
         console.log(`UserService: Attempting to update user ID: ${userId} with data:`, userData);
         RestClient.put(`user/${userId}`, userData, 

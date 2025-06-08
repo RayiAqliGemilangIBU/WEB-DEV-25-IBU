@@ -344,8 +344,8 @@ Flight::route('GET /students', function () use ($userService) {
  * )
  */
 Flight::route('POST /students', function () use ($userService) {
-    Flight::middleware();
-    (RoleMiddleware::requireRole('Admin'))(); 
+    // Flight::middleware();
+    // (RoleMiddleware::requireRole('Admin'))(); 
 
     try {
         $data = Flight::request()->data->getData();
