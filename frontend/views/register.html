@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ChemLP | Register</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="../css/styleProduct.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
+
+    <!-- JS (Pustaka) -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+    <!-- Skrip Aplikasi Anda -->
+    <script src="../utils/constants.js"></script>
+    <script src="../utils/rest-client.js"></script>
+    <script src="../services/user-service.js"></script>
+    
+    <!-- Controller untuk Halaman Registrasi -->
+    <script src="../controllers/RegisterController.js"></script>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+
+    <div class="w-full max-w-md p-8 bg-white rounded-xl shadow-md">
+        <h2 class="text-2xl font-bold text-center mb-6">Create Your ChemLP Account</h2>
+
+        <form id="registerForm" novalidate="novalidate">
+            <div class="mb-4">
+                <label for="name" class="block text-gray-700 font-medium mb-1">Full Name</label>
+                <input type="text" id="name" name="name" required
+                       class="w-full border border-gray-300 px-4 py-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-400" />
+            </div>
+
+            <div class="mb-4">
+                <label for="email" class="block text-gray-700 font-medium mb-1">Email</label>
+                <input type="email" id="email" name="email" required
+                       class="w-full border border-gray-300 px-4 py-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-400" />
+            </div>
+
+            <div class="mb-4">
+                <label for="password" class="block text-gray-700 font-medium mb-1">Password</label>
+                <input type="password" id="password" name="password" required
+                       class="w-full border border-gray-300 px-4 py-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-400" />
+            </div>
+
+            <div class="mb-6">
+                <label for="confirm_password" class="block text-gray-700 font-medium mb-1">Confirm Password</label>
+                <input type="password" id="confirm_password" name="confirm_password" required
+                       class="w-full border border-gray-300 px-4 py-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-400" />
+            </div>
+
+            <button type="submit"
+                    class="w-full bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition duration-200">
+                Register
+            </button>
+        </form>
+
+        <p class="text-center text-sm text-gray-600 mt-6">
+            Already have an account? 
+            <a href="Login.html" class="text-blue-500 hover:underline">Log in here</a>
+        </p>
+    </div>
+
+    <!-- Inisialisasi Controller -->
+    <script>
+        $(document).ready(function() {
+            // Panggil metode init dari controller registrasi
+            if (typeof RegisterController !== 'undefined') {
+                RegisterController.init();
+            }
+        });
+    </script>
+
+</body>
+</html>
