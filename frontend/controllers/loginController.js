@@ -16,7 +16,7 @@ const LoginController = {
                 email: {
                     required: true,
                     email: true,
-                    // requireDomain: "chemlp.com" // Aktifkan jika perlu validasi domain
+                    // requireDomain: "chemlp.com" 
                 },
                 password: {
                     required: true,
@@ -38,7 +38,7 @@ const LoginController = {
                 console.log("Login form is valid, attempting to login...");
                 const email = $('#email').val();
                 const password = $('#password').val();
-                // Memanggil UserService.login (dengan pola callback, BUKAN .then())
+               
                 UserService.login(email, password);
             }
         });
