@@ -5,7 +5,6 @@ require_once __DIR__ . '/../services/TextMaterialService.php';
 
 require_once __DIR__ . '/../services/QuizService.php';
 require_once __DIR__ . '/../services/QuestionService.php';
-require_once __DIR__ . '/../services/OptionItemService.php';
 require_once __DIR__ . '/../services/UserService.php';
 require_once __DIR__ . '/../services/StudentAnswerService.php';
 require_once __DIR__ . '/../middleware/jwtMiddleware.php';
@@ -243,4 +242,125 @@ Flight::route('GET /users/@id', function ($id) {
     }
 
     // lanjutkan akses user
+});
+
+/**
+ * @OA\Get(
+ * path="/students",
+ * summary="Get all users with the role 'Student'",
+ * description="Retrieves a list of all users who are registered as students. Password fields are omitted.",
+ * tags={"Students"},
+ * security={{"bearerAuth": {}}},
+ * @OA\Response(
+ * response=200,
+ * description="A list of students",
+ * @OA\JsonContent(
+ * type="array",
+ * @OA\Items(
+ * @OA\Property(property="user_id", type="integer", example=1),
+ * @OA\Property(property="name", type="string", example="John Doe"),
+ * @OA\Property(property="email", type="string", example="john.doe@example.com"),
+ * @OA\Property(property="address", type="string", example="123 Main St", nullable=true),
+ * @OA\Property(property="phone_number", type="string", example="+0987654321", nullable=true),
+ * @OA\Property(property="date_of_birth", type="string", format="date", example="1999-05-15", nullable=true),
+ * @OA\Property(property="role", type="string", example="Student"),
+ * @OA\Property(property="created_at", type="string", format="date-time", example="2024-01-10 10:00:00")
+ * )
+ * )
+ * ),
+ * @OA\Response(
+ * response=404, 
+ * description="No students found",
+ * @OA\JsonContent(
+ * @OA\Property(property="message", type="string", example="No students found")
+ * )
+ * ),
+ * @OA\Response(response=401, description="Unauthorized - JWT token is missing or invalid"),
+ * @OA\Response(response=500, description="Internal Server Error")
+ * )
+ */
+Flight::route('GET /students', function () use ($userService) {
+    Flight::middleware();
+    try {
+        // Assuming "Student" is the exact string used for the role in your database
+        $students = $userService->getUsersByRole("Student"); 
+        
+        if (empty($students)) {
+            Flight::json(['message' => 'No students found'], 404);
+        } else {
+            Flight::json($students, 200);
+        }
+    } catch (Exception $e) {
+        Flight::json(['error' => $e->getMessage()], 500);
+    }
+});
+
+/**
+ * @OA\Post(
+ * path="/students",
+ * summary="Add a new student",
+ * description="Registers a new user with the 'Student' role. Only accessible by Admin.",
+ * tags={"Students"},
+ * security={{"bearerAuth": {}}},
+ * @OA\RequestBody(
+ * required=true,
+ * @OA\JsonContent(
+ * required={"name", "email", "password"},
+ * @OA\Property(property="name", type="string", example="Jane Student"),
+ * @OA\Property(property="email", type="string", example="jane.student@example.com"),
+ * @OA\Property(property="password", type="string", example="studentpass123")
+ * )
+ * ),
+ * @OA\Response(
+ * response=201,
+ * description="Student added successfully",
+ * @OA\JsonContent(
+ * @OA\Property(property="success", type="boolean", example=true),
+ * @OA\Property(property="message", type="string", example="Student added successfully"),
+ * @OA\Property(property="data", type="object",
+ * @OA\Property(property="user_id", type="integer", example=2),
+ * @OA\Property(property="name", type="string", example="Jane Student"),
+ * @OA\Property(property="email", type="string", example="jane.student@example.com"),
+ * @OA\Property(property="role", type="string", example="Student")
+ * )
+ * )
+ * ),
+ * @OA\Response(
+ * response=400,
+ * description="Invalid input or email already exists"
+ * ),
+ * @OA\Response(
+ * response=401,
+ * description="Unauthorized - JWT token is missing or invalid"
+ * ),
+ * @OA\Response(
+ * response=403,
+ * description="Forbidden - User does not have the required role (Admin)"
+ * ),
+ * @OA\Response(
+ * response=500,
+ * description="Internal Server Error"
+ * )
+ * )
+ */
+Flight::route('POST /students', function () use ($userService) {
+    // Flight::middleware();
+    // (RoleMiddleware::requireRole('Admin'))(); 
+
+    try {
+        $data = Flight::request()->data->getData();
+        $newStudentId = $userService->addStudent($data); 
+        $newStudent = $userService->getUserById($newStudentId); 
+        
+      
+        unset($newStudent['password']);
+
+        Flight::json([
+            "success" => true,
+            "message" => "Student added successfully",
+            "data" => $newStudent
+        ], 201);
+    } catch (Exception $e) {
+        Flight::halt(400, $e->getMessage());
+    }
 });

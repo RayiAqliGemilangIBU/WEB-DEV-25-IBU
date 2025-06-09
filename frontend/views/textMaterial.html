@@ -1,0 +1,37 @@
+<div class="container mx-auto mt-6 sm:mt-10 p-4">
+    <div class="flex justify-between items-center mb-8">
+        <h1 class="text-3xl font-bold text-gray-800 dark:text-black" id="text-material-title">Text Material Details</h1>
+        <button id="editTextMaterialBtn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md shadow-md transition duration-300 ease-in-out">
+            Edit Material
+        </button>
+    </div>
+
+    <div id="text-material-status" class="text-center p-6 text-gray-500 dark:text-gray-400">
+        Loading text material...
+    </div>
+
+    <div id="text-material-display" class="overflow-x-auto bg-white dark:bg-gray-800 shadow-xl rounded-lg p-6 hidden">
+        <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+            <tbody id="text-material-tbody" class="bg-white dark:bg-gray-900 divide-y divide-gray-200 dark:divide-gray-700 text-black">
+                </tbody>
+        </table>
+    </div>
+
+    <div id="text-material-edit-form" class="bg-white dark:bg-gray-800 shadow-xl rounded-lg p-6 hidden">
+        <form id="textMaterialForm">
+            <input type="hidden" id="edit-text-id" name="text_id">
+            <input type="hidden" id="edit-material-id" name="material_id"> <div class="mb-4">
+                <label for="edit-text-title" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Title</label>
+                <input type="text" id="edit-text-title" name="title" required
+                       class="mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-black">
+            </div>
+
+            <div class="mb-4">
+                <label for="edit-text-content" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Content</label>
+                <textarea id="edit-text-content" name="content" rows="10" required
+                          class="mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-black"></textarea>
+            </div>
+            
+            </form>
+    </div>
+</div>

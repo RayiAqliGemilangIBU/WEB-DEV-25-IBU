@@ -1,0 +1,94 @@
+<!-- frontend/views/addMaterial.html -->
+<div id="add-material-page" class="container mx-auto px-4 py-8">
+
+    <!-- Judul Halaman -->
+    <div class="mb-8 text-center">
+        <h1 class="text-3xl font-bold text-gray-800">Add New Material via File Upload</h1>
+        <p class="text-lg text-gray-600  mt-2">
+            Follow the instructions below to prepare and upload your material data.
+        </p>
+    </div>
+
+    <!-- Bagian Instruksi -->
+<!-- Bagian Instruksi -->
+    <div class="mb-8 p-6 sm:p-8 bg-white shadow-xl rounded-lg"> 
+        <h2 class="text-2xl font-semibold text-gray-800 mb-4">Instructions for CSV File Format</h2>
+        <p class="text-gray-700 mb-3 pl-4 sm:pl-6"> 
+            Please prepare a CSV (Comma Separated Values) file with the following structure.
+            The first column, <code class="bg-gray-200 px-1 rounded">ROW_TYPE</code>, indicates the type of data in that row.
+        </p>
+        <ul class="list-disc list-inside space-y-2 text-gray-700 mb-4 pl-8 sm:pl-12"> 
+            <li>Lines starting with <code class="bg-gray-200 px-1 rounded">#</code> will be ignored (comments).</li>
+            <li>
+                <strong>Material & Text Material Data (One Row):</strong>
+                <ul class="list-circle list-inside ml-4 mt-1 space-y-1 pl-4 sm:pl-6"> 
+                    <li><code class="bg-gray-200 px-1 rounded">ROW_TYPE</code>: Must be <code class="bg-gray-200 px-1 rounded">MATERIAL_INFO</code></li>
+                    <li><code class="bg-gray-200 px-1 rounded">MATERIAL_TITLE</code>: Title of the material (e.g., "Atomic Structure")</li>
+                    <li><code class="bg-gray-200 px-1 rounded">MATERIAL_DESCRIPTION</code>: Brief description of the material.</li>
+                    <li><code class="bg-gray-200 px-1 rounded">TEXT_MATERIAL_CONTENT</code>: Full content of the text material. Can include multiple lines/paragraphs (ensure your CSV handles multi-line text correctly, often by enclosing in double quotes).</li>
+                </ul>
+            </li>
+            <li>
+                <strong>Quiz Data (One Row):</strong>
+                <ul class="list-circle list-inside ml-4 mt-1 space-y-1 pl-4 sm:pl-6"> 
+                    <li><code class="bg-gray-200 px-1 rounded">ROW_TYPE</code>: Must be <code class="bg-gray-200 px-1 rounded">QUIZ_INFO</code></li>
+                    <li><code class="bg-gray-200 px-1 rounded">QUIZ_TITLE</code>: Title of the quiz (e.g., "Quiz for Atomic Structure")</li>
+                    <li><code class="bg-gray-200 px-1 rounded">QUIZ_DESCRIPTION</code>: Brief description of the quiz.</li>
+                </ul>
+            </li>
+            <li>
+                <strong>Question Data (Multiple Rows, one per question):</strong>
+                <ul class="list-circle list-inside ml-4 mt-1 space-y-1 pl-4 sm:pl-6"> 
+                    <li><code class="bg-gray-200 px-1 rounded">ROW_TYPE</code>: Must be <code class="bg-gray-200 px-1 rounded">QUESTION</code></li>
+                    <li><code class="bg-gray-200 px-1 rounded">QUESTION_HEADER</code>: The question text (e.g., "Is the Earth flat?").</li>
+                    <li><code class="bg-gray-200 px-1 rounded">QUESTION_ANSWER</code>: The correct answer. Must be <code class="bg-gray-200 px-1 rounded">TRUE</code> or <code class="bg-gray-200 px-1 rounded">FALSE</code>.</li>
+                    <li><code class="bg-gray-200 px-1 rounded">QUESTION_EXPLANATION</code>: Optional explanation for the answer.</li>
+                </ul>
+            </li>
+        </ul>
+        <p class="text-sm text-gray-600 pl-4 sm:pl-6"> 
+            <a href="https://docs.google.com/spreadsheets/d/1U0pA0qO6fmvVN0ZnCTVNsIcW6sUz2THTDh4OQqKBxe8/edit?usp=sharing" id="download-csv-template-link" class="text-indigo-600 hover:underline" target="_blank">Download CSV Template and Example</a>
+        </p>
+    </div>
+
+    <!-- Area Unggah File -->
+    <div class="mb-8 p-6 bg-white dark:bg-gray-800 shadow-md rounded-lg">
+        <h2 class="text-2xl font-semibold text-gray-700 mb-4">Upload Material File</h2>
+        <form id="upload-material-form">
+            <div class="mb-6">
+                <label for="material-file-input" class="block text-sm font-medium text-gray-700  mb-1">
+                    Select CSV File:
+                </label>
+                <input type="file" id="material-file-input" name="material_file" accept=".csv"
+                       class="block w-full text-sm text-black
+                              file:mr-4 file:py-2 file:px-4
+                              file:rounded-md file:border-0
+                              file:text-sm file:font-semibold
+                              file:bg-indigo-50 dark:file:bg-indigo-800 file:text-indigo-700 dark:file:text-indigo-300
+                              hover:file:bg-indigo-100 dark:hover:file:bg-indigo-700
+                              focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800">
+                <p class="mt-1 text-xs text-gray-500 dark:text-gray-400" id="file-name-display">No file selected.</p>
+            </div>
+
+            <button type="submit" id="submit-material-file-btn" disabled
+                    class="w-full px-6 py-3 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-md shadow-md 
+                           disabled:bg-gray-400 dark:disabled:bg-gray-600 disabled:cursor-not-allowed
+                           focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 dark:focus:ring-offset-gray-800">
+                <span id="submit-btn-text">Add This Material</span>
+                <span id="submit-btn-loading" class="hidden">
+                    <svg class="animate-spin inline-block h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    Processing...
+                </span>
+            </button>
+        </form>
+    </div>
+
+    <!-- Area Preview atau Pesan Status (Opsional) -->
+    <div id="upload-status-area" class="mt-6">
+        <!-- sukses atau error  JavaScript -->
+    </div>
+
+</div>

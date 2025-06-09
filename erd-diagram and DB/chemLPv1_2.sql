@@ -177,3 +177,58 @@ INSERT INTO textmaterial (material_id, title, content) VALUES
 INSERT INTO textmaterial (material_id, title, content) VALUES
 (2, 'Understanding Chemical Bonding', 
 'Chemical bonds are forces that hold atoms together. The main types are ionic bonds (transfer of electrons), covalent bonds (sharing of electrons), and metallic bonds (sea of delocalized electrons). These bonds determine the properties of compounds.');
+
+
+-- ================================
+-- ALTER CONSTRAINT FOR ChemLP1_2
+-- ================================
+
+USE ChemLP1_2;
+
+-- 1. material.created_by_user_id → SET NULL
+ALTER TABLE material DROP FOREIGN KEY material_ibfk_1;
+ALTER TABLE material
+ADD CONSTRAINT fk_material_user
+FOREIGN KEY (created_by_user_id) REFERENCES user(user_id) ON DELETE SET NULL;
+
+-- 2. quiz.material_id → CASCADE
+ALTER TABLE quiz DROP FOREIGN KEY quiz_ibfk_1;
+ALTER TABLE quiz
+ADD CONSTRAINT fk_quiz_material
+FOREIGN KEY (material_id) REFERENCES material(material_id) ON DELETE CASCADE;
+
+-- 3. question.quiz_id → CASCADE
+ALTER TABLE question DROP FOREIGN KEY question_ibfk_1;
+ALTER TABLE question
+ADD CONSTRAINT fk_question_quiz
+FOREIGN KEY (quiz_id) REFERENCES quiz(quiz_id) ON DELETE CASCADE;
+
+-- 4. optionitem.question_id → CASCADE
+ALTER TABLE optionitem DROP FOREIGN KEY optionitem_ibfk_1;
+ALTER TABLE optionitem
+ADD CONSTRAINT fk_optionitem_question
+FOREIGN KEY (question_id) REFERENCES question(question_id) ON DELETE CASCADE;
+
+-- 5. textmaterial.material_id → CASCADE
+ALTER TABLE textmaterial DROP FOREIGN KEY textmaterial_ibfk_1;
+ALTER TABLE textmaterial
+ADD CONSTRAINT fk_textmaterial_material
+FOREIGN KEY (material_id) REFERENCES material(material_id) ON DELETE CASCADE;
+
+-- 6. student_answer.user_id → CASCADE
+ALTER TABLE student_answer DROP FOREIGN KEY student_answer_ibfk_1;
+ALTER TABLE student_answer
+ADD CONSTRAINT fk_answer_user
+FOREIGN KEY (user_id) REFERENCES user(user_id) ON DELETE CASCADE;
+
+-- 7. student_answer.question_id → CASCADE
+ALTER TABLE student_answer DROP FOREIGN KEY student_answer_ibfk_2;
+ALTER TABLE student_answer
+ADD CONSTRAINT fk_answer_question
+FOREIGN KEY (question_id) REFERENCES question(question_id) ON DELETE CASCADE;
+
+-- 8. student_answer.selected_option_id → SET NULL
+ALTER TABLE student_answer DROP FOREIGN KEY student_answer_ibfk_3;
+ALTER TABLE student_answer
+ADD CONSTRAINT fk_answer_option
+FOREIGN KEY (selected_option_id) REFERENCES optionitem(option_id) ON DELETE SET NULL;

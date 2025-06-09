@@ -2,10 +2,8 @@
 
 require_once __DIR__ . '/../services/MaterialService.php';
 require_once __DIR__ . '/../services/TextMaterialService.php';
-// require_once __DIR__ . '/../util/JwtExtractor.php';
 require_once __DIR__ . '/../services/QuizService.php';
 require_once __DIR__ . '/../services/QuestionService.php';
-require_once __DIR__ . '/../services/OptionItemService.php';
 require_once __DIR__ . '/../services/UserService.php';
 require_once __DIR__ . '/../services/StudentAnswerService.php';
 require_once __DIR__ . '/../middleware/RoleMiddleware.php';
@@ -139,7 +137,8 @@ Flight::route('GET /textmaterial/@id', function($id) use ($textMaterialService) 
  */
 Flight::route('GET /textmaterials/@material_id', function($material_id) use ($textMaterialService) {
     $list = $textMaterialService->getTextMaterialByMaterialId($material_id);
-    Flight::json(["success" => true, "data" => $list]);
+    // Flight::json(["success" => true, "data" => $list]);
+    Flight::json($list);
 });
 
 /**

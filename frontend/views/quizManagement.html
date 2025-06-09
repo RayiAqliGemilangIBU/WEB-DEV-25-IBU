@@ -1,0 +1,132 @@
+<!-- frontend/views/quizManagement.html -->
+<div id="quiz-management-page" class="container mx-auto px-4 py-8">
+
+    <!-- Header: Judul Materi dan Judul Kuis -->
+    <div class="mb-6">
+        <h1 class="text-3xl font-bold text-black" id="material-title-display">
+            Quiz Management for: <span class="italic">[Material Title Here]</span>
+        </h1>
+        <p class="text-sm text-black">
+            Manage the quiz associated with this material.
+        </p>
+    </div>
+
+    <!-- Area Detail Kuis (Judul Kuis, Deskripsi) -->
+    <div id="quiz-details-section" class="mb-8 p-6 bg-white dark:bg-gray-800 shadow-md rounded-lg">
+        <h2 class="text-2xl font-semibold text-gray-700 mb-4">Quiz Details</h2>
+        <div id="quiz-info-display" class="mb-4">
+            <!-- Informasi kuis akan dimuat di sini oleh JS -->
+            <p class="text-gray-600 dark:text-gray-300">Loading quiz details...</p>
+        </div>
+
+        <!-- Form untuk mengedit detail kuis (awalnya disembunyikan jika kuis sudah ada) -->
+        <form id="edit-quiz-details-form" class="hidden">
+            <div class="mb-4">
+                <label for="quiz-title-input" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Quiz Title</label>
+                <input type="text" id="quiz-title-input" name="quiz_title" class="mt-1 block w-full px-3 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-gray-900 dark:text-gray-900" placeholder="Enter quiz title">
+            </div>
+            <div class="mb-4">
+                <label for="quiz-description-input" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Quiz Description (Optional)</label>
+                <textarea id="quiz-description-input" name="quiz_description" rows="3" class="mt-1 block w-full px-3 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-gray-900 dark:textgray-900" placeholder="Enter a brief description for the quiz"></textarea>
+            </div>
+            <button type="submit" id="save-quiz-details-btn" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-md shadow-sm">
+                Save Quiz Details
+            </button>
+            <button type="button" id="cancel-edit-quiz-details-btn" class="ml-2 px-4 py-2 bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold rounded-md shadow-sm">
+                Cancel
+            </button>
+        </form>
+        <button type="button" id="edit-quiz-details-trigger-btn" class="hidden mt-2 px-4 py-2 bg-yellow-500 hover:bg-yellow-600 text-white font-semibold rounded-md shadow-sm">
+            Edit Quiz Details
+        </button>
+    </div>
+
+    <!-- Area Pesan Jika Tidak Ada Kuis -->
+    <div id="no-quiz-message" class="hidden text-center py-10 mb-8">
+        <p class="text-xl text-gray-700 dark:text-gray-300 mb-4">This material does not have a quiz yet.</p>
+        <button id="create-quiz-btn" class="px-6 py-3 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-md shadow-lg text-lg">
+            Create Quiz
+        </button>
+    </div>
+
+    <!-- Kontainer untuk Pertanyaan (Bank Soal) -->
+    <div id="questions-container" class="hidden">
+        <div class="flex justify-between items-center mb-6">
+            <h2 class="text-2xl font-semibold text-gray-700 dark:text-white">Questions</h2>
+            <button id="add-new-question-btn" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-md shadow-sm">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block mr-1" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" />
+                </svg>
+                Add New Question
+            </button>
+        </div>
+
+        <!-- Form untuk menambah/mengedit pertanyaan (format Benar/Salah) -->
+        <div id="question-form-section" class="hidden mb-8 p-6 bg-white dark:bg-gray-800 shadow-md rounded-lg">
+            <h3 id="question-form-title" class="text-xl font-semibold text-black mb-4">Add New Question</h3>
+            <form id="question-form">
+                <input type="hidden" id="question-id-input" value=""> 
+
+                <!-- Input Teks Pertanyaan -->
+                <div class="mb-4">
+                    <label for="question-header-input" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Question Text (Header)</label>
+                    <textarea id="question-header-input" name="question_header" rows="3" required class="mt-1 block w-full px-3 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-gray-900 " placeholder="Enter the question text"></textarea>
+                </div>
+
+                <!-- Input Jawaban Benar/Salah -->
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Correct Answer</label>
+                    <div class="mt-2 space-y-2 sm:space-y-0 sm:flex sm:space-x-4">
+                        <div class="flex items-center">
+                            <input id="question-answer-true" name="question-answer" type="radio" value="true" class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-indigo-500">
+                            <label for="question-answer-true" class="ml-3 block text-sm font-medium text-gray-700 dark:text-gray-300">True</label>
+                        </div>
+                        <div class="flex items-center">
+                            <input id="question-answer-false" name="question-answer" type="radio" value="false" checked class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-indigo-500"> 
+                            <label for="question-answer-false" class="ml-3 block text-sm font-medium text-gray-700 dark:text-gray-300">False</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Input Penjelasan -->
+                <div class="mb-4">
+                    <label for="question-explanation-input" class="block text-sm font-medium text-gray-700 ">Explanation (Optional)</label>
+                    <textarea id="question-explanation-input" name="question_explanation" rows="2" class="mt-1 block w-full px-3 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-gray-900" placeholder="Explain the correct answer (optional)"></textarea>
+                </div>
+
+                <!-- Tombol Aksi Form -->
+                <div class="flex justify-end space-x-3">
+                    <button type="button" id="cancel-question-form-btn" class="px-4 py-2 bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold rounded-md shadow-sm">
+                        Cancel
+                    </button>
+                    <button type="submit" id="save-question-btn" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-md shadow-sm">
+                        Save Question
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Daftar pertanyaan yang sudah ada -->
+        <div id="question-list" class="space-y-4">
+            <!-- Pertanyaan akan dirender di sini oleh JS -->
+            <!-- Contoh satu kartu pertanyaan (untuk referensi, akan digenerate oleh JS):
+            <div class="p-6 bg-white dark:bg-gray-800 shadow-md rounded-lg question-card" data-question-id="1">
+                <p class="text-sm font-semibold text-indigo-600 dark:text-indigo-400">Question 1</p>
+                <p class="mt-1 text-lg font-medium text-gray-900 dark:text-white">Is the Earth flat?</p>
+                <p class="mt-2 text-sm text-gray-700 dark:text-gray-300">
+                    Correct Answer: <span class="font-semibold text-red-600 dark:text-red-400">False</span>
+                </p>
+                <p class="mt-2 text-sm text-gray-600 dark:text-gray-400">
+                  <span class="font-semibold">Explanation:</span> The Earth is an oblate spheroid.
+                </p>
+                <div class="mt-4 flex space-x-3 justify-end">
+                    <button class="edit-question-btn px-3 py-1.5 text-sm bg-yellow-500 hover:bg-yellow-600 text-white font-semibold rounded-md shadow-sm" data-question-id="1">Edit</button>
+                    <button class="delete-question-btn px-3 py-1.5 text-sm bg-red-600 hover:bg-red-700 text-white font-semibold rounded-md shadow-sm" data-question-id="1">Delete</button>
+                </div>
+            </div>
+            -->
+        </div>
+        <p id="loading-questions-message" class="hidden text-center py-10 text-gray-600 dark:text-gray-300">Loading questions...</p>
+        <p id="no-questions-message" class="hidden text-center py-10 text-gray-600 dark:text-gray-300">No questions added to this quiz yet. Click "Add New Question" to start.</p>
+    </div>
+</div>

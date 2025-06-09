@@ -1,0 +1,59 @@
+<div class="container mx-auto mt-6 sm:mt-10 p-4">
+    <div class="flex justify-between items-center mb-8">
+        <h1 class="text-3xl font-bold text-gray-800 dark:text-black" id="material-management-title">Material Management</h1>
+        <a href="#addMaterial" class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-md shadow-md transition duration-300 ease-in-out">
+            Add Material
+        </a>
+    </div>
+
+    <div class="overflow-x-auto bg-white dark:bg-gray-800 shadow-xl rounded-lg">
+        <table id="materials-table" class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+            <thead class="bg-gray-50 dark:bg-gray-700">
+                </thead>
+            <tbody class="bg-white dark:bg-gray-900 divide-y divide-gray-200 dark:divide-gray-700">
+                <tr id="materials-loading-row">
+                    <td colspan="100%" class="text-center p-6 text-gray-500 dark:text-gray-400">
+                        Loading material data...
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div id="editMaterialModal" class="fixed z-50 inset-0 overflow-y-auto hidden" aria-labelledby="edit-material-modal-title" role="dialog" aria-modal="true">
+    <div id="editMaterialOverlay" class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true"></div>
+
+    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white shadow-lg rounded-lg text-left overflow-hidden transform transition-all sm:my-8 sm:max-w-5xl w-auto mx-auto text-black">
+        <form id="editMaterialForm">
+            <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                <div class="sm:flex sm:items-start">
+                    <div class="mt-3 text-center sm:mt-0 sm:text-left w-full">
+                        <h3 class="text-lg leading-6 font-medium text-black" id="edit-material-modal-title">
+                            Edit Material
+                        </h3>
+                        <input type="hidden" id="editMaterialId" name="material_id">
+                        <div class="mt-4 space-y-4">
+                            <div>
+                                <label for="editMaterialTitle" class="block text-sm font-medium text-black">Title</label>
+                                <input type="text" name="title" id="editMaterialTitle" required 
+                                       class="mt-1 block w-full px-3 py-2 border border-black bg-white text-black rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                            </div>
+                            <div>
+                                <label for="editMaterialDescription" class="block text-sm font-medium text-black">Description</label>
+                                <textarea name="description" id="editMaterialDescription" rows="3" required 
+                                          class="mt-1 block w-full px-3 py-2 border border-black bg-white text-black rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+                <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                    <button type="submit" id="saveMaterialButton"
+                    class="w-36 inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:ml-3">
+                    Save Changes
+                    </button>
+                </div>
+        </form>
+    </div>
+</div>

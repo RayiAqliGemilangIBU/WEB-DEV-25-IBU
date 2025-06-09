@@ -26,18 +26,37 @@
     <script src="https://cdn.datatables.net/2.0.3/js/dataTables.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>  <!-- sweetalert2 -->
     <script src="https://code.highcharts.com/highcharts.js"></script>
     <script src="https://code.highcharts.com/modules/series-label.js"></script>
     <script src="https://code.highcharts.com/modules/exporting.js"></script>
     <script src="https://code.highcharts.com/modules/export-data.js"></script>
 
-      <!-- Custom JS -->
+    <script src="../js/util/quizServices.js"></script>
+<script src="../js/util/textMaterialServices.js"></script>
+
     <script src="../utils/constants.js"></script>
     <script src="../utils/utils.js"></script>
     <script src="../utils/rest-client.js"></script>
-    <script src="../services/user-service.js"></script>
-    <script src="../utils/profile.js"></script>
     <script src="../utils/auth-nav.js"></script>
+
+    
+    <!-- Custom JS -->
+    <script src="../services/user-service.js"></script> 
+    <script src="../services/student-service.js"></script> 
+    <script src="../services/material-service.js"></script>
+    <script src="../services/textMaterial-service.js"></script>
+    <script src="../services/quiz-service.js"></script>
+
+    <script src="../controllers/profileController.js"></script> 
+    <script src="../controllers/studentsController.js"></script>
+    <script src="../controllers/addStudentController.js"></script>
+    <script src="../controllers/materialManagementController.js"></script>
+    <script src="../controllers/textMaterialController.js"></script>
+    <script src="../controllers/quizManagementController.js"></script>
+    <script src="../controllers/addMaterialController.js"></script>
+    <script src="../controllers/StudyController.js"></script>
+
 
     <!-- Custom JS SPA -->
 
@@ -53,9 +72,13 @@
         <div class="sm:hidden">
             <label for="Tab" class="sr-only">Tab</label>
             <select id="Tab" class="w-full rounded-md border-gray-200" onchange="location = this.value;">
-                <option value="#customersInformation">Customers Information</option>
+                <option value="#students">Student Informastion</option>
                 <option value="#study">Study</option>
                 <option value="#profile">Profile</option>
+                <option value="#materialManagement">Material Management</option>
+                <option value="#textMaterial">Text Material</option>
+                <option value="#addStudent">AddStudent</option>
+                <option value="#quizManagement">quizManagement</option>
                 <option value="#product">Product</option>
                 <option value="#faq">FAQs</option>
                 <option value="javascript:void(0);" onclick="UserService.logout()">Logout</option>
@@ -73,11 +96,17 @@
 
     <!-- Main Content -->
     <main id="spapp" role="main" class="mt-32">
-        <section id="customersInformation" class="p-8" data-load="customersInformation.html"></section>
+        <section id="students" class="p-8" data-load="students.html"></section>
+        <section id="materialManagement" class="p-8" data-load="materialManagement.html"></section>
+        <section id="addStudent" class="p-8" data-load="addStudent.html"></section> 
         <section id="study" class="p-8"></section>
         <section id="profile" class="p-8"></section>
         <section id="product" class="p-8"></section>
+        <section id="textMaterial" class="p-8" data-load="textMaterial.html"></section>
+        <section id="quizManagement" class="p-8" data-load="quizManagement.html"></section>
+        <section id="addMaterial" class="p-8" data-load="addMaterial.html"></section>
         <section id="faq" class="p-8" data-load="tpl/faq.html"></section>
+        <section id="study" class="h-full" data-load="study.html"></section>
     </main>
 
 

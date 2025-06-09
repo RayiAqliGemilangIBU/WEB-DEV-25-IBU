@@ -57,28 +57,48 @@ class TextMaterialService {
         return $this->dao->getTextMaterialById($materialId);
     }
 
-    public function updateTextMaterial($text_id, $data) {
+
+        public function updateTextMaterial($text_id, $data) {
         $content = trim(strip_tags($data['content'] ?? ''));
-        var_dump($content); // Menampilkan isi konten
-        error_log(strlen($content)); // Menulis panjang konten ke log
-    
+
+        // Pastikan debugging logs seperti var_dump dan error_log Dihapus di produksi
+        // var_dump($content); // Menampilkan isi konten
+        // error_log("Content length: " . strlen($content)); // Menulis panjang konten ke log
+
         if (empty($content) || strlen($content) < 100) {
             throw new Exception("Konten harus minimal 100 karakter.");
         }
-    
-        $existing = $this->dao->getTextMaterialById($text_id); // <--- Ubah sesuai method DAO yang tersedia
+        
+        // Periksa keberadaan text material sebelum update
+        // Pastikan getTextMaterialById($id) di DAO berfungsi dengan baik
+        $existing = $this->dao->getTextMaterialById($text_id); 
         if (!$existing) {
             throw new Exception("Text material tidak ditemukan.");
         }
-    
-        $data = [
-            'content' => $data['content'],
+        
+        // Siapkan data untuk update. 
+        // Penting: Hanya masukkan kolom yang ada di tabel dan memang ingin diupdate.
+        // Jika material_id tidak diupdate, jangan masukkan ke sini.
+        $update_data = [
             'title' => $data['title'],
-            // tambahkan kolom lain yang sesuai
+            'content' => $data['content'],
+            // Jika ada image_path atau kolom lain yang ingin diupdate, tambahkan di sini:
+            // 'image_path' => $data['image_path'] ?? null,
         ];
+
+        // Lakukan update melalui DAO. Ini akan mengembalikan true/false.
+        $is_updated = $this->dao->updateTextMaterial($update_data, $text_id); 
+
+        if ($is_updated) {
+            // !!! BAGIAN KRUSIAL: Ambil data terbaru dari database setelah update berhasil !!!
+            return $this->dao->getTextMaterialById($text_id); // Mengembalikan objek/array data yang di-update
+        } else {
+            // Jika DAO mengembalikan false, berarti update gagal
+            throw new Exception("Gagal memperbarui text material di database.");
+        }
+    }
+
     
-        return $this->dao->updateTextMaterial($data, $text_id);
-    }  
 
 
     public function deleteTextMaterialById($textId) {
