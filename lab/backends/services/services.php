@@ -63,7 +63,7 @@ class ExamService {
 
     
     $response = [
-        'message' => "User berhasil dibuat",
+        'message' => "SUCCESS",
         'data'    => $new_employee
     ];
 
