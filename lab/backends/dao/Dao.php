@@ -179,4 +179,28 @@ class ExamDao
 
       return $result;
   }
+
+  public function add_employee($data) {
+  
+        $stmt_max = $this->conn->prepare("SELECT MAX(employeeNumber) AS max_id FROM employees");
+        $stmt_max->execute();
+        $max_id_row = $stmt_max->fetch(PDO::FETCH_ASSOC);
+        $new_id = $max_id_row['max_id'] + 1;
+
+
+        $stmt_insert = $this->conn->prepare(
+            "INSERT INTO employees (employeeNumber, lastName, firstName, extension, email, officeCode, reportsTo, jobTitle)
+             VALUES (:employeeNumber, :lastName, :firstName, 'x100', :email, '1', 1002, 'Sales Rep')"
+        );
+        
+        $stmt_insert->execute([
+            'employeeNumber' => $new_id,
+            'lastName'       => $data['last_name'],
+            'firstName'      => $data['first_name'],
+            'email'          => $data['email']
+        ]);
+
+
+        return $this->get_employee_by_id($new_id);
+    }
 }
