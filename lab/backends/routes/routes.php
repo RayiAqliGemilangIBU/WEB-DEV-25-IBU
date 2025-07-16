@@ -98,3 +98,15 @@ Flight::route('GET /order/details/@order_id', function ($order_id) {
 
 
 });
+
+Flight::route('POST /employee', function () {
+    
+    $data = Flight::request()->data->getData();
+
+    
+    $new_employee = Flight::examService()->add_employee($data);
+
+    
+    Flight::json($new_employee, 201);
+});
+
