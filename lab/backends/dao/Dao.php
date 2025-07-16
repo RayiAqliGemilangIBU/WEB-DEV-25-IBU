@@ -73,14 +73,16 @@ class ExamDao
   /** TODO
    * Implement DAO method used to delete employee by id
    */
-  public function delete_employee($employee_id) {
+public function delete_employee($employee_id) {
+    
+    $stmt = $this->conn->prepare("DELETE FROM employees WHERE employeeNumber = :id");
 
-        $stmt = $this->conn->prepare("DELETE FROM e employees WHERE employeeNumber = :id ?");
-        $stmt->bindParam(':id', $employee_id);
-        $stmt->execute();
+    
+    $stmt->bindParam(':id', $employee_id);
 
-
-  }
+   
+    $stmt->execute();
+}
 
   /** TODO
    * Implement DAO method used to edit employee data
@@ -100,10 +102,9 @@ class ExamDao
         ]);
 
       
-        $stmt = $this->conn->prepare("SELECT * FROM employees WHERE employeeNumber = :id");
-        $stmt->bindParam(':id', $employee_id);
-        $stmt->execute();
-        return $stmt->fetch(PDO::FETCH_ASSOC);
+         return $this->get_employee_by_id($employee_id);
+
+        
 
   }
 
@@ -190,7 +191,7 @@ class ExamDao
        
         $stmt_insert = $this->conn->prepare(
             "INSERT INTO employees (employeeNumber, lastName, firstName, extension, email, officeCode, reportsTo, jobTitle)
-             VALUES (:employeeNumber, :lastName, :firstName, 'x100', :email, '1', 1002, 'Sales Rep')"
+             VALUES (:employeeNumber, :lastName, :firstName, 'x1006', :email, '1', null, 'Sales Rep')"
         );
         
         $stmt_insert->execute([
@@ -203,4 +204,16 @@ class ExamDao
        
         return $this->get_employee_by_id($new_id);
     }
+
+
+    public function get_employee_by_id($employee_id)
+    {
+        $stmt = $this->conn->prepare("SELECT * FROM employees WHERE employeeNumber = :id");
+        $stmt->bindParam(':id', $employee_id);
+        $stmt->execute();
+        // Menggunakan fetch() karena kita hanya mengambil satu baris
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
 }
+
+
