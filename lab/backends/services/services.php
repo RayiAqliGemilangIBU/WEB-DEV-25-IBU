@@ -50,13 +50,24 @@ class ExamService {
 
     }
 
-
     public function add_employee($data) {
         
         if (empty($data['first_name']) || empty($data['last_name']) || empty($data['email'])) {
             
             Flight::halt(400, "First name, last name, and email are required.");
         }
-        return $this->dao->add_employee($data);
+        // return $this->dao->add_employee($data);
+
+
+        $new_employee = $this->dao->add_employee($data);
+
+    
+    $response = [
+        'message' => "User berhasil dibuat",
+        'data'    => $new_employee
+    ];
+
+    
+    return $response;
     }
 }
