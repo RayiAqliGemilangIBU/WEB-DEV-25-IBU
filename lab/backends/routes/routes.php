@@ -1,4 +1,3 @@
-
 <?php
 
 Flight::route('GET /connection-check', function () {
@@ -53,10 +52,12 @@ Flight::route('PUT /employee/edit/@employee_id', function ($employee_id) {
      * 10 points
      */
 
-    $data = Fliught::request()->data->getData();
+    $data = Flight::request()->data->getData();
 
-    $result = Flight::examService()->delete_employee($employee_id, $data);
+    $result = Flight::examService()->edit_employee($employee_id, $data);
 
+    
+    Flight::json($result);
 
 });
 
@@ -109,4 +110,3 @@ Flight::route('POST /employee', function () {
     
     Flight::json($new_employee, 201);
 });
-
